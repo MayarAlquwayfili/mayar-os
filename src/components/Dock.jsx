@@ -1,0 +1,71 @@
+import AppIconMoheetik from '../assets/AppIconMoheetik.svg'
+import AppIconQaffatek from '../assets/AppIconQaffatek.svg'
+import AppIconRECLAB from '../assets/AppIconRECLAB.svg'
+
+const DOCK_APPS = [
+  { id: 'Moheetik', label: 'Moheetik', icon: AppIconMoheetik },
+  { id: 'Qaffatek', label: 'Qaffatek', icon: AppIconQaffatek },
+  { id: 'RECLAB', label: 'RECLAB', icon: AppIconRECLAB },
+]
+
+export default function Dock({ openWindows = [], onOpen }) {
+  const openIds = new Set(openWindows.map((w) => w.id))
+
+  return (
+    <div
+      className="fixed bottom-4 left-1/2 -translate-x-1/2 flex items-end gap-2 px-3 py-2 rounded-[22px] border border-white/30 shadow-2xl"
+      style={{
+        zIndex: 500,
+        background: 'rgba(255,255,255,0.18)',
+        backdropFilter: 'blur(28px)',
+        WebkitBackdropFilter: 'blur(28px)',
+        boxShadow:
+          '0 8px 32px rgba(0,0,0,0.18), 0 1.5px 0 rgba(255,255,255,0.35) inset',
+      }}
+      onClick={(e) => e.stopPropagation()}
+    >
+      {DOCK_APPS.map(({ id, label, icon }) => (
+        <div key={id} className="relative flex flex-col items-center group">
+
+          {/* Tooltip */}
+          <div className="absolute -top-10 left-1/2 -translate-x-1/2 pointer-events-none select-none opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+            <div className="relative bg-white/90 text-black text-[11px] font-medium px-3 py-1 rounded-lg shadow-md whitespace-nowrap">
+              {label}
+              {/* Arrow */}
+              <span
+                className="absolute left-1/2 -translate-x-1/2 -bottom-[5px] w-0 h-0"
+                style={{
+                  borderLeft: '5px solid transparent',
+                  borderRight: '5px solid transparent',
+                  borderTop: '5px solid rgba(255,255,255,0.9)',
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Icon */}
+          <button
+            type="button"
+            aria-label={`Open ${label}`}
+            className="w-[54px] h-[54px] rounded-[12px] transition-all duration-200 ease-out hover:scale-[1.15] hover:-translate-y-1 active:scale-100 focus:outline-none"
+            onClick={() => onOpen?.(id)}
+          >
+            <img
+              src={icon}
+              alt={label}
+              draggable={false}
+              className="w-full h-full rounded-[12px] object-cover"
+            />
+          </button>
+
+          {/* Active dot */}
+          <span
+            className={`mt-0.5 w-1 h-1 rounded-full transition-opacity duration-200 ${
+              openIds.has(id) ? 'bg-gray-700 opacity-100' : 'opacity-0'
+            }`}
+          />
+        </div>
+      ))}
+    </div>
+  )
+}

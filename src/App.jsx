@@ -5,6 +5,7 @@ import AppIconMoheetik from './assets/AppIconMoheetik.svg'
 import MockupMoheetik01 from './assets/MockupMoheetik01.svg'
 import MockupMoheetik02 from './assets/MockupMoheetik02.svg'
 import MockupMoheetik03 from './assets/MockupMoheetik03.svg'
+import Dock from './components/Dock'
 
 const MENU_BAR_PX = 28
 const EDGE_PX = 10
@@ -731,6 +732,8 @@ export default function App() {
           />
         ))}
       </main>
+
+      <Dock openWindows={openWindows} onOpen={openOrFocusWindow} />
     </div>
   )
 }
