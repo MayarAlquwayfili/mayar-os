@@ -70,7 +70,7 @@ function MoheetikSplitContent() {
                  [&::-webkit-scrollbar-thumb]:rounded-full
                  [&::-webkit-scrollbar-thumb]:bg-gray-300"
     >
-      <div className="mx-auto max-w-6xl px-6 py-8 md:px-10">
+      <div className="mx-auto max-w-5xl px-8 py-10 md:px-16">
 
         {/* ── Identity ───────────────────────────────────────── */}
         <header className="flex items-center gap-4 pb-6 mb-8 border-b border-gray-100">
@@ -122,7 +122,7 @@ function MoheetikSplitContent() {
         </div>
 
         {/* ── 01. The Challenge — text left, mockup right ─────── */}
-        <section className="mb-16 flex flex-col gap-10 md:flex-row md:items-center md:gap-12">
+        <section className="py-12 flex flex-col gap-8 md:flex-row md:items-center md:gap-8">
           <div className="flex-1 min-w-0">
             <p className={META_KEY_CLS + ' mb-3'}>01 — The Challenge</p>
             <h2 className="text-[24px] font-bold leading-tight tracking-tight text-gray-900 mb-4">
@@ -131,28 +131,30 @@ function MoheetikSplitContent() {
             </h2>
             <p className={BODY_CLS}>
               Arriving at an address is just the start of the real challenge. GPS
-              can lead you to a building, but it won&apos;t find the door handle.
-              In our research, 27% of respondents identified mobility as the
-              sector most in need of a breakthrough. We built Moheetik to bridge
-              this gap.
+              can lead you to a building, but it won&apos;t find the door handle or
+              the entrance. This is a critical blind spot where technology fails. In
+              our research, 27% of respondents identified mobility as the sector most
+              in need of a breakthrough. We built Moheetik to bridge this gap, taking
+              over the moment the GPS says &lsquo;You have arrived,&rsquo; and guiding
+              the user until the app confirms: &lsquo;Target reached.&rsquo;
             </p>
           </div>
-          <div className="w-full shrink-0 md:w-[50%]">
+          <div className="w-full shrink-0 md:w-[32%]">
             <img
               src={MockupMoheetik01}
               alt="App loading state and object list"
-              className="w-full h-auto object-contain"
+              className="w-full h-auto object-contain drop-shadow-none"
             />
           </div>
         </section>
 
         {/* ── 02. The Solution — mockup left, text right ──────── */}
-        <section className="mb-16 flex flex-col gap-10 md:flex-row md:items-center md:gap-12">
-          <div className="w-full shrink-0 md:w-[50%] md:order-first order-last">
+        <section className="py-12 border-t border-gray-100 flex flex-col gap-8 md:flex-row md:items-center md:gap-8">
+          <div className="w-full shrink-0 md:w-[32%] order-last md:order-first">
             <img
               src={MockupMoheetik02}
               alt="Real-time detection grid"
-              className="w-full h-auto object-contain"
+              className="w-full h-auto object-contain drop-shadow-none"
             />
           </div>
           <div className="flex-1 min-w-0">
@@ -161,23 +163,27 @@ function MoheetikSplitContent() {
               Magic Tap. Haptic zones.<br />Arabic voice. Custom Core&nbsp;ML.
             </h2>
             <p className={BODY_CLS}>
-              We integrated the{' '}
+              During usability testing, we realized we were designing for an
+              experience we didn&apos;t fully understand. Since a tester advised us
+              to practice VoiceOver, I haven&apos;t opened the app without it. To make
+              navigation seamless, we integrated the{' '}
               <strong className="font-semibold text-gray-900">Magic Tap</strong> gesture
-              for instant scanning and a 3-meter haptic proximity zone that alerts
-              users before they reach an obstacle — no manual interaction needed.
-              We broke the language barrier by integrating real-time{' '}
-              <strong className="font-semibold text-gray-900">Arabic voice guidance</strong>,
-              making the app fully native-feeling for our target audience.
-              We custom-trained our own{' '}
+              for instant scanning and a 3-meter haptic zone where vibrations intensify
+              as you get closer to the target. Our research also highlighted a major
+              exclusion: the lack of localized accessibility tools that support Arabic.
+              We broke this barrier by integrating real-time{' '}
+              <strong className="font-semibold text-gray-900">Arabic voice guidance</strong>{' '}
+              to ensure the experience felt native and intuitive. Furthermore, because
+              standard YOLO models lacked critical navigation objects like doors and
+              stairs, we supplemented them by custom-training our own{' '}
               <strong className="font-semibold text-gray-900">Core ML model</strong>{' '}
-              (MoheetikModel) from scratch because standard YOLO models lacked
-              critical navigation objects.
+              (MoheetikModel) from scratch.
             </p>
           </div>
         </section>
 
         {/* ── 03. The Impact — text left, mockup right ────────── */}
-        <section className="mb-16 flex flex-col gap-10 md:flex-row md:items-center md:gap-12">
+        <section className="py-12 border-t border-gray-100 flex flex-col gap-8 md:flex-row md:items-center md:gap-8">
           <div className="flex-1 min-w-0">
             <p className={META_KEY_CLS + ' mb-3'}>03 — The Impact</p>
             <h2 className="text-[24px] font-bold leading-tight tracking-tight text-gray-900 mb-4">
@@ -185,17 +191,19 @@ function MoheetikSplitContent() {
               <span className="text-gray-400">to real independence.</span>
             </h2>
             <p className={BODY_CLS}>
-              Showcased at the Apple Developer Academy and the Authority for
-              Persons with Disabilities (APD). Seeing users find a chair
-              independently proved our impact. We started with doors and stairs,
-              but our vision is to expand to every daily essential.
+              Our journey wasn&apos;t just about code. We were selected to showcase at
+              the Apple Developer Academy. Presenting Moheetik at the Authority for
+              Persons with Disabilities (APD) and seeing users find a bottle or a chair
+              independently proved our impact. We started with doors and stairs, but our
+              vision is to expand to every daily essential, ensuring that &lsquo;arriving&rsquo;
+              is never the end of the journey.
             </p>
           </div>
-          <div className="w-full shrink-0 md:w-[50%]">
+          <div className="w-full shrink-0 md:w-[32%]">
             <img
               src={MockupMoheetik03}
               alt="Target reached and voice confirmation"
-              className="w-full h-auto object-contain"
+              className="w-full h-auto object-contain drop-shadow-none"
             />
           </div>
         </section>
