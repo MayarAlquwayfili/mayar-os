@@ -70,7 +70,7 @@ function MoheetikSplitContent() {
                  [&::-webkit-scrollbar-thumb]:rounded-full
                  [&::-webkit-scrollbar-thumb]:bg-gray-300"
     >
-      <div className="mx-auto max-w-[920px] px-8 py-8 md:px-12 lg:px-16">
+      <div className="mx-auto max-w-6xl px-6 py-8 md:px-10">
 
         {/* ── Identity ───────────────────────────────────────── */}
         <header className="flex items-center gap-4 pb-6 mb-8 border-b border-gray-100">
@@ -137,7 +137,7 @@ function MoheetikSplitContent() {
               this gap.
             </p>
           </div>
-          <div className="w-full shrink-0 md:w-[42%]">
+          <div className="w-full shrink-0 md:w-[50%]">
             <img
               src={MockupMoheetik01}
               alt="App loading state and object list"
@@ -148,7 +148,7 @@ function MoheetikSplitContent() {
 
         {/* ── 02. The Solution — mockup left, text right ──────── */}
         <section className="mb-16 flex flex-col gap-10 md:flex-row md:items-center md:gap-12">
-          <div className="w-full shrink-0 md:w-[42%] md:order-first order-last">
+          <div className="w-full shrink-0 md:w-[50%] md:order-first order-last">
             <img
               src={MockupMoheetik02}
               alt="Real-time detection grid"
@@ -191,7 +191,7 @@ function MoheetikSplitContent() {
               but our vision is to expand to every daily essential.
             </p>
           </div>
-          <div className="w-full shrink-0 md:w-[42%]">
+          <div className="w-full shrink-0 md:w-[50%]">
             <img
               src={MockupMoheetik03}
               alt="Target reached and voice confirmation"
