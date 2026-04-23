@@ -2,6 +2,9 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import FolderIcon from './assets/Folder.svg'
 import IcWifi from './assets/Ic_wifi.svg'
 import AppIconMoheetik from './assets/AppIconMoheetik.svg'
+import AppIconQaffatek from './assets/AppIconQaffatek.svg'
+import AppIconRECLAB from './assets/AppIconRECLAB.svg'
+import IcAppleLogo from './assets/Ic_apple.logo.svg'
 import MockupMoheetik01 from './assets/MockupMoheetik01.svg'
 import MockupMoheetik02 from './assets/MockupMoheetik02.svg'
 import MockupMoheetik03 from './assets/MockupMoheetik03.svg'
@@ -207,6 +210,207 @@ function MoheetikSplitContent() {
               className="w-full h-auto object-contain drop-shadow-none"
             />
           </div>
+        </section>
+
+      </div>
+    </div>
+  )
+}
+
+const RECLAB_TOOLS = ['Figma', 'SwiftUI', 'SwiftData', 'UIKit', 'ImageIO', 'Cursor (AI)']
+
+function RECLABContent() {
+  return (
+    <div
+      className="h-full overflow-y-auto bg-white font-sans
+                 [&::-webkit-scrollbar]:w-1.5
+                 [&::-webkit-scrollbar-track]:bg-transparent
+                 [&::-webkit-scrollbar-thumb]:rounded-full
+                 [&::-webkit-scrollbar-thumb]:bg-gray-300"
+    >
+      <div className="w-full max-w-[1200px] mx-auto px-6 py-8 md:px-[5%]">
+
+        {/* ── Identity ───────────────────────────────────────── */}
+        <header className="flex items-center gap-4 pb-6 mb-8 border-b border-gray-100">
+          <img
+            src={AppIconRECLAB}
+            alt="RECLAB app icon"
+            className="h-16 w-16 rounded-[14px] shadow-sm"
+          />
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-[20px] font-bold tracking-tight text-gray-900">RECLAB</h1>
+              <span className="bg-amber-100 text-amber-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                WIP
+              </span>
+            </div>
+            <p className="mt-0.5 text-[13px] font-medium text-gray-500">
+              Lifestyle &amp; Productivity
+            </p>
+          </div>
+        </header>
+
+        {/* ── Overview Grid ──────────────────────────────────── */}
+        <div className="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-4 pb-8 mb-10 border-b border-gray-100">
+          <div>
+            <p className={META_KEY_CLS}>Timeline</p>
+            <p className={META_VAL_CLS}>Jan – Mar 2026</p>
+          </div>
+          <div>
+            <p className={META_KEY_CLS}>My Role</p>
+            <p className={META_VAL_CLS}>iOS Developer &amp; UI/UX Designer</p>
+          </div>
+          <div>
+            <p className={META_KEY_CLS}>Project Type</p>
+            <p className={META_VAL_CLS}>Personal Project</p>
+          </div>
+          <div>
+            <p className={META_KEY_CLS}>Tools</p>
+            <div className="mt-1.5 flex flex-wrap gap-1">
+              {RECLAB_TOOLS.map((t) => (
+                <span
+                  key={t}
+                  className="inline-flex rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-medium text-gray-600"
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* ── Description ────────────────────────────────────── */}
+        <section className="py-10">
+          <p className={META_KEY_CLS + ' mb-3'}>About the Project</p>
+          <h2 className="text-[24px] font-bold leading-tight tracking-tight text-gray-900 mb-4">
+            Built for people who refuse<br />
+            <span className="text-gray-400">to be just one thing.</span>
+          </h2>
+          <p className={BODY_CLS}>
+            Most productivity tools are built for specialists — one goal, one
+            path, one identity. RECLAB is built for{' '}
+            <strong className="font-semibold text-gray-900">multipotentialites</strong>:
+            people who carry multiple passions, projects, and pursuits at once.
+            It&apos;s a platform designed to let you track, gamify, and celebrate
+            your diverse learning journeys — whether that&apos;s code, design,
+            music, or anything in between. Every interest gets its own lab.
+            Every milestone gets its own moment. The goal is to make the chaos
+            of curiosity feel like{' '}
+            <strong className="font-semibold text-gray-900">intentional progress</strong>.
+          </p>
+        </section>
+
+      </div>
+    </div>
+  )
+}
+
+const QAFFATEK_TOOLS = ['Figma', 'SwiftUI', 'SwiftData', 'UIKit', 'ImageIO', 'Cursor']
+
+function QaffatekContent() {
+  return (
+    <div
+      className="h-full overflow-y-auto bg-white font-sans
+                 [&::-webkit-scrollbar]:w-1.5
+                 [&::-webkit-scrollbar-track]:bg-transparent
+                 [&::-webkit-scrollbar-thumb]:rounded-full
+                 [&::-webkit-scrollbar-thumb]:bg-gray-300"
+    >
+      <div className="w-full max-w-[1200px] mx-auto px-6 py-8 md:px-[5%]">
+
+        {/* ── Identity ───────────────────────────────────────── */}
+        <header className="flex items-center gap-4 pb-6 mb-8 border-b border-gray-100">
+          <img
+            src={AppIconQaffatek}
+            alt="Qaffatek app icon"
+            className="h-16 w-16 rounded-[14px] shadow-sm"
+          />
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-[20px] font-bold tracking-tight text-gray-900">Qaffatek</h1>
+              <span className="flex items-center gap-1 bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
+                Live
+              </span>
+            </div>
+            <p className="mt-0.5 text-[13px] font-medium text-gray-500">
+              Family Game
+            </p>
+          </div>
+        </header>
+
+        {/* ── Overview Grid ──────────────────────────────────── */}
+        <div className="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-4 pb-8 mb-10 border-b border-gray-100">
+          <div>
+            <p className={META_KEY_CLS}>Timeline</p>
+            <p className={META_VAL_CLS}>Sep 2025 – Mar 2026</p>
+          </div>
+          <div>
+            <p className={META_KEY_CLS}>My Role</p>
+            <p className={META_VAL_CLS}>iOS Developer &amp; Product Designer</p>
+          </div>
+          <div>
+            <p className={META_KEY_CLS}>Project Type</p>
+            <p className={META_VAL_CLS}>iOS App (Apple Dev Academy)</p>
+          </div>
+          <div>
+            <p className={META_KEY_CLS}>Tools</p>
+            <div className="mt-1.5 flex flex-wrap gap-1">
+              {QAFFATEK_TOOLS.map((t) => (
+                <span
+                  key={t}
+                  className="inline-flex rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-medium text-gray-600"
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* ── Description ────────────────────────────────────── */}
+        <section className="py-10">
+          <p className={META_KEY_CLS + ' mb-3'}>About the Project</p>
+          <h2 className="text-[24px] font-bold leading-tight tracking-tight text-gray-900 mb-4">
+            A traditional Saudi game,<br />
+            <span className="text-gray-400">reimagined for the iPhone.</span>
+          </h2>
+          <p className={BODY_CLS}>
+            Qaffatek is a digital revival of{' '}
+            <strong className="font-semibold text-gray-900">Gamzah</strong>, the
+            classic Saudi social game built on quick reflexes and shared laughter.
+            The original game is deceptively simple — players react to a trigger
+            and the slowest hand loses — but the real magic is in the energy it
+            creates around a table. Our goal was to capture that same electric
+            social tension and translate it faithfully to a native iOS experience.
+            Designed for families and friend groups, Qaffatek brings the{' '}
+            <strong className="font-semibold text-gray-900">speed, the stakes, and the chaos</strong>{' '}
+            of the original while making it accessible anywhere, any time.
+          </p>
+
+          {/* ── App Store Button ─────────────────────────────── */}
+          <a
+            href="https://apps.apple.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-3 mt-8 bg-black text-white px-5 py-3 rounded-xl transition-all duration-200 hover:scale-105 select-none"
+            style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.18)' }}
+          >
+            <img
+              src={IcAppleLogo}
+              alt=""
+              aria-hidden
+              className="w-[18px] h-auto invert"
+            />
+            <div className="flex flex-col leading-none">
+              <span className="text-[10px] font-normal text-white/80 tracking-wide">
+                Download on the
+              </span>
+              <span className="text-[17px] font-semibold tracking-tight mt-0.5">
+                App Store
+              </span>
+            </div>
+          </a>
         </section>
 
       </div>
@@ -458,6 +662,10 @@ function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus }) 
       <div className="min-h-0 flex-1 overflow-hidden bg-white">
         {title === 'Moheetik' ? (
           <MoheetikSplitContent />
+        ) : title === 'RECLAB' ? (
+          <RECLABContent />
+        ) : title === 'Qaffatek' ? (
+          <QaffatekContent />
         ) : (
           <div className="p-6 text-sm text-gray-600">
             <p className="font-medium text-gray-800">{title}</p>

@@ -13,7 +13,7 @@ export default function Dock({ openWindows = [], onOpen }) {
 
   return (
     <div
-      className="fixed bottom-4 left-1/2 -translate-x-1/2 flex items-end gap-2 px-3 py-2 rounded-[22px] border border-white/30 shadow-2xl"
+      className="fixed bottom-4 left-1/2 -translate-x-1/2 flex items-end gap-5 px-5 py-2 rounded-[22px] border border-white/30 shadow-2xl"
       style={{
         zIndex: 500,
         background: 'rgba(255,255,255,0.18)',
@@ -29,7 +29,10 @@ export default function Dock({ openWindows = [], onOpen }) {
 
           {/* Tooltip */}
           <div className="absolute -top-10 left-1/2 -translate-x-1/2 pointer-events-none select-none opacity-0 group-hover:opacity-100 transition-opacity duration-150">
-            <div className="relative bg-white/90 text-black text-[11px] font-medium px-3 py-1 rounded-lg shadow-md whitespace-nowrap">
+            <div
+              className="relative bg-white/90 text-black text-[11px] font-medium px-3 py-1 rounded-lg whitespace-nowrap"
+              style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08)' }}
+            >
               {label}
               {/* Arrow */}
               <span
@@ -47,7 +50,8 @@ export default function Dock({ openWindows = [], onOpen }) {
           <button
             type="button"
             aria-label={`Open ${label}`}
-            className="w-[54px] h-[54px] rounded-[12px] transition-all duration-200 ease-out hover:scale-[1.15] hover:-translate-y-1 active:scale-100 focus:outline-none"
+            className="w-[54px] h-[54px] rounded-[12px] hover:scale-[1.3] hover:-translate-y-1.5 active:scale-100 focus:outline-none"
+            style={{ transition: 'transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1)' }}
             onClick={() => onOpen?.(id)}
           >
             <img
