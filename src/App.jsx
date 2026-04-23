@@ -7,7 +7,7 @@ import MockupMoheetik02 from './assets/MockupMoheetik02.svg'
 import MockupMoheetik03 from './assets/MockupMoheetik03.svg'
 
 const MENU_BAR_PX = 28
-const EDGE_PX = 6
+const EDGE_PX = 10
 const MIN_W = 380
 const MIN_H = 320
 
@@ -70,7 +70,7 @@ function MoheetikSplitContent() {
                  [&::-webkit-scrollbar-thumb]:rounded-full
                  [&::-webkit-scrollbar-thumb]:bg-gray-300"
     >
-      <div className="mx-auto max-w-5xl px-8 py-10 md:px-16">
+      <div className="w-full max-w-[1200px] mx-auto px-6 py-8 md:px-[5%]">
 
         {/* ── Identity ───────────────────────────────────────── */}
         <header className="flex items-center gap-4 pb-6 mb-8 border-b border-gray-100">
@@ -122,8 +122,8 @@ function MoheetikSplitContent() {
         </div>
 
         {/* ── 01. The Challenge — text left, mockup right ─────── */}
-        <section className="py-12 flex flex-col gap-8 md:flex-row md:items-center md:gap-8">
-          <div className="flex-1 min-w-0">
+        <section className="py-10 grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] items-center gap-6 md:gap-[6%]">
+          <div className="min-w-0">
             <p className={META_KEY_CLS + ' mb-3'}>01 — The Challenge</p>
             <h2 className="text-[24px] font-bold leading-tight tracking-tight text-gray-900 mb-4">
               GPS gets you to the building.<br />
@@ -139,7 +139,7 @@ function MoheetikSplitContent() {
               the user until the app confirms: &lsquo;Target reached.&rsquo;
             </p>
           </div>
-          <div className="w-full shrink-0 md:w-[32%]">
+          <div className="min-w-0">
             <img
               src={MockupMoheetik01}
               alt="App loading state and object list"
@@ -149,15 +149,15 @@ function MoheetikSplitContent() {
         </section>
 
         {/* ── 02. The Solution — mockup left, text right ──────── */}
-        <section className="py-12 border-t border-gray-100 flex flex-col gap-8 md:flex-row md:items-center md:gap-8">
-          <div className="w-full shrink-0 md:w-[32%] order-last md:order-first">
+        <section className="py-10 border-t border-gray-100 grid grid-cols-1 md:grid-cols-[0.8fr_1.2fr] items-center gap-6 md:gap-[6%]">
+          <div className="min-w-0">
             <img
               src={MockupMoheetik02}
               alt="Real-time detection grid"
               className="w-full h-auto object-contain drop-shadow-none"
             />
           </div>
-          <div className="flex-1 min-w-0">
+          <div className="min-w-0">
             <p className={META_KEY_CLS + ' mb-3'}>02 — The Solution</p>
             <h2 className="text-[24px] font-bold leading-tight tracking-tight text-gray-900 mb-4">
               Magic Tap. Haptic zones.<br />Arabic voice. Custom Core&nbsp;ML.
@@ -183,8 +183,8 @@ function MoheetikSplitContent() {
         </section>
 
         {/* ── 03. The Impact — text left, mockup right ────────── */}
-        <section className="py-12 border-t border-gray-100 flex flex-col gap-8 md:flex-row md:items-center md:gap-8">
-          <div className="flex-1 min-w-0">
+        <section className="py-10 border-t border-gray-100 grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] items-center gap-6 md:gap-[6%]">
+          <div className="min-w-0">
             <p className={META_KEY_CLS + ' mb-3'}>03 — The Impact</p>
             <h2 className="text-[24px] font-bold leading-tight tracking-tight text-gray-900 mb-4">
               From the Academy stage<br />
@@ -199,7 +199,7 @@ function MoheetikSplitContent() {
               is never the end of the journey.
             </p>
           </div>
-          <div className="w-full shrink-0 md:w-[32%]">
+          <div className="min-w-0">
             <img
               src={MockupMoheetik03}
               alt="Target reached and voice confirmation"
@@ -213,20 +213,14 @@ function MoheetikSplitContent() {
   )
 }
 
-function MacWindow({ title, onClose }) {
+function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus }) {
   const defaultW = 700
   const defaultH = 500
 
-  const [position, setPosition] = useState(() => ({
-    x:
-      typeof window !== 'undefined'
-        ? window.innerWidth / 2 - defaultW / 2
-        : 0,
-    y:
-      typeof window !== 'undefined'
-        ? window.innerHeight / 2 - defaultH / 2
-        : 0,
-  }))
+  const [position, setPosition] = useState({
+    x: initialX ?? 60,
+    y: initialY ?? 48,
+  })
   const [size, setSize] = useState({ w: defaultW, h: defaultH })
   const [isDragging, setIsDragging] = useState(false)
   const [isResizing, setIsResizing] = useState(false)
@@ -265,7 +259,7 @@ function MacWindow({ title, onClose }) {
       let ny = e.clientY - dragOffsetRef.current.y
       setPosition({
         x: Math.max(0, Math.min(nx, maxX)),
-        y: Math.max(0, Math.min(ny, maxY)),
+        y: Math.max(MENU_BAR_PX, Math.min(ny, maxY)),
       })
     }
     const onMouseUp = () => setIsDragging(false)
@@ -335,6 +329,7 @@ function MacWindow({ title, onClose }) {
   }, [isResizing])
 
   const onTitleBarMouseDown = (e) => {
+    onFocus?.()
     if (e.button !== 0 || isMaximized) return
     e.preventDefault()
     e.stopPropagation()
@@ -349,6 +344,7 @@ function MacWindow({ title, onClose }) {
   }
 
   const onShellMouseDown = (e) => {
+    onFocus?.()
     if (e.button !== 0 || isMaximized) return
     if (e.target.closest('[data-titlebar]')) return
     const el = windowRef.current
@@ -402,6 +398,7 @@ function MacWindow({ title, onClose }) {
         top: MENU_BAR_PX,
         width: '100vw',
         height: `calc(100vh - ${MENU_BAR_PX}px)`,
+        zIndex,
       }
     : {
         left: position.x,
@@ -409,13 +406,14 @@ function MacWindow({ title, onClose }) {
         width: size.w,
         height: size.h,
         cursor: shellCursor,
+        zIndex,
       }
 
   return (
     <div
       ref={windowRef}
-      className={`fixed z-50 flex flex-col overflow-hidden border border-black/10 bg-white font-sans shadow-2xl ${
-        isMaximized ? 'rounded-none' : 'rounded-xl'
+      className={`fixed flex flex-col overflow-hidden border border-black/10 bg-white font-sans shadow-2xl ${
+        isMaximized ? 'rounded-none border-t-0' : 'rounded-xl'
       }`}
       style={windowStyle}
       role="dialog"
@@ -466,6 +464,32 @@ function MacWindow({ title, onClose }) {
           </div>
         )}
       </div>
+
+      {/* SE corner resize handle — sits above scrollbar layer */}
+      {!isMaximized && (
+        <div
+          aria-hidden
+          className="absolute bottom-0 right-0 w-4 h-4 cursor-se-resize"
+          style={{ zIndex: 10 }}
+          onMouseDown={(e) => {
+            onFocus?.()
+            if (e.button !== 0) return
+            e.preventDefault()
+            e.stopPropagation()
+            const rect = windowRef.current.getBoundingClientRect()
+            resizeRef.current = {
+              zone: 'se',
+              startX: e.clientX,
+              startY: e.clientY,
+              startW: rect.width,
+              startH: rect.height,
+              startLeft: rect.left,
+              startTop: rect.top,
+            }
+            setIsResizing(true)
+          }}
+        />
+      )}
     </div>
   )
 }
@@ -594,24 +618,69 @@ function DraggableFolder({
   )
 }
 
+function randomFolderPos() {
+  const vw = typeof window !== 'undefined' ? window.innerWidth : 1200
+  const vh = typeof window !== 'undefined' ? window.innerHeight : 800
+  const desktop = vh - MENU_BAR_PX
+  const x = Math.max(20, Math.floor(Math.random() * vw * 0.72))
+  const y = Math.max(20, Math.floor(Math.random() * desktop * 0.72))
+  return { x, y }
+}
+
 const initialFolders = [
-  { id: 1, title: 'Moheetik', x: 20, y: 20 },
-  { id: 2, title: 'Folder #02', x: 20, y: 130 },
+  { id: 1, title: 'Moheetik', ...randomFolderPos() },
+  { id: 2, title: 'Folder #02', ...randomFolderPos() },
 ]
 
 export default function App() {
   const [now, setNow] = useState(() => new Date())
   const [selectedFolderId, setSelectedFolderId] = useState(null)
-  const [openWindow, setOpenWindow] = useState(null)
+  const [openWindows, setOpenWindows] = useState([])
+  const zCounterRef = useRef(200)
 
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 1000)
     return () => clearInterval(id)
   }, [])
 
+  const openOrFocusWindow = useCallback((title) => {
+    setOpenWindows((prev) => {
+      const existing = prev.find((w) => w.id === title)
+      const newZ = ++zCounterRef.current
+      if (existing) {
+        return prev.map((w) => w.id === title ? { ...w, zIndex: newZ } : w)
+      }
+      const idx = prev.length
+      return [
+        ...prev,
+        {
+          id: title,
+          title,
+          zIndex: newZ,
+          initialX: 60 + idx * 24,
+          initialY: 48 + idx * 24,
+        },
+      ]
+    })
+  }, [])
+
+  const bringToFront = useCallback((id) => {
+    setOpenWindows((prev) => {
+      const newZ = ++zCounterRef.current
+      return prev.map((w) => w.id === id ? { ...w, zIndex: newZ } : w)
+    })
+  }, [])
+
+  const closeWindow = useCallback((id) => {
+    setOpenWindows((prev) => prev.filter((w) => w.id !== id))
+  }, [])
+
   return (
     <div className="fixed inset-0 min-h-0 w-full overflow-hidden bg-[#f8f6f0] font-sans antialiased">
-      <header className="fixed top-0 z-50 flex h-7 w-full items-center justify-between bg-[#E8E4D9] px-4 text-[13px] font-semibold font-sans tracking-wide text-gray-900">
+      <header
+        className="fixed top-0 w-full flex h-7 items-center justify-between bg-[#E8E4D9] px-4 text-[13px] font-semibold font-sans tracking-wide text-gray-900"
+        style={{ zIndex: 9999 }}
+      >
         <div className="flex items-center gap-4">
           <span aria-hidden>✦</span>
           <span className="font-bold">Mayar</span>
@@ -646,15 +715,21 @@ export default function App() {
             initialY={folder.y}
             isSelected={selectedFolderId === folder.id}
             onSelect={() => setSelectedFolderId(folder.id)}
-            onDoubleClick={() => setOpenWindow(folder.title)}
+            onDoubleClick={() => openOrFocusWindow(folder.title)}
           />
         ))}
-        {openWindow && (
+        {openWindows.map((win) => (
           <MacWindow
-            title={openWindow}
-            onClose={() => setOpenWindow(null)}
+            key={win.id}
+            id={win.id}
+            title={win.title}
+            zIndex={win.zIndex}
+            initialX={win.initialX}
+            initialY={win.initialY}
+            onClose={() => closeWindow(win.id)}
+            onFocus={() => bringToFront(win.id)}
           />
-        )}
+        ))}
       </main>
     </div>
   )
