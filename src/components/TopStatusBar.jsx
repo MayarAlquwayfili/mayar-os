@@ -1,37 +1,19 @@
 import { useState, useEffect } from 'react'
+import IcWifi from '../assets/Ic_wifi.svg'
 import IcGithub from '../assets/Ic_Github.svg'
 import IcLinkedin from '../assets/Ic_linkedin.svg'
 import IcBehance from '../assets/Ic_Behance.svg'
 
 const SOCIAL_LINKS = [
-  { href: 'https://github.com/MayarAlquwayfili', icon: IcGithub, label: 'GitHub' },
+  { href: 'https://github.com/MayarAlquwayfili',          icon: IcGithub,   label: 'GitHub'   },
   { href: 'https://www.linkedin.com/in/mayar-alquwayfili/', icon: IcLinkedin, label: 'LinkedIn' },
-  { href: 'https://www.behance.net/mayaralquway', icon: IcBehance, label: 'Behance' },
+  { href: 'https://www.behance.net/mayaralquway',           icon: IcBehance,  label: 'Behance'  },
 ]
 
-function WifiGlyph({ className }) {
+function BatteryGlyph() {
   return (
     <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M5 12.55a11 11 0 0 1 14.08 0" />
-      <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
-      <path d="M12 20h.01" />
-    </svg>
-  )
-}
-
-function BatteryGlyph({ className }) {
-  return (
-    <svg
-      className={className}
+      className="h-[11px] w-[17px] shrink-0"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -56,6 +38,9 @@ function formatMenuBarClock(d) {
   return `${weekday} ${day} ${month} ${h}:${m}`
 }
 
+/* Shared hover pill style — gray tint, no movement */
+const HOVER_PILL = 'rounded-md px-1.5 py-0.5 transition-colors duration-100 hover:bg-black/[0.06] cursor-default select-none'
+
 export default function TopStatusBar() {
   const [now, setNow] = useState(() => new Date())
 
@@ -67,27 +52,22 @@ export default function TopStatusBar() {
   return (
     <header
       role="banner"
-      className="fixed inset-x-0 top-0 box-border flex h-[28px] min-h-[28px] max-h-[28px] flex-nowrap items-center justify-between gap-6 px-4 backdrop-blur-[10px] sm:px-5"
+      className="fixed inset-x-0 top-0 font-sans box-border flex h-[28px] min-h-[28px] max-h-[28px] flex-nowrap items-center justify-between px-2 sm:px-3"
       style={{
         zIndex: 9999,
-        fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
-        backgroundColor: 'rgba(235, 232, 226, 0.92)',
-        borderBottom: '1px solid rgba(0, 0, 0, 0.06)',
+        backgroundColor: 'rgba(235, 232, 226, 0.96)',
+        borderBottom: '1px solid rgba(0, 0, 0, 0.08)',
         boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.5)',
       }}
     >
-      {/* Left cluster */}
-      <div className="flex min-w-0 flex-1 flex-nowrap items-center gap-4 overflow-hidden text-[12px] font-medium leading-none text-neutral-900/90 antialiased sm:text-[13px] md:gap-5">
-        <span className="shrink-0 whitespace-nowrap font-semibold tracking-[-0.01em]">
-          Mayar
-        </span>
-        <span className="shrink-0 whitespace-nowrap font-normal tracking-[-0.01em]">
-          About Me
-        </span>
+      {/* ── Left cluster ── */}
+      <div className="flex min-w-0 flex-1 flex-nowrap items-center gap-0.5 text-[13px] font-medium leading-none text-neutral-900">
+        <span className={`font-semibold ${HOVER_PILL}`}>Mayar</span>
+        <span className={`font-normal ${HOVER_PILL}`}>About Me</span>
       </div>
 
-      {/* Right cluster */}
-      <div className="flex shrink-0 flex-nowrap items-center gap-2.5 text-neutral-700 sm:gap-3">
+      {/* ── Right cluster ── */}
+      <div className="flex shrink-0 flex-nowrap items-center gap-0.5 text-neutral-900">
 
         {/* Social links */}
         {SOCIAL_LINKS.map(({ href, icon, label }) => (
@@ -97,23 +77,31 @@ export default function TopStatusBar() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={label}
-            className="shrink-0 opacity-50 transition-all duration-150 hover:opacity-100 hover:-translate-y-[1px]"
+            className="flex shrink-0 items-center justify-center rounded-md p-1 transition-colors duration-100 hover:bg-black/[0.06]"
           >
-            <img src={icon} alt={label} className="h-[18px] w-[18px] block" draggable={false} />
+            <img src={icon} alt={label} className="h-[16px] w-[16px] block" draggable={false} />
           </a>
         ))}
 
         {/* Divider */}
-        <span className="h-3 w-px shrink-0 bg-neutral-400/40" aria-hidden />
+        <span className="mx-1 h-3 w-px shrink-0 bg-neutral-400/50" aria-hidden />
 
-        {/* System status */}
+        {/* Wi-Fi */}
         <span className="sr-only">Wi-Fi</span>
-        <WifiGlyph className="h-3 w-3 shrink-0 opacity-[0.85]" />
+        <span className={HOVER_PILL + ' flex items-center'}>
+          <img src={IcWifi} alt="" aria-hidden className="h-[14px] w-[14px] block" draggable={false} />
+        </span>
+
+        {/* Battery */}
         <span className="sr-only">Battery</span>
-        <BatteryGlyph className="h-[11px] w-[17px] shrink-0 opacity-[0.85]" />
+        <span className={HOVER_PILL + ' flex items-center'}>
+          <BatteryGlyph />
+        </span>
+
+        {/* Clock */}
         <time
           dateTime={now.toISOString()}
-          className="shrink-0 whitespace-nowrap pl-0.5 text-[12px] font-medium tabular-nums leading-none tracking-[-0.01em] text-neutral-900/90 sm:text-[13px]"
+          className={`shrink-0 whitespace-nowrap text-[12px] font-medium tabular-nums leading-none tracking-tight text-neutral-900 sm:text-[13px] ${HOVER_PILL}`}
         >
           {formatMenuBarClock(now)}
         </time>

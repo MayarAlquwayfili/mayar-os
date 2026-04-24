@@ -420,8 +420,8 @@ function CVContent() {
         <p className="text-[11px] text-gray-400 mb-8 uppercase tracking-widest">PDF Document</p>
 
         <a
-          href="#"
-          download="Mayar_CV.pdf"
+          href="/Mayar_Alquwayfili.pdf"
+          download="Mayar_Alquwayfili.pdf"
           className="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-5 py-2.5 text-[13px] font-medium text-white transition-colors hover:bg-gray-700"
         >
           <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
