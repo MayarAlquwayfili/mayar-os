@@ -414,7 +414,7 @@ function CVContent() {
                  [&::-webkit-scrollbar-thumb]:bg-gray-200"
     >
       {/* Centered content column — expands with the window */}
-      <div className="mx-auto w-full max-w-[820px] px-12 pb-8 pt-10 md:px-16">
+      <div className="mx-auto w-full max-w-[820px] px-8 pb-12 pt-10 sm:px-10 md:px-14 lg:px-16">
 
         {/* ── Header ── */}
         <header className="mb-8 border-b border-gray-200 pb-7">
@@ -510,17 +510,29 @@ function CVContent() {
         {/* ── Certifications ── */}
         <Section title="Certifications">
           <ul className="space-y-2 text-[13px] text-gray-700">
-            {[
-              ['UX Design Virtual Work Experience (Foodics × Misk)', 'Oct 2025'],
-              ['Introduction to Securities & Investment (CME-1), CISI', 'Aug 2025'],
-              ['Intro to Financial Sustainability, Udacity', 'Feb 2025'],
-              ['Data Fundamentals, IBM', 'Oct 2024'],
-            ].map(([cert, date]) => (
-              <li key={cert} className="flex items-baseline justify-between gap-4 leading-relaxed">
-                <span>{cert}</span>
-                <span className="shrink-0 text-gray-400">{date}</span>
-              </li>
-            ))}
+            <li className="flex items-baseline justify-between gap-4 leading-relaxed">
+              <span>UX Design Virtual Work Experience (Foodics × Misk)</span>
+              <span className="shrink-0 text-gray-400">Oct 2025</span>
+            </li>
+            <li className="flex items-baseline justify-between gap-4 leading-relaxed">
+              <span>Introduction to Securities &amp; Investment (CME-1), CISI</span>
+              <span className="shrink-0 text-gray-400">Aug 2025</span>
+            </li>
+            <li className="flex items-baseline justify-between gap-4 leading-relaxed">
+              <a
+                href="https://www.udacity.com/certificate/e/8f9e5572-e489-11ef-b41c-ab762a8ad8e8"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline-offset-2 hover:underline hover:text-gray-900 transition-colors"
+              >
+                BSF Intro to Financial Sustainability, Udacity
+              </a>
+              <span className="shrink-0 text-gray-400">Feb 2025</span>
+            </li>
+            <li className="flex items-baseline justify-between gap-4 leading-relaxed">
+              <span>Data Fundamentals, IBM</span>
+              <span className="shrink-0 text-gray-400">Oct 2024</span>
+            </li>
           </ul>
         </Section>
 
@@ -539,8 +551,8 @@ function CVContent() {
           </div>
         </Section>
 
-        {/* ── Download button — sticky to bottom of scroll container ── */}
-        <div className="sticky bottom-0 -mx-12 mt-6 flex justify-center border-t border-gray-100 bg-white px-12 py-4 md:-mx-16 md:px-16">
+        {/* ── Download button ── */}
+        <div className="mt-10 flex justify-start border-t border-gray-100 pt-7">
           <a
             href="/Mayar_Alquwayfili.pdf"
             download="Mayar_Alquwayfili.pdf"
