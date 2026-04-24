@@ -405,33 +405,198 @@ function QaffatekContent() {
 
 function CVContent() {
   return (
-    <div className="h-full overflow-y-auto bg-[#f5f5f5] font-sans flex flex-col items-center justify-center p-8">
-      <div className="text-center max-w-xs">
-        {/* PDF document icon */}
-        <div className="mx-auto mb-6 flex h-24 w-20 flex-col overflow-hidden rounded-lg shadow-md">
-          <div className="flex flex-1 items-center justify-center bg-white">
-            <span className="text-[11px] font-bold tracking-widest text-red-500 uppercase">PDF</span>
+    <div
+      className="h-full overflow-y-auto font-sans
+                 [&::-webkit-scrollbar]:w-1.5
+                 [&::-webkit-scrollbar-track]:bg-transparent
+                 [&::-webkit-scrollbar-thumb]:rounded-full
+                 [&::-webkit-scrollbar-thumb]:bg-gray-300"
+      style={{ background: '#f7f6f3' }}
+    >
+      {/* A4-style page */}
+      <div className="mx-auto my-8 w-full max-w-[780px] rounded-lg bg-white px-14 py-12 shadow-sm"
+           style={{ minHeight: '1050px' }}>
+
+        {/* ── Header ── */}
+        <header className="mb-8 border-b border-gray-200 pb-6">
+          <h1 className="text-[28px] font-bold tracking-tight text-gray-900">
+            Mayar Alquwayfili
+          </h1>
+          <p className="mt-1.5 text-[13px] text-gray-500 leading-relaxed">
+            Riyadh&nbsp;&nbsp;·&nbsp;&nbsp;
+            <a href="mailto:mf.alquwayfili@gmail.com" className="hover:text-gray-800 transition-colors">mf.alquwayfili@gmail.com</a>
+            &nbsp;&nbsp;·&nbsp;&nbsp;054767478&nbsp;&nbsp;·&nbsp;&nbsp;
+            <a href="https://www.linkedin.com/in/mayar-alquwayfili/" target="_blank" rel="noopener noreferrer" className="hover:text-gray-800 transition-colors">LinkedIn</a>
+            &nbsp;&nbsp;·&nbsp;&nbsp;
+            <a href="https://www.behance.net/mayaralquway" target="_blank" rel="noopener noreferrer" className="hover:text-gray-800 transition-colors">Behance</a>
+          </p>
+        </header>
+
+        {/* ── Profile ── */}
+        <Section title="Profile">
+          <p className="text-[13.5px] leading-[1.85] text-gray-700">
+            Economics senior &amp; Apple Developer Academy student. Bridging the gap between
+            business strategy, UI/UX design, and iOS development to build highly impactful
+            digital products.
+          </p>
+        </Section>
+
+        {/* ── Education ── */}
+        <Section title="Education">
+          <CVEntry
+            title="Apple Developer Academy at TUWAIQ"
+            meta="Education Scholarship"
+            date="2025 – Present"
+          />
+          <CVEntry
+            title="Princess Nourah Bint Abdulrahman University"
+            meta="Bachelor's degree, Economics"
+            date="2022 – Present"
+          />
+        </Section>
+
+        {/* ── Projects ── */}
+        <Section title="Projects">
+          <CVEntry
+            title="RECLAB App — Personal Project"
+            meta="iOS Developer &amp; Product Designer"
+            date="Jan 2026 – Present"
+            bullets={[
+              'Developed an iOS personal-logging app for multipotentialites to document and track diverse experiments.',
+              'Designed a clean, native card-based UI in Figma, turning the initial concept into a fully functional application.',
+            ]}
+          />
+          <CVEntry
+            title="Qaffatek — Apple Developer Academy"
+            meta="iOS Developer &amp; Product Designer"
+            date="Sep 2025 – Mar 2026"
+            bullets={[
+              'Launched an iOS game to the App Store, transforming a traditional paper game into a digital experience.',
+              'Built with SwiftUI and MVVM architecture, implementing improvements based on beta user feedback.',
+              'Designed a Figma interface for instant role assignment and focus on real-world interaction.',
+            ]}
+          />
+          <CVEntry
+            title="Moheetik App — Apple Developer Academy"
+            meta="Lead iOS Developer &amp; UI/UX Designer"
+            date="Nov 2025 – Jan 2026"
+            bullets={[
+              'Developed an assistive app for visually impaired users using real-time Arabic audio and haptic feedback.',
+              'Engineered a custom Core ML model to detect doors and stairs, surpassing standard model limitations.',
+              'Validated the MVP with the Authority for People with Disability (APD).',
+            ]}
+          />
+          <CVEntry
+            title="Brewcha Studio — Entrepreneurship Project"
+            meta="Product Manager &amp; Designer"
+            date="Sep 2025 – Nov 2025"
+            bullets={[
+              'Led end-to-end development of a DIY beverage workshop and managed strategic vision.',
+              'Designed brand identity and Figma prototypes for packaging, stickers, and cards.',
+              'Executed a live prototype workshop to validate the business model through feedback.',
+            ]}
+          />
+          <CVEntry
+            title="Digital Payments Impact on Korean SMEs — Research"
+            meta="Independent Researcher"
+            date="Sep 2025 – Nov 2025"
+            bullets={[
+              'Analyzed 10 years of Korean macroeconomic data using R to measure SME survival rates.',
+              'Developed Multiple Linear Regression and EFA models to evaluate financial trends.',
+            ]}
+          />
+        </Section>
+
+        {/* ── Certifications ── */}
+        <Section title="Certifications">
+          <ul className="space-y-1.5 text-[13px] text-gray-700">
+            {[
+              ['UX Design Virtual Work Experience (Foodics × Misk)', 'Oct 2025'],
+              ['Introduction to Securities & Investment (CME-1), CISI', 'Aug 2025'],
+              ['Intro to Financial Sustainability, Udacity', 'Feb 2025'],
+              ['Data Fundamentals, IBM', 'Oct 2024'],
+            ].map(([cert, date]) => (
+              <li key={cert} className="flex items-baseline justify-between gap-4">
+                <span>{cert}</span>
+                <span className="shrink-0 text-gray-400">{date}</span>
+              </li>
+            ))}
+          </ul>
+        </Section>
+
+        {/* ── Skills ── */}
+        <Section title="Skills">
+          <div className="space-y-2 text-[13px] text-gray-700">
+            {[
+              ['Technical', 'Swift, SwiftUI, Core ML, MVVM, API, Git/GitHub, iOS Accessibility, TestFlight'],
+              ['Design',    'Figma (Auto Layout), Design Systems, Apple HIG, User Research, Inclusive Design'],
+              ['Product',   'Agile (Scrum), Design Thinking, BMC, MVP Strategy, Market Analysis'],
+            ].map(([cat, items]) => (
+              <p key={cat}>
+                <span className="font-semibold text-gray-900">{cat}:&nbsp;</span>{items}
+              </p>
+            ))}
           </div>
-          <div className="h-1.5 bg-red-500" />
+        </Section>
+
+        {/* ── Download button ── */}
+        <div className="mt-10 flex justify-center border-t border-gray-100 pt-8">
+          <a
+            href="/Mayar_Alquwayfili.pdf"
+            download="Mayar_Alquwayfili.pdf"
+            className="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-6 py-2.5 text-[13px] font-medium text-white transition-colors hover:bg-gray-700"
+          >
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            Download PDF
+          </a>
         </div>
 
-        <p className="text-[17px] font-semibold text-gray-900 mb-1">Mayar_CV.pdf</p>
-        <p className="text-[13px] text-gray-500 mb-2">Mayar Alquwayfili — Designer &amp; Developer</p>
-        <p className="text-[11px] text-gray-400 mb-8 uppercase tracking-widest">PDF Document</p>
-
-        <a
-          href="/Mayar_Alquwayfili.pdf"
-          download="Mayar_Alquwayfili.pdf"
-          className="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-5 py-2.5 text-[13px] font-medium text-white transition-colors hover:bg-gray-700"
-        >
-          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-            <polyline points="7 10 12 15 17 10" />
-            <line x1="12" y1="15" x2="12" y2="3" />
-          </svg>
-          Download CV
-        </a>
       </div>
+    </div>
+  )
+}
+
+/* ── Resume sub-components ─────────────────────────────────────────────────── */
+
+function Section({ title, children }) {
+  return (
+    <section className="mb-7">
+      <h2 className="mb-3 text-[11px] font-bold uppercase tracking-[0.12em] text-gray-400">
+        {title}
+      </h2>
+      {children}
+    </section>
+  )
+}
+
+function CVEntry({ title, meta, date, bullets }) {
+  return (
+    <div className="mb-4 last:mb-0">
+      <div className="flex items-baseline justify-between gap-4">
+        <p className="text-[13.5px] font-semibold text-gray-900">{title}</p>
+        <span className="shrink-0 text-[12px] text-gray-400">{date}</span>
+      </div>
+      {meta && (
+        <p
+          className="mt-0.5 text-[12.5px] text-gray-500"
+          dangerouslySetInnerHTML={{ __html: meta }}
+        />
+      )}
+      {bullets && bullets.length > 0 && (
+        <ul className="mt-2 space-y-1 pl-4">
+          {bullets.map((b) => (
+            <li key={b} className="relative text-[13px] leading-[1.75] text-gray-700
+                                   before:absolute before:left-[-12px] before:top-[0.6em]
+                                   before:h-1 before:w-1 before:rounded-full before:bg-gray-400 before:content-['']">
+              {b}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   )
 }
