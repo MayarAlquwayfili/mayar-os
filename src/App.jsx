@@ -405,24 +405,23 @@ function QaffatekContent() {
 
 function CVContent() {
   return (
+    /* Outer: fills the window, white bg, scrollable, thin custom scrollbar */
     <div
-      className="h-full overflow-y-auto font-sans
+      className="h-full overflow-y-auto bg-white font-sans
                  [&::-webkit-scrollbar]:w-1.5
                  [&::-webkit-scrollbar-track]:bg-transparent
                  [&::-webkit-scrollbar-thumb]:rounded-full
-                 [&::-webkit-scrollbar-thumb]:bg-gray-300"
-      style={{ background: '#f7f6f3' }}
+                 [&::-webkit-scrollbar-thumb]:bg-gray-200"
     >
-      {/* A4-style page */}
-      <div className="mx-auto my-8 w-full max-w-[780px] rounded-lg bg-white px-14 py-12 shadow-sm"
-           style={{ minHeight: '1050px' }}>
+      {/* Centered content column — expands with the window */}
+      <div className="mx-auto w-full max-w-[820px] px-12 pb-8 pt-10 md:px-16">
 
         {/* ── Header ── */}
-        <header className="mb-8 border-b border-gray-200 pb-6">
-          <h1 className="text-[28px] font-bold tracking-tight text-gray-900">
+        <header className="mb-8 border-b border-gray-200 pb-7">
+          <h1 className="text-[26px] font-bold tracking-tight text-gray-900">
             Mayar Alquwayfili
           </h1>
-          <p className="mt-1.5 text-[13px] text-gray-500 leading-relaxed">
+          <p className="mt-2 text-[13px] leading-relaxed text-gray-500">
             Riyadh&nbsp;&nbsp;·&nbsp;&nbsp;
             <a href="mailto:mf.alquwayfili@gmail.com" className="hover:text-gray-800 transition-colors">mf.alquwayfili@gmail.com</a>
             &nbsp;&nbsp;·&nbsp;&nbsp;054767478&nbsp;&nbsp;·&nbsp;&nbsp;
@@ -434,7 +433,7 @@ function CVContent() {
 
         {/* ── Profile ── */}
         <Section title="Profile">
-          <p className="text-[13.5px] leading-[1.85] text-gray-700">
+          <p className="text-[13.5px] leading-7 text-gray-700">
             Economics senior &amp; Apple Developer Academy student. Bridging the gap between
             business strategy, UI/UX design, and iOS development to build highly impactful
             digital products.
@@ -459,7 +458,7 @@ function CVContent() {
         <Section title="Projects">
           <CVEntry
             title="RECLAB App — Personal Project"
-            meta="iOS Developer &amp; Product Designer"
+            meta="iOS Developer & Product Designer"
             date="Jan 2026 – Present"
             bullets={[
               'Developed an iOS personal-logging app for multipotentialites to document and track diverse experiments.',
@@ -468,7 +467,8 @@ function CVContent() {
           />
           <CVEntry
             title="Qaffatek — Apple Developer Academy"
-            meta="iOS Developer &amp; Product Designer"
+            titleHref="https://apps.apple.com/sa/app/%D9%82%D9%81%D8%B7%D8%AA%D9%83/id6479574301"
+            meta="iOS Developer & Product Designer"
             date="Sep 2025 – Mar 2026"
             bullets={[
               'Launched an iOS game to the App Store, transforming a traditional paper game into a digital experience.',
@@ -478,7 +478,7 @@ function CVContent() {
           />
           <CVEntry
             title="Moheetik App — Apple Developer Academy"
-            meta="Lead iOS Developer &amp; UI/UX Designer"
+            meta="Lead iOS Developer & UI/UX Designer"
             date="Nov 2025 – Jan 2026"
             bullets={[
               'Developed an assistive app for visually impaired users using real-time Arabic audio and haptic feedback.',
@@ -488,7 +488,7 @@ function CVContent() {
           />
           <CVEntry
             title="Brewcha Studio — Entrepreneurship Project"
-            meta="Product Manager &amp; Designer"
+            meta="Product Manager & Designer"
             date="Sep 2025 – Nov 2025"
             bullets={[
               'Led end-to-end development of a DIY beverage workshop and managed strategic vision.',
@@ -509,14 +509,14 @@ function CVContent() {
 
         {/* ── Certifications ── */}
         <Section title="Certifications">
-          <ul className="space-y-1.5 text-[13px] text-gray-700">
+          <ul className="space-y-2 text-[13px] text-gray-700">
             {[
               ['UX Design Virtual Work Experience (Foodics × Misk)', 'Oct 2025'],
               ['Introduction to Securities & Investment (CME-1), CISI', 'Aug 2025'],
               ['Intro to Financial Sustainability, Udacity', 'Feb 2025'],
               ['Data Fundamentals, IBM', 'Oct 2024'],
             ].map(([cert, date]) => (
-              <li key={cert} className="flex items-baseline justify-between gap-4">
+              <li key={cert} className="flex items-baseline justify-between gap-4 leading-relaxed">
                 <span>{cert}</span>
                 <span className="shrink-0 text-gray-400">{date}</span>
               </li>
@@ -526,7 +526,7 @@ function CVContent() {
 
         {/* ── Skills ── */}
         <Section title="Skills">
-          <div className="space-y-2 text-[13px] text-gray-700">
+          <div className="space-y-2.5 text-[13px] leading-relaxed text-gray-700">
             {[
               ['Technical', 'Swift, SwiftUI, Core ML, MVVM, API, Git/GitHub, iOS Accessibility, TestFlight'],
               ['Design',    'Figma (Auto Layout), Design Systems, Apple HIG, User Research, Inclusive Design'],
@@ -539,8 +539,8 @@ function CVContent() {
           </div>
         </Section>
 
-        {/* ── Download button ── */}
-        <div className="mt-10 flex justify-center border-t border-gray-100 pt-8">
+        {/* ── Download button — sticky to bottom of scroll container ── */}
+        <div className="sticky bottom-0 -mx-12 mt-6 flex justify-center border-t border-gray-100 bg-white px-12 py-4 md:-mx-16 md:px-16">
           <a
             href="/Mayar_Alquwayfili.pdf"
             download="Mayar_Alquwayfili.pdf"
@@ -564,8 +564,8 @@ function CVContent() {
 
 function Section({ title, children }) {
   return (
-    <section className="mb-7">
-      <h2 className="mb-3 text-[11px] font-bold uppercase tracking-[0.12em] text-gray-400">
+    <section className="mb-8 border-t border-gray-100 pt-6 first:border-t-0 first:pt-0">
+      <h2 className="mb-4 text-[10.5px] font-bold uppercase tracking-[0.13em] text-gray-400">
         {title}
       </h2>
       {children}
@@ -573,25 +573,52 @@ function Section({ title, children }) {
   )
 }
 
-function CVEntry({ title, meta, date, bullets }) {
+function CVEntry({ title, titleHref, meta, date, bullets }) {
   return (
-    <div className="mb-4 last:mb-0">
+    <div className="mb-5 last:mb-0">
       <div className="flex items-baseline justify-between gap-4">
-        <p className="text-[13.5px] font-semibold text-gray-900">{title}</p>
+        {/* Title — optionally a link */}
+        {titleHref ? (
+          <a
+            href={titleHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-baseline gap-1.5 text-[13.5px] font-semibold text-gray-900 hover:text-gray-600 transition-colors"
+          >
+            {title}
+            {/* external link icon */}
+            <svg
+              className="mb-[-1px] h-3 w-3 shrink-0 opacity-0 transition-opacity group-hover:opacity-60"
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+              strokeLinecap="round" strokeLinejoin="round" aria-hidden
+            >
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+          </a>
+        ) : (
+          <p className="text-[13.5px] font-semibold text-gray-900">{title}</p>
+        )}
         <span className="shrink-0 text-[12px] text-gray-400">{date}</span>
       </div>
+
+      {/* Role / type — italic, lighter gray */}
       {meta && (
-        <p
-          className="mt-0.5 text-[12.5px] text-gray-500"
-          dangerouslySetInnerHTML={{ __html: meta }}
-        />
+        <p className="mt-0.5 text-[12.5px] italic text-gray-400">{meta}</p>
       )}
+
+      {/* Bullets */}
       {bullets && bullets.length > 0 && (
-        <ul className="mt-2 space-y-1 pl-4">
+        <ul className="mt-2.5 space-y-1.5 pl-4">
           {bullets.map((b) => (
-            <li key={b} className="relative text-[13px] leading-[1.75] text-gray-700
-                                   before:absolute before:left-[-12px] before:top-[0.6em]
-                                   before:h-1 before:w-1 before:rounded-full before:bg-gray-400 before:content-['']">
+            <li
+              key={b}
+              className="relative text-[13px] leading-7 text-gray-700
+                         before:absolute before:left-[-13px] before:top-[0.65em]
+                         before:h-[5px] before:w-[5px] before:rounded-full
+                         before:bg-gray-300 before:content-['']"
+            >
               {b}
             </li>
           ))}
