@@ -9,6 +9,8 @@ import MockupMoheetik01 from './assets/MockupMoheetik01.svg'
 import MockupMoheetik02 from './assets/MockupMoheetik02.svg'
 import MockupMoheetik03 from './assets/MockupMoheetik03.svg'
 import Dock from './components/Dock'
+import { useWindowManager } from './hooks/useWindowManager'
+import { MOHEETIK_TOOLS, RECLAB_TOOLS, QAFFATEK_TOOLS, DESKTOP_FOLDERS } from './constants/projects'
 
 const MENU_BAR_PX = 28
 const EDGE_PX = 10
@@ -63,8 +65,6 @@ const META_KEY_CLS = 'text-[10px] font-medium uppercase tracking-[0.09em] text-g
 const META_VAL_CLS = 'text-[13px] font-medium text-gray-900'
 const SECTION_H2   = 'mb-4 text-[15px] font-semibold tracking-tight text-gray-900'
 
-const TOOLS = ['SwiftUI', 'CoreML', 'ARKit', 'Figma', 'Cursor (AI)']
-
 function MoheetikSplitContent() {
   return (
     <div
@@ -113,7 +113,7 @@ function MoheetikSplitContent() {
           <div>
             <p className={META_KEY_CLS}>Tools</p>
             <div className="mt-1.5 flex flex-wrap gap-1">
-              {TOOLS.map((t) => (
+              {MOHEETIK_TOOLS.map((t) => (
                 <span
                   key={t}
                   className="inline-flex rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-medium text-gray-600"
@@ -217,8 +217,6 @@ function MoheetikSplitContent() {
   )
 }
 
-const RECLAB_TOOLS = ['Figma', 'SwiftUI', 'SwiftData', 'UIKit', 'ImageIO', 'Cursor (AI)']
-
 function RECLABContent() {
   return (
     <div
@@ -304,8 +302,6 @@ function RECLABContent() {
     </div>
   )
 }
-
-const QAFFATEK_TOOLS = ['Figma', 'SwiftUI', 'SwiftData', 'UIKit', 'ImageIO', 'Cursor']
 
 function QaffatekContent() {
   return (
@@ -827,61 +823,14 @@ function DraggableFolder({
   )
 }
 
-function randomFolderPos() {
-  const vw = typeof window !== 'undefined' ? window.innerWidth : 1200
-  const vh = typeof window !== 'undefined' ? window.innerHeight : 800
-  const desktop = vh - MENU_BAR_PX
-  const x = Math.max(20, Math.floor(Math.random() * vw * 0.72))
-  const y = Math.max(20, Math.floor(Math.random() * desktop * 0.72))
-  return { x, y }
-}
-
-const initialFolders = [
-  { id: 1, title: 'Moheetik', ...randomFolderPos() },
-  { id: 2, title: 'Folder #02', ...randomFolderPos() },
-]
-
 export default function App() {
   const [now, setNow] = useState(() => new Date())
   const [selectedFolderId, setSelectedFolderId] = useState(null)
-  const [openWindows, setOpenWindows] = useState([])
-  const zCounterRef = useRef(200)
+  const { openWindows, openOrFocusWindow, bringToFront, closeWindow } = useWindowManager()
 
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 1000)
     return () => clearInterval(id)
-  }, [])
-
-  const openOrFocusWindow = useCallback((title) => {
-    setOpenWindows((prev) => {
-      const existing = prev.find((w) => w.id === title)
-      const newZ = ++zCounterRef.current
-      if (existing) {
-        return prev.map((w) => w.id === title ? { ...w, zIndex: newZ } : w)
-      }
-      const idx = prev.length
-      return [
-        ...prev,
-        {
-          id: title,
-          title,
-          zIndex: newZ,
-          initialX: 60 + idx * 24,
-          initialY: 48 + idx * 24,
-        },
-      ]
-    })
-  }, [])
-
-  const bringToFront = useCallback((id) => {
-    setOpenWindows((prev) => {
-      const newZ = ++zCounterRef.current
-      return prev.map((w) => w.id === id ? { ...w, zIndex: newZ } : w)
-    })
-  }, [])
-
-  const closeWindow = useCallback((id) => {
-    setOpenWindows((prev) => prev.filter((w) => w.id !== id))
   }, [])
 
   return (
@@ -915,7 +864,7 @@ export default function App() {
         className="absolute inset-x-0 bottom-0 top-7 z-0 overflow-hidden"
         onClick={() => setSelectedFolderId(null)}
       >
-        {initialFolders.map((folder) => (
+        {DESKTOP_FOLDERS.map((folder) => (
           <DraggableFolder
             key={folder.id}
             id={folder.id}
