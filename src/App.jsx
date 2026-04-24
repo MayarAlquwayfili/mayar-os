@@ -417,17 +417,19 @@ function CVContent() {
       <div className="mx-auto w-full max-w-[820px] min-w-0 overflow-x-hidden break-words px-8 pb-12 pt-10 sm:px-10 md:px-14 lg:px-16">
 
         {/* ── Header ── */}
-        <header className="mb-8 border-b border-gray-200 pb-7">
+        <header className="mb-6 pb-5">
           <h1 className="text-[20px] font-bold tracking-tight text-gray-900 sm:text-[23px] md:text-[26px]">
             Mayar Alquwayfili
           </h1>
           <p className="mt-2 text-[13px] leading-relaxed text-gray-500">
             Riyadh&nbsp;&nbsp;·&nbsp;&nbsp;
-            <a href="mailto:mf.alquwayfili@gmail.com" className="hover:text-gray-800 transition-colors">mf.alquwayfili@gmail.com</a>
+            <a href="mailto:mf.alquwayfili@gmail.com" className="text-gray-500 transition-colors hover:text-gray-800 hover:underline underline-offset-2">mf.alquwayfili@gmail.com</a>
             &nbsp;&nbsp;·&nbsp;&nbsp;054767478&nbsp;&nbsp;·&nbsp;&nbsp;
-            <a href="https://www.linkedin.com/in/mayar-alquwayfili/" target="_blank" rel="noopener noreferrer" className="hover:text-gray-800 transition-colors">LinkedIn</a>
+            <a href="https://github.com/MayarAlquwayfili" target="_blank" rel="noopener noreferrer" className="text-gray-500 transition-colors hover:text-gray-800 hover:underline underline-offset-2">GitHub</a>
             &nbsp;&nbsp;·&nbsp;&nbsp;
-            <a href="https://www.behance.net/mayaralquway" target="_blank" rel="noopener noreferrer" className="hover:text-gray-800 transition-colors">Behance</a>
+            <a href="https://www.linkedin.com/in/mayar-alquwayfili/" target="_blank" rel="noopener noreferrer" className="text-gray-500 transition-colors hover:text-gray-800 hover:underline underline-offset-2">LinkedIn</a>
+            &nbsp;&nbsp;·&nbsp;&nbsp;
+            <a href="https://www.behance.net/mayaralquway" target="_blank" rel="noopener noreferrer" className="text-gray-500 transition-colors hover:text-gray-800 hover:underline underline-offset-2">Behance</a>
           </p>
         </header>
 
