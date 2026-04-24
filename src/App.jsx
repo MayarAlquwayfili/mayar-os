@@ -63,7 +63,7 @@ function MoheetikSplitContent() {
                  [&::-webkit-scrollbar-thumb]:rounded-full
                  [&::-webkit-scrollbar-thumb]:bg-gray-300"
     >
-      <div className="w-full max-w-[1200px] mx-auto px-6 py-8 md:px-[5%]">
+      <div className="w-full max-w-[1200px] mx-auto px-6 py-8 sm:px-8 md:px-10">
 
         {/* ── Identity ───────────────────────────────────────── */}
         <header className="flex items-center gap-4 pb-6 mb-8 border-b border-gray-100">
@@ -215,7 +215,7 @@ function RECLABContent() {
                  [&::-webkit-scrollbar-thumb]:rounded-full
                  [&::-webkit-scrollbar-thumb]:bg-gray-300"
     >
-      <div className="w-full max-w-[1200px] mx-auto px-6 py-8 md:px-[5%]">
+      <div className="w-full max-w-[1200px] mx-auto px-6 py-8 sm:px-8 md:px-10">
 
         {/* ── Identity ───────────────────────────────────────── */}
         <header className="flex items-center gap-4 pb-6 mb-8 border-b border-gray-100">
@@ -301,7 +301,7 @@ function QaffatekContent() {
                  [&::-webkit-scrollbar-thumb]:rounded-full
                  [&::-webkit-scrollbar-thumb]:bg-gray-300"
     >
-      <div className="w-full max-w-[1200px] mx-auto px-6 py-8 md:px-[5%]">
+      <div className="w-full max-w-[1200px] mx-auto px-6 py-8 sm:px-8 md:px-10">
 
         {/* ── Identity ───────────────────────────────────────── */}
         <header className="flex items-center gap-4 pb-6 mb-8 border-b border-gray-100">
@@ -413,12 +413,12 @@ function CVContent() {
                  [&::-webkit-scrollbar-thumb]:rounded-full
                  [&::-webkit-scrollbar-thumb]:bg-gray-200"
     >
-      {/* Centered content column — expands with the window */}
-      <div className="mx-auto w-full max-w-[820px] px-8 pb-12 pt-10 sm:px-10 md:px-14 lg:px-16">
+      {/* Centered content column — expands with the window, overflow-safe */}
+      <div className="mx-auto w-full max-w-[820px] min-w-0 overflow-x-hidden break-words px-8 pb-12 pt-10 sm:px-10 md:px-14 lg:px-16">
 
         {/* ── Header ── */}
         <header className="mb-8 border-b border-gray-200 pb-7">
-          <h1 className="text-[26px] font-bold tracking-tight text-gray-900">
+          <h1 className="text-[20px] font-bold tracking-tight text-gray-900 sm:text-[23px] md:text-[26px]">
             Mayar Alquwayfili
           </h1>
           <p className="mt-2 text-[13px] leading-relaxed text-gray-500">
@@ -855,8 +855,11 @@ function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus }) 
         className={`relative flex h-11 shrink-0 select-none items-center border-b border-black/[0.06] bg-white px-4 ${
           isMaximized
             ? 'cursor-default'
-            : `cursor-grab active:cursor-grabbing ${isDragging ? 'cursor-grabbing' : ''}`
+            : isDragging
+            ? 'cursor-grabbing'
+            : 'cursor-grab active:cursor-grabbing'
         }`}
+        style={shellCursor ? { cursor: shellCursor } : undefined}
         onMouseDown={onTitleBarMouseDown}
       >
         {/* Traffic lights */}
@@ -937,12 +940,14 @@ function DraggableFolder({
   isSelected,
   onSelect,
   onDoubleClick,
+  onPositionChange,
 }) {
   const [position, setPosition] = useState({ x: initialX, y: initialY })
   const [isDragging, setIsDragging] = useState(false)
 
   const rootRef = useRef(null)
   const dragOffsetRef = useRef({ x: 0, y: 0 })
+  const lastPositionRef = useRef({ x: initialX, y: initialY })
 
   useEffect(() => {
     if (!isDragging) return
@@ -963,14 +968,17 @@ function DraggableFolder({
       const maxX = Math.max(0, pr.width - fr.width)
       const maxY = Math.max(0, pr.height - fr.height)
 
-      setPosition({
+      const newPos = {
         x: Math.max(0, Math.min(nx, maxX)),
         y: Math.max(0, Math.min(ny, maxY)),
-      })
+      }
+      lastPositionRef.current = newPos
+      setPosition(newPos)
     }
 
     const onMouseUp = () => {
       setIsDragging(false)
+      onPositionChange?.(lastPositionRef.current)
     }
 
     window.addEventListener('mousemove', onMouseMove)
@@ -980,7 +988,7 @@ function DraggableFolder({
       window.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('mouseup', onMouseUp)
     }
-  }, [isDragging])
+  }, [isDragging, onPositionChange])
 
   const onMouseDown = (e) => {
     if (e.button !== 0) return
@@ -1053,9 +1061,40 @@ function DraggableFolder({
   )
 }
 
+const LS_KEY = 'mayaros-folder-positions'
+
+function initFolderPositions() {
+  try {
+    const saved = localStorage.getItem(LS_KEY)
+    if (saved) {
+      const parsed = JSON.parse(saved)
+      const result = {}
+      DESKTOP_FOLDERS.forEach((f) => {
+        result[f.id] = parsed[f.id] ?? { x: f.x, y: f.y }
+      })
+      return result
+    }
+  } catch {}
+  // First load — persist random positions so they survive refreshes
+  const defaults = {}
+  DESKTOP_FOLDERS.forEach((f) => { defaults[f.id] = { x: f.x, y: f.y } })
+  try { localStorage.setItem(LS_KEY, JSON.stringify(defaults)) } catch {}
+  return defaults
+}
+
 export default function App() {
   const [selectedFolderId, setSelectedFolderId] = useState(null)
   const { openWindows, openOrFocusWindow, bringToFront, closeWindow } = useWindowManager()
+  const [folderPositions] = useState(initFolderPositions)
+
+  const handleFolderPositionChange = useCallback((id, pos) => {
+    try {
+      const raw = localStorage.getItem(LS_KEY)
+      const current = raw ? JSON.parse(raw) : {}
+      current[id] = pos
+      localStorage.setItem(LS_KEY, JSON.stringify(current))
+    } catch {}
+  }, [])
 
   return (
     <div className="fixed inset-0 min-h-0 w-full overflow-hidden bg-[#f8f6f0] font-sans antialiased">
@@ -1072,11 +1111,12 @@ export default function App() {
             title={folder.title}
             icon={folder.icon}
             subtitle={folder.subtitle}
-            initialX={folder.x}
-            initialY={folder.y}
+            initialX={folderPositions[folder.id]?.x ?? folder.x}
+            initialY={folderPositions[folder.id]?.y ?? folder.y}
             isSelected={selectedFolderId === folder.id}
             onSelect={() => setSelectedFolderId(folder.id)}
             onDoubleClick={() => openOrFocusWindow(folder.windowTitle ?? folder.title)}
+            onPositionChange={(pos) => handleFolderPositionChange(folder.id, pos)}
           />
         ))}
         {openWindows.map((win) => (
