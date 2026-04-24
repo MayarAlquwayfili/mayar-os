@@ -1,4 +1,13 @@
 import { useState, useEffect } from 'react'
+import IcGithub from '../assets/Ic_Github.svg'
+import IcLinkedin from '../assets/Ic_linkedin.svg'
+import IcBehance from '../assets/Ic_Behance.svg'
+
+const SOCIAL_LINKS = [
+  { href: 'https://github.com/MayarAlquwayfili', icon: IcGithub, label: 'GitHub' },
+  { href: 'https://www.linkedin.com/in/mayar-alquwayfili/', icon: IcLinkedin, label: 'LinkedIn' },
+  { href: 'https://www.behance.net/mayaralquway', icon: IcBehance, label: 'Behance' },
+]
 
 function WifiGlyph({ className }) {
   return (
@@ -47,9 +56,6 @@ function formatMenuBarClock(d) {
   return `${weekday} ${day} ${month} ${h}:${m}`
 }
 
-/**
- * macOS menu bar chrome: fixed 28px, flex space-between, glass background, system clock.
- */
 export default function TopStatusBar() {
   const [now, setNow] = useState(() => new Date())
 
@@ -61,15 +67,16 @@ export default function TopStatusBar() {
   return (
     <header
       role="banner"
-      className="fixed inset-x-0 top-0 z-[100] box-border flex h-[28px] min-h-[28px] max-h-[28px] flex-nowrap items-center justify-between gap-6 px-4 backdrop-blur-[10px] sm:px-5"
+      className="fixed inset-x-0 top-0 box-border flex h-[28px] min-h-[28px] max-h-[28px] flex-nowrap items-center justify-between gap-6 px-4 backdrop-blur-[10px] sm:px-5"
       style={{
+        zIndex: 9999,
         fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
         backgroundColor: 'rgba(235, 232, 226, 0.92)',
         borderBottom: '1px solid rgba(0, 0, 0, 0.06)',
         boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.5)',
       }}
     >
-      {/* Left cluster — min 16px between labels */}
+      {/* Left cluster */}
       <div className="flex min-w-0 flex-1 flex-nowrap items-center gap-4 overflow-hidden text-[12px] font-medium leading-none text-neutral-900/90 antialiased sm:text-[13px] md:gap-5">
         <span className="shrink-0 whitespace-nowrap font-semibold tracking-[-0.01em]">
           Mayar
@@ -79,8 +86,27 @@ export default function TopStatusBar() {
         </span>
       </div>
 
-      {/* Right cluster — icons and clock never touch */}
-      <div className="flex shrink-0 flex-nowrap items-center gap-3 text-neutral-700 sm:gap-3.5">
+      {/* Right cluster */}
+      <div className="flex shrink-0 flex-nowrap items-center gap-2.5 text-neutral-700 sm:gap-3">
+
+        {/* Social links */}
+        {SOCIAL_LINKS.map(({ href, icon, label }) => (
+          <a
+            key={label}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={label}
+            className="shrink-0 opacity-50 transition-all duration-150 hover:opacity-100 hover:-translate-y-[1px]"
+          >
+            <img src={icon} alt={label} className="h-[18px] w-[18px] block" draggable={false} />
+          </a>
+        ))}
+
+        {/* Divider */}
+        <span className="h-3 w-px shrink-0 bg-neutral-400/40" aria-hidden />
+
+        {/* System status */}
         <span className="sr-only">Wi-Fi</span>
         <WifiGlyph className="h-3 w-3 shrink-0 opacity-[0.85]" />
         <span className="sr-only">Battery</span>

@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import FolderIcon from './assets/Folder.svg'
-import IcWifi from './assets/Ic_wifi.svg'
 import AppIconMoheetik from './assets/AppIconMoheetik.svg'
 import AppIconQaffatek from './assets/AppIconQaffatek.svg'
 import AppIconRECLAB from './assets/AppIconRECLAB.svg'
@@ -9,6 +8,7 @@ import MockupMoheetik01 from './assets/MockupMoheetik01.svg'
 import MockupMoheetik02 from './assets/MockupMoheetik02.svg'
 import MockupMoheetik03 from './assets/MockupMoheetik03.svg'
 import Dock from './components/Dock'
+import TopStatusBar from './components/TopStatusBar'
 import { useWindowManager } from './hooks/useWindowManager'
 import { MOHEETIK_TOOLS, RECLAB_TOOLS, QAFFATEK_TOOLS, DESKTOP_FOLDERS } from './constants/projects'
 
@@ -48,17 +48,6 @@ function getResizeZone(clientX, clientY, rect) {
   return null
 }
 
-function formatClock(d) {
-  const w = d.toLocaleDateString('en-US', { weekday: 'short' })
-  const day = d.getDate()
-  const m = d.toLocaleDateString('en-US', { month: 'short' })
-  const t = d.toLocaleTimeString('en-US', {
-    hour: 'numeric',
-    minute: '2-digit',
-    hour12: true,
-  })
-  return `${w} ${day} ${m}\u00A0${t}`
-}
 
 const BODY_CLS    = 'text-[13.5px] leading-[1.8] tracking-[0.01em] text-gray-700'
 const META_KEY_CLS = 'text-[10px] font-medium uppercase tracking-[0.09em] text-gray-400 mb-1'
@@ -414,6 +403,39 @@ function QaffatekContent() {
   )
 }
 
+function CVContent() {
+  return (
+    <div className="h-full overflow-y-auto bg-[#f5f5f5] font-sans flex flex-col items-center justify-center p-8">
+      <div className="text-center max-w-xs">
+        {/* PDF document icon */}
+        <div className="mx-auto mb-6 flex h-24 w-20 flex-col overflow-hidden rounded-lg shadow-md">
+          <div className="flex flex-1 items-center justify-center bg-white">
+            <span className="text-[11px] font-bold tracking-widest text-red-500 uppercase">PDF</span>
+          </div>
+          <div className="h-1.5 bg-red-500" />
+        </div>
+
+        <p className="text-[17px] font-semibold text-gray-900 mb-1">Mayar_CV.pdf</p>
+        <p className="text-[13px] text-gray-500 mb-2">Mayar Alquwayfili — Designer &amp; Developer</p>
+        <p className="text-[11px] text-gray-400 mb-8 uppercase tracking-widest">PDF Document</p>
+
+        <a
+          href="#"
+          download="Mayar_CV.pdf"
+          className="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-5 py-2.5 text-[13px] font-medium text-white transition-colors hover:bg-gray-700"
+        >
+          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          Download CV
+        </a>
+      </div>
+    </div>
+  )
+}
+
 function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus }) {
   const defaultW = 700
   const defaultH = 500
@@ -662,6 +684,8 @@ function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus }) 
           <RECLABContent />
         ) : title === 'Qaffatek' ? (
           <QaffatekContent />
+        ) : title === 'Preview — Mayar_CV.pdf' ? (
+          <CVContent />
         ) : (
           <div className="p-6 text-sm text-gray-600">
             <p className="font-medium text-gray-800">{title}</p>
@@ -702,6 +726,8 @@ function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus }) 
 function DraggableFolder({
   id,
   title,
+  icon,
+  subtitle,
   initialX,
   initialY,
   isSelected,
@@ -794,7 +820,7 @@ function DraggableFolder({
         }`}
       >
         <img
-          src={FolderIcon}
+          src={icon ?? FolderIcon}
           className="h-16 w-16 shrink-0"
           alt=""
           draggable={false}
@@ -816,7 +842,7 @@ function DraggableFolder({
             isSelected ? 'font-medium text-amber-800' : 'text-gray-600'
           }`}
         >
-          2 items
+          {subtitle ?? '2 items'}
         </span>
       </div>
     </div>
@@ -824,41 +850,12 @@ function DraggableFolder({
 }
 
 export default function App() {
-  const [now, setNow] = useState(() => new Date())
   const [selectedFolderId, setSelectedFolderId] = useState(null)
   const { openWindows, openOrFocusWindow, bringToFront, closeWindow } = useWindowManager()
 
-  useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), 1000)
-    return () => clearInterval(id)
-  }, [])
-
   return (
     <div className="fixed inset-0 min-h-0 w-full overflow-hidden bg-[#f8f6f0] font-sans antialiased">
-      <header
-        className="fixed top-0 w-full flex h-7 items-center justify-between bg-[#E8E4D9] px-4 text-[13px] font-semibold font-sans tracking-wide text-gray-900"
-        style={{ zIndex: 9999 }}
-      >
-        <div className="flex items-center gap-4">
-          <span aria-hidden>✦</span>
-          <span className="font-bold">Mayar</span>
-          <span>About Me</span>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <img
-            src={IcWifi}
-            className="w-4 h-4 opacity-80"
-            alt="Wi-Fi"
-          />
-          <time
-            dateTime={now.toISOString()}
-            className="text-[13px] font-semibold text-black/90 tracking-tight tabular-nums"
-          >
-            {formatClock(now)}
-          </time>
-        </div>
-      </header>
+      <TopStatusBar />
 
       <main
         className="absolute inset-x-0 bottom-0 top-7 z-0 overflow-hidden"
@@ -869,11 +866,13 @@ export default function App() {
             key={folder.id}
             id={folder.id}
             title={folder.title}
+            icon={folder.icon}
+            subtitle={folder.subtitle}
             initialX={folder.x}
             initialY={folder.y}
             isSelected={selectedFolderId === folder.id}
             onSelect={() => setSelectedFolderId(folder.id)}
-            onDoubleClick={() => openOrFocusWindow(folder.title)}
+            onDoubleClick={() => openOrFocusWindow(folder.windowTitle ?? folder.title)}
           />
         ))}
         {openWindows.map((win) => (

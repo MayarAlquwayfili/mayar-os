@@ -1,3 +1,6 @@
+import FolderIcon from '../assets/Folder.svg'
+import FolderpdfIcon from '../assets/Folderpdf.svg'
+
 // ─── Tool stacks ──────────────────────────────────────────────────────────────
 
 export const MOHEETIK_TOOLS = ['SwiftUI', 'CoreML', 'ARKit', 'Figma', 'Cursor (AI)']
@@ -17,6 +20,14 @@ function randomFolderPos() {
 }
 
 export const DESKTOP_FOLDERS = [
-  { id: 1, title: 'Moheetik', ...randomFolderPos() },
-  { id: 2, title: 'Folder #02', ...randomFolderPos() },
+  { id: 1, title: 'Moheetik',    icon: FolderIcon,    ...randomFolderPos() },
+  { id: 2, title: 'Folder #02',  icon: FolderIcon,    ...randomFolderPos() },
+  {
+    id: 'cv',
+    title: 'Mayar_CV.pdf',
+    windowTitle: 'Preview — Mayar_CV.pdf',
+    icon: FolderpdfIcon,
+    subtitle: 'PDF Document',
+    ...randomFolderPos(),
+  },
 ]
