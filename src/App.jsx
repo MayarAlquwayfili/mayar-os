@@ -8,6 +8,8 @@ import MockupRECLABLab from './assets/RECLAB/MockupLab.svg'
 import MockupRECLABExperiment from './assets/RECLAB/MockupExperiment.svg'
 import MockupRECLABWinCollection from './assets/RECLAB/MockupWinCollection.svg'
 import RECLABPopup from './assets/RECLAB/RECLAB_POPUP.svg'
+// RECLAB_POPUP02.svg — drop this file into src/assets/RECLAB/ to activate the second popup
+import RECLABPopup02 from './assets/RECLAB/RECLAB_POPUP.svg'
 import RECLABButton from './assets/RECLAB/RECLAB_BUTTON.svg'
 import IcAppleLogo from './assets/Ic_apple.logo.svg'
 import MockupMoheetik01 from './assets/Moheetik/MockupMoheetik01.svg'
@@ -215,23 +217,90 @@ function MoheetikSplitContent() {
 }
 
 function RECLABContent() {
+  const scrollRef = useRef(null)
+  const sec2Ref   = useRef(null)  // S02 text (right) — BUTTON bell
+  const sec3Ref   = useRef(null)  // S03 text (left)  — POPUP bell
+  const sec4Ref   = useRef(null)  // S04 text (right) — Lab→WC blend
+
+  // Bell-curve progress for floating icons (0=entering, 0.5=centred, 1=exiting)
+  const [sec2RP, setSec2RP] = useState(0)
+  const [sec3RP, setSec3RP] = useState(0)
+  // Directional section-scroll progress for mockup blend (0=entered, 1=fully past)
+  const [labToWCP, setLabToWCP] = useState(0)
+
+  // readProgress: 0 = entering from bottom, 0.5 = centred, 1 = exiting from top
+  const readProgress = useCallback((ref) => {
+    const container = scrollRef.current
+    const el = ref.current
+    if (!container || !el) return 0
+    const cRect = container.getBoundingClientRect()
+    const eRect = el.getBoundingClientRect()
+    const elCenter = eRect.top + eRect.height / 2 - cRect.top
+    return Math.min(1, Math.max(0, 1 - elCenter / cRect.height))
+  }, [])
+
+  // sectionScrolled: 0 when section top hits viewport top, 1 when section bottom passes top
+  const sectionScrolled = useCallback((ref) => {
+    const container = scrollRef.current
+    const el = ref.current
+    if (!container || !el) return 0
+    const cRect = container.getBoundingClientRect()
+    const eRect = el.getBoundingClientRect()
+    return Math.min(1, Math.max(0, (cRect.top - eRect.top) / eRect.height))
+  }, [])
+
+  // sectionVisible: starts the moment the section's TOP enters the viewport from below.
+  // Returns 0 at first pixel of visibility, rising to 1 as the section scrolls upward.
+  const sectionVisible = useCallback((ref) => {
+    const container = scrollRef.current
+    const el = ref.current
+    if (!container || !el) return 0
+    const cRect = container.getBoundingClientRect()
+    const eRect = el.getBoundingClientRect()
+    // (cRect.bottom - eRect.top): 0 when section top == viewport bottom, positive as it scrolls up
+    return Math.min(1, Math.max(0, (cRect.bottom - eRect.top) / cRect.height))
+  }, [])
+
+  const handleScroll = useCallback(() => {
+    setSec2RP(readProgress(sec2Ref))
+    setSec3RP(readProgress(sec3Ref))
+    // 0.3 dead-zone: transition waits until 30% of S04 is visible, then ×8 makes it fast.
+    const sec4Progress = Math.max(0, sectionVisible(sec4Ref) - 0.3)
+    setLabToWCP(Math.min(1, sec4Progress * 8))
+  }, [readProgress, sectionScrolled, sectionVisible])
+
+  // ── Mockup: Lab is static through S02 & S03, blends to WC early in S04 ──
+  const labOpacity = 1 - labToWCP
+  const wcOpacity  = labToWCP
+
+  // ── Bell-curve icons ─────────────────────────────────────────────────────
+  // bell(p) = sin(p·π): 0 at entry, 1 at centre, 0 at exit
+  const bell    = (p) => Math.pow(Math.sin(p * Math.PI), 6)
+  const floatTY = (p) => (0.5 - p) * 72   // ±36 px cinematic drift
+
+  // BUTTON strictly tracks S02 only
+  const btnOpacity = bell(sec2RP)
+  const btnTY      = floatTY(sec2RP)
+
+  // Single POPUP tracks S03
+  const popOpacity = bell(sec3RP)
+  const popTY      = floatTY(sec3RP)
+
   return (
     <div
+      ref={scrollRef}
+      onScroll={handleScroll}
       className="h-full overflow-y-auto bg-white font-sans
                  [&::-webkit-scrollbar]:w-1.5
                  [&::-webkit-scrollbar-track]:bg-transparent
                  [&::-webkit-scrollbar-thumb]:rounded-full
                  [&::-webkit-scrollbar-thumb]:bg-gray-300"
     >
-      <div className="w-full max-w-[1200px] mx-auto px-6 py-8 sm:px-8 md:px-10">
 
-        {/* ── Identity ───────────────────────────────────────── */}
+      {/* ── Header + Overview ─────────────────────────────────────────── */}
+      <div className="w-full max-w-[1200px] mx-auto px-6 sm:px-8 md:px-10 pt-8 pb-6">
         <header className="flex items-center gap-5 pb-6 mb-8 border-b border-gray-100">
-          <img
-            src={AppIconRECLAB}
-            alt="RECLAB app icon"
-            className="h-16 w-16 rounded-[14px] shadow-sm"
-          />
+          <img src={AppIconRECLAB} alt="RECLAB app icon" className="h-16 w-16 rounded-[14px] shadow-sm" />
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-[20px] font-bold tracking-tight text-gray-900">RECLAB</h1>
@@ -239,14 +308,10 @@ function RECLABContent() {
                 MVP
               </span>
             </div>
-            <p className="mt-0.5 text-[13px] font-medium text-gray-500">
-              Lifestyle &amp; Productivity
-            </p>
+            <p className="mt-0.5 text-[13px] font-medium text-gray-500">Lifestyle &amp; Productivity</p>
           </div>
         </header>
-
-        {/* ── Overview Grid ──────────────────────────────────── */}
-        <div className="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-4 pb-8 mb-10 border-b border-gray-100">
+        <div className="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-4 pb-8 border-b border-gray-100">
           <div>
             <p className={META_KEY_CLS}>Timeline</p>
             <p className={META_VAL_CLS}>01/2026 – Present</p>
@@ -263,155 +328,197 @@ function RECLABContent() {
             <p className={META_KEY_CLS}>Tools</p>
             <div className="mt-1.5 flex flex-wrap gap-1">
               {RECLAB_TOOLS.map((t) => (
-                <span
-                  key={t}
-                  className="inline-flex rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-medium text-gray-600"
-                >
+                <span key={t} className="inline-flex rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-medium text-gray-600">
                   {t}
                 </span>
               ))}
             </div>
           </div>
         </div>
+      </div>
 
-        {/* ── 01. The Challenge — text left, mockups right ─────── */}
-        <section className="py-10 grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] items-start gap-6 md:gap-[6%]">
-          {/* Feature Card */}
-          <div className="min-w-0 bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <p className={META_KEY_CLS + ' mb-3'}>01 — The Challenge</p>
-            <h2 className="text-[24px] font-bold leading-tight tracking-tight text-gray-900 mb-4">
-              &lsquo;What are your hobbies?&rsquo;<br />
-              <span className="text-gray-400">For a Multipotentialite, this is a trick question.</span>
-            </h2>
-            <p className={BODY_CLS}>
-              Being a &lsquo;Hobby Collector&rsquo; is about the constant thrill of discovery.
-              But once that initial curiosity is satisfied, the spark often disappears. Without a
-              system to capture the journey, these experiments quickly vanish into a graveyard of
-              abandoned hobbies.
-            </p>
-            <p className={BODY_CLS + ' mt-4'}>
-              While exploring communities of people with endless interests, a few thoughts kept coming up:
-            </p>
-            <div className="mt-2 space-y-1">
-              <p className={BODY_CLS + ' italic'}>&ldquo;I joke that I only have one hobby, which is that I am a hobby collector.&rdquo;</p>
-              <p className={BODY_CLS + ' italic'}>&ldquo;I&apos;m rich in experience, but I have nothing to show for it.&rdquo;</p>
-              <p className={BODY_CLS + ' italic'}>&ldquo;Mastery isn&apos;t the point; gaining exposure is.&rdquo;</p>
+      {/* ── 01. The Challenge — full-width dramatic prologue ─────────── */}
+      <div className="w-full max-w-[820px] mx-auto px-6 sm:px-8 py-24 text-center">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-400 mb-6">
+          01 — The Challenge
+        </p>
+        <h2 className="text-[28px] sm:text-[34px] font-bold tracking-tight leading-[1.2] text-gray-900 mb-8">
+          &lsquo;What are your hobbies?&rsquo;<br />
+          <span className="text-gray-400 font-normal">
+            For a Multipotentialite, this is a trick question.
+          </span>
+        </h2>
+        <p className="text-[15px] leading-[1.9] tracking-[0.01em] text-gray-600 mb-8">
+          Being a &lsquo;Hobby Collector&rsquo; is about the constant thrill of discovery.
+          But once that initial curiosity is satisfied, the spark often disappears. Without a
+          system to capture the journey, these experiments quickly vanish into a graveyard of
+          abandoned hobbies.
+        </p>
+        <div className="space-y-3 my-10 border-l-2 border-gray-200 pl-6 text-left max-w-[560px] mx-auto">
+          <p className="text-[15px] leading-[1.9] tracking-[0.01em] text-gray-500 italic">
+            &ldquo;I joke that I only have one hobby, which is that I am a hobby collector.&rdquo;
+          </p>
+          <p className="text-[15px] leading-[1.9] tracking-[0.01em] text-gray-500 italic">
+            &ldquo;I&apos;m rich in experience, but I have nothing to show for it.&rdquo;
+          </p>
+          <p className="text-[15px] leading-[1.9] tracking-[0.01em] text-gray-500 italic">
+            &ldquo;Mastery isn&apos;t the point; gaining exposure is.&rdquo;
+          </p>
+        </div>
+        <p className="text-[15px] leading-[1.9] tracking-[0.01em] text-gray-600 mb-6">
+          Current productivity apps are built to track &lsquo;finishing.&rsquo; They treat tasks
+          like chores to be checked off instead of experiments to be celebrated. This gap makes
+          even a small win — perfecting a new matcha recipe, folding 100 paper stars — feel like
+          it never happened. Without a record, these achievements simply fade away.
+        </p>
+        <p className="text-[16px] leading-[1.8] tracking-[0.01em] font-semibold text-gray-900">
+          Every &lsquo;Day 1&rsquo; deserves more than a checkmark. It needs a Record.
+        </p>
+      </div>
+
+      {/* ── Main Stage — sticky phone + 3 alternating text sections ─────
+           Desktop grid: [1fr] [400px phone] [1fr]
+           Phone: col 2, rows 1-3, md:sticky top-0 h-screen.
+
+           S02  col 3 (RIGHT)  MockupLab (static)   BUTTON 280px LEFT gutter
+           S03  col 1 (LEFT)   MockupLab (static)   POPUP 300px RIGHT gutter
+           S04  col 3 (RIGHT)  Lab → WC (done by 50% scroll)  —              ── */}
+      <div className="w-full max-w-[1200px] mx-auto px-6 sm:px-8 md:px-10 pb-24">
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_400px_1fr] gap-x-10 items-start">
+
+          {/* ══ STICKY PHONE — col 2, rows 1-3 ══════════════════════════ */}
+          <div
+            className="md:col-start-2 md:row-start-1 md:row-end-4 md:sticky top-0
+                       flex items-center justify-center h-screen"
+            style={{ zIndex: 10 }}
+          >
+            <div className="relative w-full max-w-[400px]">
+
+              {/* MockupLab — static through S02 + S03, fades as S04 scrolls */}
+              <img
+                src={MockupRECLABLab}
+                alt="RECLAB Lab screen"
+                className="w-full h-auto object-contain"
+                style={{ opacity: labOpacity }}
+              />
+              {/* MockupWinCollection — fades in across S04 */}
+              <img
+                src={MockupRECLABWinCollection}
+                alt="RECLAB Win Collection"
+                className="absolute inset-0 w-full h-full object-contain"
+                style={{ opacity: wcOpacity }}
+              />
+
+              {/* RECLAB_BUTTON — 280px, LEFT gutter, tied strictly to S02 */}
+              <img
+                src={RECLABButton}
+                alt="RECLAB record button"
+                style={{
+                  position: 'absolute',
+                  right: 'calc(100% + 36px)',
+                  top: '50%',
+                  width: '280px',
+                  objectFit: 'contain',
+                  filter: 'drop-shadow(0 8px 20px rgba(0,0,0,0.12))',
+                  opacity: btnOpacity,
+                  transform: `translateY(calc(-50% + ${btnTY}px))`,
+                  pointerEvents: 'none',
+                }}
+              />
+
+              {/* RECLAB_POPUP — 300px, RIGHT gutter, tied strictly to S03 */}
+              <img
+                src={RECLABPopup}
+                alt="RECLAB randomizer popup"
+                style={{
+                  position: 'absolute',
+                  left: 'calc(100% + 36px)',
+                  top: '50%',
+                  width: '300px',
+                  objectFit: 'contain',
+                  filter: 'drop-shadow(0 8px 20px rgba(0,0,0,0.12))',
+                  opacity: popOpacity,
+                  transform: `translateY(calc(-50% + ${popTY}px))`,
+                  pointerEvents: 'none',
+                }}
+              />
             </div>
-            <p className={BODY_CLS + ' mt-4'}>
-              The struggle isn&apos;t about being lazy or lacking willpower. It&apos;s the frustration
-              of being boxed into one single, specialized path. Current productivity apps are built to
-              track &lsquo;finishing.&rsquo; They treat tasks like chores to be checked off instead of
-              experiments to be celebrated. By focusing only on the end goal, these tools leave the
-              curious mind without any visual proof of their journey.
-            </p>
-            <p className={BODY_CLS + ' mt-4'}>
-              This gap makes even a small win, like perfecting a new matcha recipe or folding 100 paper
-              stars, feel like it never happened. Without a record, these achievements simply fade away.
-            </p>
-            <p className={BODY_CLS + ' mt-4'}>
-              <strong className="font-semibold text-gray-900">
-                Every &lsquo;Day 1&rsquo; deserves more than a checkmark. It needs a Record.
-              </strong>
-            </p>
           </div>
-          {/* Mockup visual area */}
-          <div className="min-w-0 bg-[#f5f5f7] rounded-2xl p-4 flex items-center gap-2">
-            <img
-              src={MockupRECLABLab}
-              alt="RECLAB Lab screen"
-              className="w-1/2 h-auto rounded-xl object-contain drop-shadow-sm"
-            />
-            <img
-              src={MockupRECLABExperiment}
-              alt="RECLAB Experiment screen"
-              className="w-1/2 h-auto rounded-xl object-contain drop-shadow-sm"
-            />
-          </div>
-        </section>
 
-        {/* ── 02. The Solution — text left, floating mockup right ─ */}
-        <section className="py-10 border-t border-gray-100 grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] items-start gap-6 md:gap-[6%]">
-          {/* Feature Card */}
-          <div className="min-w-0 bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <p className={META_KEY_CLS + ' mb-3'}>02 — The Solution</p>
-            <h2 className="text-[24px] font-bold leading-tight tracking-tight text-gray-900 mb-4">
-              Don&apos;t just do it.<br />
-              <span className="text-gray-400">Hit REC.</span>
-            </h2>
-            <p className={BODY_CLS}>
-              RECLAB is a space designed for the Hobby Collector. Inspired by movie scientists
-              recording experiments on old-school tapes, the app treats every curiosity as an
-              experiment. It replaces the pressure of mastering a skill with the joy of simply trying it.
-            </p>
-            <p className={BODY_CLS + ' mt-4'}>
-              To solve Decision Paralysis, the &lsquo;Randomizer&rsquo; spins through the list of
-              experiments to pick the next move. It turns an overwhelming list of choices into a fun,
-              low-pressure start to a new adventure.
-            </p>
-            <p className={BODY_CLS + ' mt-4'}>
-              The experience isn&apos;t about checking off a task and forgetting it. It&apos;s about
-              hitting REC to capture the journey with visual proof. This builds a personal Collection
-              of Wins from every world explored, making sure no small win ever fades away.
-            </p>
-          </div>
-          {/* Floating mockup visual area */}
-          <div className="min-w-0 relative bg-[#f5f5f7] rounded-2xl overflow-hidden">
-            <img
-              src={MockupRECLABHome}
-              alt="RECLAB home screen"
-              className="w-full h-auto"
-            />
-            <img
-              src={RECLABPopup}
-              alt="RECLAB popup"
-              className="absolute inset-x-3 top-[18%] rotate-3 shadow-2xl rounded-[12px] transition-all duration-500"
-            />
-            <img
-              src={RECLABButton}
-              alt="RECLAB record button"
-              className="absolute inset-x-3 bottom-[12%] rounded-[8px] shadow-md transition-all duration-500"
-            />
-          </div>
-        </section>
+          {/* ══ S02 — col 3 (RIGHT), row 1 ═══════════════════════════════
+               Phone: MockupLab (static). RECLAB_BUTTON LEFT gutter.      */}
+          <section
+            ref={sec2Ref}
+            className="md:col-start-3 md:row-start-1 flex items-center py-16 min-h-[85vh]"
+          >
+            <div className="min-w-0">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-400 mb-5">
+                02 — The Solution
+              </p>
+              <h2 className="text-[28px] font-bold leading-[1.2] tracking-tight text-gray-900 mb-6">
+                Don&apos;t just do it.<br />
+                <span className="text-gray-400 font-normal">Hit REC.</span>
+              </h2>
+              <p className="text-[15px] leading-[1.9] tracking-[0.01em] text-gray-600">
+                RECLAB is a space designed for the Hobby Collector. Inspired by movie scientists
+                recording experiments on old-school tapes, the app treats every curiosity as an
+                experiment — replacing the pressure of mastering a skill with the joy of simply
+                trying it.
+              </p>
+            </div>
+          </section>
 
-        {/* ── 03. The Impact — text left, mockup right ─────────── */}
-        <section className="py-10 border-t border-gray-100 grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] items-start gap-6 md:gap-[6%]">
-          {/* Feature Card */}
-          <div className="min-w-0 bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <p className={META_KEY_CLS + ' mb-3'}>03 — The Impact</p>
-            <h2 className="text-[24px] font-bold leading-tight tracking-tight text-gray-900 mb-4">
-              Success isn&apos;t about the finish line;<br />
-              <span className="text-gray-400">it&apos;s about the joy of the experiment itself.</span>
-            </h2>
-            <p className={BODY_CLS}>
-              RECLAB started as a challenge to digitize my &lsquo;Summer List.&rsquo; This is a
-              collection I make every summer of random things I want to try just because. Even if it
-              seems simple to others, I believe a win doesn&apos;t have to be big to be worthy of a
-              record. Success isn&apos;t about the finish line; it&apos;s about the joy of the
-              experiment itself.
-            </p>
-            <p className={BODY_CLS + ' mt-4'}>
-              Building this app was one of the most enjoyable challenges I&apos;ve taken on. Looking
-              ahead, the next step is to get RECLAB into the hands of other Hobby Collectors. I want
-              to see how they interact with the Lab, from the moment they hit REC to start a journey,
-              to the moment they save it as a Win.
-            </p>
-            <p className={BODY_CLS + ' mt-4'}>
-              <strong className="font-semibold text-gray-900">
+          {/* ══ S03 — col 1 (LEFT), row 2 ════════════════════════════════
+               Phone: MockupLab (static). Single POPUP RIGHT gutter.       */}
+          <section
+            ref={sec3Ref}
+            className="md:col-start-1 md:row-start-2 flex items-center py-16 min-h-[85vh]"
+          >
+            <div className="min-w-0">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-400 mb-5">
+                03 — The Randomizer
+              </p>
+              <h2 className="text-[28px] font-bold leading-[1.2] tracking-tight text-gray-900 mb-6">
+                Too many options?<br />
+                <span className="text-gray-400 font-normal">Let the Randomizer decide.</span>
+              </h2>
+              <p className="text-[15px] leading-[1.9] tracking-[0.01em] text-gray-600">
+                To solve Decision Paralysis, the &lsquo;Randomizer&rsquo; spins through the list
+                of experiments to pick the next move. It turns an overwhelming list of choices
+                into a fun, low-pressure start to a new adventure — making sure no small win ever
+                fades away.
+              </p>
+            </div>
+          </section>
+
+          {/* ══ S04 — col 3 (RIGHT), row 3 ════════════════════════════════
+               Phone: Lab → WinCollection blends as this section scrolls.  */}
+          <section
+            ref={sec4Ref}
+            className="md:col-start-3 md:row-start-3 flex items-center py-16 min-h-[85vh]"
+          >
+            <div className="min-w-0">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-400 mb-5">
+                04 — The Impact
+              </p>
+              <h2 className="text-[28px] font-bold leading-[1.2] tracking-tight text-gray-900 mb-6">
+                Success isn&apos;t about the finish line.
+              </h2>
+              <p className="text-[15px] leading-[1.9] tracking-[0.01em] text-gray-600 mb-6">
+                RECLAB started as a challenge to digitize my &lsquo;Summer List&rsquo; — a
+                collection I make every summer of random things I want to try just because.
+                Building this app was one of the most enjoyable challenges I&apos;ve taken on.
+                The next step is to get RECLAB into the hands of other Hobby Collectors, and see
+                how they interact with the Lab — from the moment they hit REC to start a journey,
+                to the moment they save it as a Win.
+              </p>
+              <p className="text-[16px] leading-[1.8] tracking-[0.01em] font-semibold text-gray-900">
                 Ensuring that every &lsquo;just trying&rsquo; is a win worth a record.
-              </strong>
-            </p>
-          </div>
-          {/* Win Collection visual area */}
-          <div className="min-w-0 bg-[#f5f5f7] rounded-2xl p-4 flex items-center justify-center">
-            <img
-              src={MockupRECLABWinCollection}
-              alt="RECLAB Win Collection screen"
-              className="w-full h-auto rounded-xl object-contain drop-shadow-sm"
-            />
-          </div>
-        </section>
+              </p>
+            </div>
+          </section>
 
+        </div>
       </div>
     </div>
   )
