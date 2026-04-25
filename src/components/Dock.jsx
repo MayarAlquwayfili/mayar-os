@@ -1,6 +1,6 @@
-import AppIconMoheetik from '../assets/AppIconMoheetik.svg'
+import AppIconMoheetik from '../assets/Moheetik/AppIconMoheetik.svg'
 import AppIconQaffatek from '../assets/AppIconQaffatek.svg'
-import AppIconRECLAB from '../assets/AppIconRECLAB.svg'
+import AppIconRECLAB from '../assets/RECLAB/AppIconRECLAB.svg'
 
 const DOCK_APPS = [
   { id: 'Moheetik', label: 'Moheetik', icon: AppIconMoheetik },

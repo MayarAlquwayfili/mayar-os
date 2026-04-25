@@ -20,7 +20,6 @@ function randomFolderPos() {
 }
 
 export const DESKTOP_FOLDERS = [
-  { id: 1, title: 'Moheetik',    icon: FolderIcon,    ...randomFolderPos() },
   { id: 2, title: 'Folder #02',  icon: FolderIcon,    ...randomFolderPos() },
   {
     id: 'cv',

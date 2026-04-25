@@ -1,12 +1,18 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import FolderIcon from './assets/Folder.svg'
-import AppIconMoheetik from './assets/AppIconMoheetik.svg'
+import AppIconMoheetik from './assets/Moheetik/AppIconMoheetik.svg'
 import AppIconQaffatek from './assets/AppIconQaffatek.svg'
-import AppIconRECLAB from './assets/AppIconRECLAB.svg'
+import AppIconRECLAB from './assets/RECLAB/AppIconRECLAB.svg'
+import MockupRECLABHome from './assets/RECLAB/MockupHome.svg'
+import MockupRECLABLab from './assets/RECLAB/MockupLab.svg'
+import MockupRECLABExperiment from './assets/RECLAB/MockupExperiment.svg'
+import MockupRECLABWinCollection from './assets/RECLAB/MockupWinCollection.svg'
+import RECLABPopup from './assets/RECLAB/RECLAB_POPUP.svg'
+import RECLABButton from './assets/RECLAB/RECLAB_BUTTON.svg'
 import IcAppleLogo from './assets/Ic_apple.logo.svg'
-import MockupMoheetik01 from './assets/MockupMoheetik01.svg'
-import MockupMoheetik02 from './assets/MockupMoheetik02.svg'
-import MockupMoheetik03 from './assets/MockupMoheetik03.svg'
+import MockupMoheetik01 from './assets/Moheetik/MockupMoheetik01.svg'
+import MockupMoheetik02 from './assets/Moheetik/MockupMoheetik02.svg'
+import MockupMoheetik03 from './assets/Moheetik/MockupMoheetik03.svg'
 import Dock from './components/Dock'
 import TopStatusBar from './components/TopStatusBar'
 import { useWindowManager } from './hooks/useWindowManager'
@@ -268,94 +274,142 @@ function RECLABContent() {
           </div>
         </div>
 
-        {/* ── 01. The Challenge ────────────────────────────────── */}
-        <section className="py-10">
-          <p className={META_KEY_CLS + ' mb-3'}>01 — The Challenge</p>
-          <h2 className="text-[24px] font-bold leading-tight tracking-tight text-gray-900 mb-4">
-            &lsquo;What are your hobbies?&rsquo;<br />
-            <span className="text-gray-400">For a Multipotentialite, this is a trick question.</span>
-          </h2>
-          <p className={BODY_CLS}>
-            Being a &lsquo;Hobby Collector&rsquo; is about the constant thrill of discovery.
-            But once that initial curiosity is satisfied, the spark often disappears. Without a
-            system to capture the journey, these experiments quickly vanish into a graveyard of
-            abandoned hobbies.
-          </p>
-          <p className={BODY_CLS + ' mt-4'}>
-            While exploring communities of people with endless interests, a few thoughts kept coming up:
-          </p>
-          <div className="mt-2 space-y-1">
-            <p className={BODY_CLS + ' italic'}>&ldquo;I joke that I only have one hobby, which is that I am a hobby collector.&rdquo;</p>
-            <p className={BODY_CLS + ' italic'}>&ldquo;I&apos;m rich in experience, but I have nothing to show for it.&rdquo;</p>
-            <p className={BODY_CLS + ' italic'}>&ldquo;Mastery isn&apos;t the point; gaining exposure is.&rdquo;</p>
+        {/* ── 01. The Challenge — text left, mockups right ─────── */}
+        <section className="py-10 grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] items-start gap-6 md:gap-[6%]">
+          {/* Feature Card */}
+          <div className="min-w-0 bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+            <p className={META_KEY_CLS + ' mb-3'}>01 — The Challenge</p>
+            <h2 className="text-[24px] font-bold leading-tight tracking-tight text-gray-900 mb-4">
+              &lsquo;What are your hobbies?&rsquo;<br />
+              <span className="text-gray-400">For a Multipotentialite, this is a trick question.</span>
+            </h2>
+            <p className={BODY_CLS}>
+              Being a &lsquo;Hobby Collector&rsquo; is about the constant thrill of discovery.
+              But once that initial curiosity is satisfied, the spark often disappears. Without a
+              system to capture the journey, these experiments quickly vanish into a graveyard of
+              abandoned hobbies.
+            </p>
+            <p className={BODY_CLS + ' mt-4'}>
+              While exploring communities of people with endless interests, a few thoughts kept coming up:
+            </p>
+            <div className="mt-2 space-y-1">
+              <p className={BODY_CLS + ' italic'}>&ldquo;I joke that I only have one hobby, which is that I am a hobby collector.&rdquo;</p>
+              <p className={BODY_CLS + ' italic'}>&ldquo;I&apos;m rich in experience, but I have nothing to show for it.&rdquo;</p>
+              <p className={BODY_CLS + ' italic'}>&ldquo;Mastery isn&apos;t the point; gaining exposure is.&rdquo;</p>
+            </div>
+            <p className={BODY_CLS + ' mt-4'}>
+              The struggle isn&apos;t about being lazy or lacking willpower. It&apos;s the frustration
+              of being boxed into one single, specialized path. Current productivity apps are built to
+              track &lsquo;finishing.&rsquo; They treat tasks like chores to be checked off instead of
+              experiments to be celebrated. By focusing only on the end goal, these tools leave the
+              curious mind without any visual proof of their journey.
+            </p>
+            <p className={BODY_CLS + ' mt-4'}>
+              This gap makes even a small win, like perfecting a new matcha recipe or folding 100 paper
+              stars, feel like it never happened. Without a record, these achievements simply fade away.
+            </p>
+            <p className={BODY_CLS + ' mt-4'}>
+              <strong className="font-semibold text-gray-900">
+                Every &lsquo;Day 1&rsquo; deserves more than a checkmark. It needs a Record.
+              </strong>
+            </p>
           </div>
-          <p className={BODY_CLS + ' mt-4'}>
-            The struggle isn&apos;t about being lazy or lacking willpower. It&apos;s the frustration
-            of being boxed into one single, specialized path. Current productivity apps are built to
-            track &lsquo;finishing.&rsquo; They treat tasks like chores to be checked off instead of
-            experiments to be celebrated. By focusing only on the end goal, these tools leave the
-            curious mind without any visual proof of their journey.
-          </p>
-          <p className={BODY_CLS + ' mt-4'}>
-            This gap makes even a small win, like perfecting a new matcha recipe or folding 100 paper
-            stars, feel like it never happened. Without a record, these achievements simply fade away.
-          </p>
-          <p className={BODY_CLS + ' mt-4'}>
-            <strong className="font-semibold text-gray-900">
-              Every &lsquo;Day 1&rsquo; deserves more than a checkmark. It needs a Record.
-            </strong>
-          </p>
+          {/* Mockup visual area */}
+          <div className="min-w-0 bg-[#f5f5f7] rounded-2xl p-4 flex items-center gap-2">
+            <img
+              src={MockupRECLABLab}
+              alt="RECLAB Lab screen"
+              className="w-1/2 h-auto rounded-xl object-contain drop-shadow-sm"
+            />
+            <img
+              src={MockupRECLABExperiment}
+              alt="RECLAB Experiment screen"
+              className="w-1/2 h-auto rounded-xl object-contain drop-shadow-sm"
+            />
+          </div>
         </section>
 
-        {/* ── 02. The Solution ─────────────────────────────────── */}
-        <section className="py-10 border-t border-gray-100">
-          <p className={META_KEY_CLS + ' mb-3'}>02 — The Solution</p>
-          <h2 className="text-[24px] font-bold leading-tight tracking-tight text-gray-900 mb-4">
-            Don&apos;t just do it.<br />
-            <span className="text-gray-400">Hit REC.</span>
-          </h2>
-          <p className={BODY_CLS}>
-            RECLAB is a space designed for the Hobby Collector. Inspired by movie scientists
-            recording experiments on old-school tapes, the app treats every curiosity as an
-            experiment. It replaces the pressure of mastering a skill with the joy of simply trying it.
-          </p>
-          <p className={BODY_CLS + ' mt-4'}>
-            To solve Decision Paralysis, the &lsquo;Randomizer&rsquo; spins through the list of
-            experiments to pick the next move. It turns an overwhelming list of choices into a fun,
-            low-pressure start to a new adventure.
-          </p>
-          <p className={BODY_CLS + ' mt-4'}>
-            The experience isn&apos;t about checking off a task and forgetting it. It&apos;s about
-            hitting REC to capture the journey with visual proof. This builds a personal Collection
-            of Wins from every world explored, making sure no small win ever fades away.
-          </p>
+        {/* ── 02. The Solution — text left, floating mockup right ─ */}
+        <section className="py-10 border-t border-gray-100 grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] items-start gap-6 md:gap-[6%]">
+          {/* Feature Card */}
+          <div className="min-w-0 bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+            <p className={META_KEY_CLS + ' mb-3'}>02 — The Solution</p>
+            <h2 className="text-[24px] font-bold leading-tight tracking-tight text-gray-900 mb-4">
+              Don&apos;t just do it.<br />
+              <span className="text-gray-400">Hit REC.</span>
+            </h2>
+            <p className={BODY_CLS}>
+              RECLAB is a space designed for the Hobby Collector. Inspired by movie scientists
+              recording experiments on old-school tapes, the app treats every curiosity as an
+              experiment. It replaces the pressure of mastering a skill with the joy of simply trying it.
+            </p>
+            <p className={BODY_CLS + ' mt-4'}>
+              To solve Decision Paralysis, the &lsquo;Randomizer&rsquo; spins through the list of
+              experiments to pick the next move. It turns an overwhelming list of choices into a fun,
+              low-pressure start to a new adventure.
+            </p>
+            <p className={BODY_CLS + ' mt-4'}>
+              The experience isn&apos;t about checking off a task and forgetting it. It&apos;s about
+              hitting REC to capture the journey with visual proof. This builds a personal Collection
+              of Wins from every world explored, making sure no small win ever fades away.
+            </p>
+          </div>
+          {/* Floating mockup visual area */}
+          <div className="min-w-0 relative bg-[#f5f5f7] rounded-2xl overflow-hidden">
+            <img
+              src={MockupRECLABHome}
+              alt="RECLAB home screen"
+              className="w-full h-auto"
+            />
+            <img
+              src={RECLABPopup}
+              alt="RECLAB popup"
+              className="absolute inset-x-3 top-[18%] rotate-3 shadow-2xl rounded-[12px] transition-all duration-500"
+            />
+            <img
+              src={RECLABButton}
+              alt="RECLAB record button"
+              className="absolute inset-x-3 bottom-[12%] rounded-[8px] shadow-md transition-all duration-500"
+            />
+          </div>
         </section>
 
-        {/* ── 03. The Impact ──────────────────────────────────── */}
-        <section className="py-10 border-t border-gray-100">
-          <p className={META_KEY_CLS + ' mb-3'}>03 — The Impact</p>
-          <h2 className="text-[24px] font-bold leading-tight tracking-tight text-gray-900 mb-4">
-            Success isn&apos;t about the finish line;<br />
-            <span className="text-gray-400">it&apos;s about the joy of the experiment itself.</span>
-          </h2>
-          <p className={BODY_CLS}>
-            RECLAB started as a challenge to digitize my &lsquo;Summer List.&rsquo; This is a
-            collection I make every summer of random things I want to try just because. Even if it
-            seems simple to others, I believe a win doesn&apos;t have to be big to be worthy of a
-            record. Success isn&apos;t about the finish line; it&apos;s about the joy of the
-            experiment itself.
-          </p>
-          <p className={BODY_CLS + ' mt-4'}>
-            Building this app was one of the most enjoyable challenges I&apos;ve taken on. Looking
-            ahead, the next step is to get RECLAB into the hands of other Hobby Collectors. I want
-            to see how they interact with the Lab, from the moment they hit REC to start a journey,
-            to the moment they save it as a Win.
-          </p>
-          <p className={BODY_CLS + ' mt-4'}>
-            <strong className="font-semibold text-gray-900">
-              Ensuring that every &lsquo;just trying&rsquo; is a win worth a record.
-            </strong>
-          </p>
+        {/* ── 03. The Impact — text left, mockup right ─────────── */}
+        <section className="py-10 border-t border-gray-100 grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] items-start gap-6 md:gap-[6%]">
+          {/* Feature Card */}
+          <div className="min-w-0 bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+            <p className={META_KEY_CLS + ' mb-3'}>03 — The Impact</p>
+            <h2 className="text-[24px] font-bold leading-tight tracking-tight text-gray-900 mb-4">
+              Success isn&apos;t about the finish line;<br />
+              <span className="text-gray-400">it&apos;s about the joy of the experiment itself.</span>
+            </h2>
+            <p className={BODY_CLS}>
+              RECLAB started as a challenge to digitize my &lsquo;Summer List.&rsquo; This is a
+              collection I make every summer of random things I want to try just because. Even if it
+              seems simple to others, I believe a win doesn&apos;t have to be big to be worthy of a
+              record. Success isn&apos;t about the finish line; it&apos;s about the joy of the
+              experiment itself.
+            </p>
+            <p className={BODY_CLS + ' mt-4'}>
+              Building this app was one of the most enjoyable challenges I&apos;ve taken on. Looking
+              ahead, the next step is to get RECLAB into the hands of other Hobby Collectors. I want
+              to see how they interact with the Lab, from the moment they hit REC to start a journey,
+              to the moment they save it as a Win.
+            </p>
+            <p className={BODY_CLS + ' mt-4'}>
+              <strong className="font-semibold text-gray-900">
+                Ensuring that every &lsquo;just trying&rsquo; is a win worth a record.
+              </strong>
+            </p>
+          </div>
+          {/* Win Collection visual area */}
+          <div className="min-w-0 bg-[#f5f5f7] rounded-2xl p-4 flex items-center justify-center">
+            <img
+              src={MockupRECLABWinCollection}
+              alt="RECLAB Win Collection screen"
+              className="w-full h-auto rounded-xl object-contain drop-shadow-sm"
+            />
+          </div>
         </section>
 
       </div>
