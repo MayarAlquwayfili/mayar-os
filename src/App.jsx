@@ -17,6 +17,7 @@ import MockupMoheetik02 from './assets/Moheetik/MockupMoheetik02.svg'
 import MockupMoheetik03 from './assets/Moheetik/MockupMoheetik03.svg'
 import Dock from './components/Dock'
 import TopStatusBar from './components/TopStatusBar'
+import QaftatkContent from './components/QaftatkContent'
 import { useWindowManager } from './hooks/useWindowManager'
 import { MOHEETIK_TOOLS, RECLAB_TOOLS, QAFFATEK_TOOLS, DESKTOP_FOLDERS } from './constants/projects'
 
@@ -84,7 +85,7 @@ function MoheetikSplitContent() {
           />
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-[20px] font-bold tracking-tight text-gray-900">Moheetik</h1>
+              <h1 className="text-[20px] font-bold tracking-tight text-gray-900">Moheetik | محيطك</h1>
               <span className="bg-gray-100 text-gray-600 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
                 MVP
               </span>
@@ -1245,7 +1246,7 @@ function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus }) 
         ) : title === 'RECLAB' ? (
           <RECLABContent />
         ) : title === 'Qaffatek' ? (
-          <QaffatekContent />
+          <QaftatkContent />
         ) : title === 'Preview — Mayar_CV.pdf' ? (
           <CVContent />
         ) : title === 'About Me' ? (
