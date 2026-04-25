@@ -13,6 +13,8 @@ import { useWindowManager } from './hooks/useWindowManager'
 import { MOHEETIK_TOOLS, RECLAB_TOOLS, QAFFATEK_TOOLS, DESKTOP_FOLDERS } from './constants/projects'
 
 const MENU_BAR_PX = 28
+// Dock: bottom-4 (16px) + py-2 (16px) + icon (54px) + dot gap + dot = ~96px clearance
+const DOCK_SAFE_PX = 96
 const EDGE_PX = 10
 const MIN_W = 380
 const MIN_H = 320
@@ -66,7 +68,7 @@ function MoheetikSplitContent() {
       <div className="w-full max-w-[1200px] mx-auto px-6 py-8 sm:px-8 md:px-10">
 
         {/* ── Identity ───────────────────────────────────────── */}
-        <header className="flex items-center gap-4 pb-6 mb-8 border-b border-gray-100">
+        <header className="flex items-center gap-5 pb-6 mb-8 border-b border-gray-100">
           <img
             src={AppIconMoheetik}
             alt="Moheetik app icon"
@@ -218,7 +220,7 @@ function RECLABContent() {
       <div className="w-full max-w-[1200px] mx-auto px-6 py-8 sm:px-8 md:px-10">
 
         {/* ── Identity ───────────────────────────────────────── */}
-        <header className="flex items-center gap-4 pb-6 mb-8 border-b border-gray-100">
+        <header className="flex items-center gap-5 pb-6 mb-8 border-b border-gray-100">
           <img
             src={AppIconRECLAB}
             alt="RECLAB app icon"
@@ -227,8 +229,8 @@ function RECLABContent() {
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-[20px] font-bold tracking-tight text-gray-900">RECLAB</h1>
-              <span className="bg-amber-100 text-amber-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
-                WIP
+              <span className="bg-gray-100 text-gray-600 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                MVP
               </span>
             </div>
             <p className="mt-0.5 text-[13px] font-medium text-gray-500">
@@ -241,7 +243,7 @@ function RECLABContent() {
         <div className="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-4 pb-8 mb-10 border-b border-gray-100">
           <div>
             <p className={META_KEY_CLS}>Timeline</p>
-            <p className={META_VAL_CLS}>Jan – Mar 2026</p>
+            <p className={META_VAL_CLS}>01/2026 – Present</p>
           </div>
           <div>
             <p className={META_KEY_CLS}>My Role</p>
@@ -266,24 +268,93 @@ function RECLABContent() {
           </div>
         </div>
 
-        {/* ── Description ────────────────────────────────────── */}
+        {/* ── 01. The Challenge ────────────────────────────────── */}
         <section className="py-10">
-          <p className={META_KEY_CLS + ' mb-3'}>About the Project</p>
+          <p className={META_KEY_CLS + ' mb-3'}>01 — The Challenge</p>
           <h2 className="text-[24px] font-bold leading-tight tracking-tight text-gray-900 mb-4">
-            Built for people who refuse<br />
-            <span className="text-gray-400">to be just one thing.</span>
+            &lsquo;What are your hobbies?&rsquo;<br />
+            <span className="text-gray-400">For a Multipotentialite, this is a trick question.</span>
           </h2>
           <p className={BODY_CLS}>
-            Most productivity tools are built for specialists — one goal, one
-            path, one identity. RECLAB is built for{' '}
-            <strong className="font-semibold text-gray-900">multipotentialites</strong>:
-            people who carry multiple passions, projects, and pursuits at once.
-            It&apos;s a platform designed to let you track, gamify, and celebrate
-            your diverse learning journeys — whether that&apos;s code, design,
-            music, or anything in between. Every interest gets its own lab.
-            Every milestone gets its own moment. The goal is to make the chaos
-            of curiosity feel like{' '}
-            <strong className="font-semibold text-gray-900">intentional progress</strong>.
+            Being a &lsquo;Hobby Collector&rsquo; is about the constant thrill of discovery.
+            But once that initial curiosity is satisfied, the spark often disappears. Without a
+            system to capture the journey, these experiments quickly vanish into a graveyard of
+            abandoned hobbies.
+          </p>
+          <p className={BODY_CLS + ' mt-4'}>
+            While exploring communities of people with endless interests, a few thoughts kept coming up:
+          </p>
+          <div className="mt-2 space-y-1">
+            <p className={BODY_CLS + ' italic'}>&ldquo;I joke that I only have one hobby, which is that I am a hobby collector.&rdquo;</p>
+            <p className={BODY_CLS + ' italic'}>&ldquo;I&apos;m rich in experience, but I have nothing to show for it.&rdquo;</p>
+            <p className={BODY_CLS + ' italic'}>&ldquo;Mastery isn&apos;t the point; gaining exposure is.&rdquo;</p>
+          </div>
+          <p className={BODY_CLS + ' mt-4'}>
+            The struggle isn&apos;t about being lazy or lacking willpower. It&apos;s the frustration
+            of being boxed into one single, specialized path. Current productivity apps are built to
+            track &lsquo;finishing.&rsquo; They treat tasks like chores to be checked off instead of
+            experiments to be celebrated. By focusing only on the end goal, these tools leave the
+            curious mind without any visual proof of their journey.
+          </p>
+          <p className={BODY_CLS + ' mt-4'}>
+            This gap makes even a small win, like perfecting a new matcha recipe or folding 100 paper
+            stars, feel like it never happened. Without a record, these achievements simply fade away.
+          </p>
+          <p className={BODY_CLS + ' mt-4'}>
+            <strong className="font-semibold text-gray-900">
+              Every &lsquo;Day 1&rsquo; deserves more than a checkmark. It needs a Record.
+            </strong>
+          </p>
+        </section>
+
+        {/* ── 02. The Solution ─────────────────────────────────── */}
+        <section className="py-10 border-t border-gray-100">
+          <p className={META_KEY_CLS + ' mb-3'}>02 — The Solution</p>
+          <h2 className="text-[24px] font-bold leading-tight tracking-tight text-gray-900 mb-4">
+            Don&apos;t just do it.<br />
+            <span className="text-gray-400">Hit REC.</span>
+          </h2>
+          <p className={BODY_CLS}>
+            RECLAB is a space designed for the Hobby Collector. Inspired by movie scientists
+            recording experiments on old-school tapes, the app treats every curiosity as an
+            experiment. It replaces the pressure of mastering a skill with the joy of simply trying it.
+          </p>
+          <p className={BODY_CLS + ' mt-4'}>
+            To solve Decision Paralysis, the &lsquo;Randomizer&rsquo; spins through the list of
+            experiments to pick the next move. It turns an overwhelming list of choices into a fun,
+            low-pressure start to a new adventure.
+          </p>
+          <p className={BODY_CLS + ' mt-4'}>
+            The experience isn&apos;t about checking off a task and forgetting it. It&apos;s about
+            hitting REC to capture the journey with visual proof. This builds a personal Collection
+            of Wins from every world explored, making sure no small win ever fades away.
+          </p>
+        </section>
+
+        {/* ── 03. The Impact ──────────────────────────────────── */}
+        <section className="py-10 border-t border-gray-100">
+          <p className={META_KEY_CLS + ' mb-3'}>03 — The Impact</p>
+          <h2 className="text-[24px] font-bold leading-tight tracking-tight text-gray-900 mb-4">
+            Success isn&apos;t about the finish line;<br />
+            <span className="text-gray-400">it&apos;s about the joy of the experiment itself.</span>
+          </h2>
+          <p className={BODY_CLS}>
+            RECLAB started as a challenge to digitize my &lsquo;Summer List.&rsquo; This is a
+            collection I make every summer of random things I want to try just because. Even if it
+            seems simple to others, I believe a win doesn&apos;t have to be big to be worthy of a
+            record. Success isn&apos;t about the finish line; it&apos;s about the joy of the
+            experiment itself.
+          </p>
+          <p className={BODY_CLS + ' mt-4'}>
+            Building this app was one of the most enjoyable challenges I&apos;ve taken on. Looking
+            ahead, the next step is to get RECLAB into the hands of other Hobby Collectors. I want
+            to see how they interact with the Lab, from the moment they hit REC to start a journey,
+            to the moment they save it as a Win.
+          </p>
+          <p className={BODY_CLS + ' mt-4'}>
+            <strong className="font-semibold text-gray-900">
+              Ensuring that every &lsquo;just trying&rsquo; is a win worth a record.
+            </strong>
           </p>
         </section>
 
@@ -304,7 +375,7 @@ function QaffatekContent() {
       <div className="w-full max-w-[1200px] mx-auto px-6 py-8 sm:px-8 md:px-10">
 
         {/* ── Identity ───────────────────────────────────────── */}
-        <header className="flex items-center gap-4 pb-6 mb-8 border-b border-gray-100">
+        <header className="flex items-center gap-5 pb-6 mb-8 border-b border-gray-100">
           <img
             src={AppIconQaffatek}
             alt="Qaffatek app icon"
@@ -375,7 +446,7 @@ function QaffatekContent() {
 
           {/* ── App Store Button ─────────────────────────────── */}
           <a
-            href="https://apps.apple.com"
+            href="https://apps.apple.com/sa/app/%D9%82%D9%81%D8%B7%D8%AA%D9%83/id6757811186"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 mt-8 bg-black text-white px-5 py-3 rounded-xl transition-all duration-200 hover:scale-105 select-none"
@@ -469,7 +540,7 @@ function CVContent() {
           />
           <CVEntry
             title="Qaffatek — Apple Developer Academy"
-            titleHref="https://apps.apple.com/sa/app/%D9%82%D9%81%D8%B7%D8%AA%D9%83/id6479574301"
+            titleHref="https://apps.apple.com/sa/app/%D9%82%D9%81%D8%B7%D8%AA%D9%83/id6757811186"
             meta="iOS Developer & Product Designer"
             date="Sep 2025 – Mar 2026"
             bullets={[
@@ -485,7 +556,7 @@ function CVContent() {
             bullets={[
               'Developed an assistive app for visually impaired users using real-time Arabic audio and haptic feedback.',
               'Engineered a custom Core ML model to detect doors and stairs, surpassing standard model limitations.',
-              'Validated the MVP with the Authority for People with Disability (APD).',
+              'Showcased the functional MVP at the Authority for People with Disability (APD) to validate the solution with users.',
             ]}
           />
           <CVEntry
@@ -493,9 +564,9 @@ function CVContent() {
             meta="Product Manager & Designer"
             date="Sep 2025 – Nov 2025"
             bullets={[
-              'Led end-to-end development of a DIY beverage workshop and managed strategic vision.',
+              'Led the end-to-end development of a DIY beverage workshop, managing the strategic vision and final report coordination.',
               'Designed brand identity and Figma prototypes for packaging, stickers, and cards.',
-              'Executed a live prototype workshop to validate the business model through feedback.',
+              'Executed a live prototype workshop, directing team roles and operations to validate the business model through user feedback.',
             ]}
           />
           <CVEntry
@@ -505,6 +576,7 @@ function CVContent() {
             bullets={[
               'Analyzed 10 years of Korean macroeconomic data using R to measure SME survival rates.',
               'Developed Multiple Linear Regression and EFA models to evaluate financial trends.',
+              'Identified that a hybrid payment ecosystem significantly reduces operational risks for small businesses during economic crises.',
             ]}
           />
         </Section>
@@ -542,9 +614,9 @@ function CVContent() {
         <Section title="Skills">
           <div className="space-y-2.5 text-[13px] leading-relaxed text-gray-700">
             {[
-              ['Technical', 'Swift, SwiftUI, Core ML, MVVM, API, Git/GitHub, iOS Accessibility, TestFlight'],
-              ['Design',    'Figma (Auto Layout), Design Systems, Apple HIG, User Research, Inclusive Design'],
-              ['Product',   'Agile (Scrum), Design Thinking, BMC, MVP Strategy, Market Analysis'],
+              ['Technical', 'Swift, SwiftUI, Core ML, MVVM Architecture, API, Git/GitHub, iOS Accessibility (VoiceOver, Dynamic Type), Cursor (AI-Assisted Development), TestFlight, App Store Connect.'],
+              ['Design',    'Figma (Auto Layout, Components), Design Systems, Apple Human Interface Guidelines (HIG), User Flows, User Research (Interviews & Usability Testing), Developer Handoff, Inclusive Design.'],
+              ['Product',   'Agile (Scrum), Design Thinking, Product Development (End-to-End), Business Analysis (BMC, MVP Strategy), Market & Competitive Analysis, Data Analysis & Visualization.'],
             ].map(([cat, items]) => (
               <p key={cat}>
                 <span className="font-semibold text-gray-900">{cat}:&nbsp;</span>{items}
@@ -683,7 +755,7 @@ function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus }) 
       const w = el.offsetWidth
       const h = el.offsetHeight
       const maxX = Math.max(0, window.innerWidth - w)
-      const maxY = Math.max(0, window.innerHeight - h)
+      const maxY = Math.max(MENU_BAR_PX, window.innerHeight - h - DOCK_SAFE_PX)
       let nx = e.clientX - dragOffsetRef.current.x
       let ny = e.clientY - dragOffsetRef.current.y
       setPosition({
@@ -734,7 +806,7 @@ function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus }) 
         newT = MENU_BAR_PX
       }
       if (newL + newW > window.innerWidth) newW = window.innerWidth - newL
-      if (newT + newH > window.innerHeight) newH = window.innerHeight - newT
+      if (newT + newH > window.innerHeight - DOCK_SAFE_PX) newH = window.innerHeight - DOCK_SAFE_PX - newT
 
       newW = Math.max(MIN_W, newW)
       newH = Math.max(MIN_H, newH)
