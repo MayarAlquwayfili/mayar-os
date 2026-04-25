@@ -41,7 +41,7 @@ function formatMenuBarClock(d) {
 /* Shared hover pill style — gray tint, no movement */
 const HOVER_PILL = 'rounded-md px-1.5 py-0.5 transition-colors duration-100 hover:bg-black/[0.06] cursor-default select-none'
 
-export default function TopStatusBar() {
+export default function TopStatusBar({ onAboutMe }) {
   const [now, setNow] = useState(() => new Date())
 
   useEffect(() => {
@@ -63,7 +63,13 @@ export default function TopStatusBar() {
       {/* ── Left cluster ── */}
       <div className="flex min-w-0 flex-1 flex-nowrap items-center gap-0.5 text-[13px] font-medium leading-none text-neutral-900">
         <span className={`font-semibold ${HOVER_PILL}`}>Mayar</span>
-        <span className={`font-normal ${HOVER_PILL}`}>About Me</span>
+        <button
+          type="button"
+          onClick={onAboutMe}
+          className={`font-normal ${HOVER_PILL}`}
+        >
+          About Me
+        </button>
       </div>
 
       {/* ── Right cluster ── */}

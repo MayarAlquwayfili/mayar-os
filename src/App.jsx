@@ -524,6 +524,115 @@ function RECLABContent() {
   )
 }
 
+// ─── About Me — Apple Notes–style single pane ────────────────────────────────
+const ABOUT_ACCENT = '#544EAE'
+
+const ABOUT_ITEMS = [
+  {
+    id: 1,
+    text: 'Analyze the market like an Economist, but build the product like an Apple Developer.',
+    done: false,
+  },
+  {
+    id: 2,
+    text: 'Refuse to take a 30-minute break because breaking a deep focus state is simply illogical.',
+    done: false,
+  },
+  {
+    id: 3,
+    text: "Treat micro-details as a competitive sport (if it's 1 pixel off, it's not done).",
+    done: false,
+  },
+  {
+    id: 4,
+    text: 'Add "make coffee" to this list just to get the absolute satisfaction of checking it off.',
+    done: true,
+  },
+]
+
+function AboutMeContent() {
+  const [items, setItems] = useState(() => ABOUT_ITEMS.map((i) => ({ ...i })))
+
+  const toggle = (id) =>
+    setItems((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, done: !item.done } : item))
+    )
+
+  return (
+    <div className="flex h-full w-full flex-col items-start justify-start overflow-y-auto
+                    bg-white font-sans
+                    [&::-webkit-scrollbar]:w-1
+                    [&::-webkit-scrollbar-track]:bg-transparent
+                    [&::-webkit-scrollbar-thumb]:rounded-full
+                    [&::-webkit-scrollbar-thumb]:bg-gray-200">
+      <div className="w-full p-6">
+
+        {/* ── Title + subtitle ────────────────────────────────────── */}
+        <div className="mb-4">
+          <h1
+            className="text-[18px] font-bold leading-tight tracking-tight"
+            style={{ color: ABOUT_ACCENT }}
+          >
+            Get to know Mayar
+          </h1>
+          <p className="mt-0.5 text-[12px]" style={{ color: '#8e8e93' }}>
+            {items.filter((i) => !i.done).length === 0
+              ? 'All caught up! '
+              : `${items.filter((i) => !i.done).length} items`}
+          </p>
+        </div>
+
+        {/* ── Checklist ───────────────────────────────────────────── */}
+        <ul className="flex w-full flex-col items-start">
+          {items.map((item) => (
+            <li key={item.id} className="flex w-full items-start gap-3 py-2">
+
+              {/* Circle checkbox — 16 px, aligned to text cap-height */}
+              <button
+                type="button"
+                aria-label={item.done ? 'Mark as incomplete' : 'Mark as complete'}
+                onClick={() => toggle(item.id)}
+                className="mt-1 flex h-4 w-4 shrink-0 items-center justify-center
+                           rounded-full border-[1.5px] transition-all duration-150"
+                style={{
+                  borderColor: ABOUT_ACCENT,
+                  backgroundColor: item.done ? ABOUT_ACCENT : 'transparent',
+                }}
+              >
+                {item.done && (
+                  <svg width="8" height="6" viewBox="0 0 8 6" fill="none" aria-hidden>
+                    <path
+                      d="M1 3L3 5.5L7 1"
+                      stroke="white"
+                      strokeWidth="1.4"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                )}
+              </button>
+
+              {/* Item text — wraps naturally, never breaks layout */}
+              <p
+                className="min-w-0 flex-1 text-[13px] leading-[1.6] transition-all duration-150"
+                style={{
+                  color: item.done ? '#aeaeb2' : '#1c1c1e',
+                  textDecoration: item.done ? 'line-through' : 'none',
+                  textDecorationColor: '#aeaeb2',
+                  overflowWrap: 'break-word',
+                }}
+              >
+                {item.text}
+              </p>
+            </li>
+          ))}
+        </ul>
+
+      </div>
+    </div>
+  )
+}
+
 function QaffatekContent() {
   return (
     <div
@@ -875,13 +984,24 @@ function CVEntry({ title, titleHref, meta, date, bullets }) {
   )
 }
 
-function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus }) {
-  const defaultW = 700
-  const defaultH = 500
+// Per-title window presets: { w, h, centered }
+const WINDOW_PRESETS = {
+  'About Me': { w: 420, h: 380, centered: true },
+}
 
-  const [position, setPosition] = useState({
-    x: initialX ?? 60,
-    y: initialY ?? 48,
+function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus }) {
+  const preset   = WINDOW_PRESETS[title] ?? {}
+  const defaultW = preset.w ?? 700
+  const defaultH = preset.h ?? 500
+
+  const [position, setPosition] = useState(() => {
+    if (preset.centered) {
+      return {
+        x: Math.max(0, Math.round((window.innerWidth  - defaultW) / 2)),
+        y: Math.max(28, Math.round((window.innerHeight - defaultH) / 2)),
+      }
+    }
+    return { x: initialX ?? 60, y: initialY ?? 48 }
   })
   const [size, setSize] = useState({ w: defaultW, h: defaultH })
   const [isDragging, setIsDragging] = useState(false)
@@ -1128,6 +1248,8 @@ function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus }) 
           <QaffatekContent />
         ) : title === 'Preview — Mayar_CV.pdf' ? (
           <CVContent />
+        ) : title === 'About Me' ? (
+          <AboutMeContent />
         ) : (
           <div className="p-6 text-sm text-gray-600">
             <p className="font-medium text-gray-800">{title}</p>
@@ -1333,7 +1455,7 @@ export default function App() {
 
   return (
     <div className="fixed inset-0 min-h-0 w-full overflow-hidden bg-[#f8f6f0] font-sans antialiased">
-      <TopStatusBar />
+      <TopStatusBar onAboutMe={() => openOrFocusWindow('About Me')} />
 
       <main
         className="absolute inset-x-0 bottom-0 top-7 z-0 overflow-hidden"
