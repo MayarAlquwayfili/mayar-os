@@ -10,21 +10,18 @@ const SOCIAL_LINKS = [
   { href: 'https://www.behance.net/mayaralquway',           icon: IcBehance,  label: 'Behance'  },
 ]
 
-function BatteryGlyph() {
+function SignatureStarGlyph() {
   return (
     <svg
-      className="h-[11px] w-[17px] shrink-0"
+      className="h-[12px] w-[12px] shrink-0"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
+      strokeWidth="1.5"
       strokeLinejoin="round"
       aria-hidden
     >
-      <rect x="2" y="7" width="18" height="10" rx="2" />
-      <path d="M22 11v2" />
-      <path d="M6 10v4" fill="currentColor" stroke="none" />
+      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
     </svg>
   )
 }
@@ -38,8 +35,9 @@ function formatMenuBarClock(d) {
   return `${weekday} ${day} ${month} ${h}:${m}`
 }
 
-/* Shared hover pill style — gray tint, no movement */
-const HOVER_PILL = 'rounded-md px-1.5 py-0.5 transition-colors duration-100 hover:bg-black/[0.06] cursor-default select-none'
+/* Shared hover pill — soft background, matches all menu-bar controls */
+const HOVER_PILL =
+  'rounded-md px-1.5 py-0.5 transition-colors duration-100 hover:bg-gray-100/80 cursor-default select-none'
 
 export default function TopStatusBar({ onAboutMe }) {
   const [now, setNow] = useState(() => new Date())
@@ -52,16 +50,17 @@ export default function TopStatusBar({ onAboutMe }) {
   return (
     <header
       role="banner"
-      className="fixed inset-x-0 top-0 font-sans box-border flex h-[28px] min-h-[28px] max-h-[28px] flex-nowrap items-center justify-between px-2 sm:px-3"
+      className="fixed inset-x-0 top-0 z-[9999] box-border flex h-[28px] min-h-[28px] max-h-[28px] flex-nowrap items-center justify-between border-b border-gray-200 px-2 font-sans sm:px-3"
       style={{
-        zIndex: 9999,
         backgroundColor: 'rgba(235, 232, 226, 0.96)',
-        borderBottom: '1px solid rgba(0, 0, 0, 0.08)',
         boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.5)',
       }}
     >
-      {/* ── Left cluster ── */}
+      {/* ── Left cluster (signature star = menu-bar anchor, macOS Apple position) ── */}
       <div className="flex min-w-0 flex-1 flex-nowrap items-center gap-0.5 text-[13px] font-medium leading-none text-neutral-900">
+        <span className={`flex items-center justify-center ${HOVER_PILL}`} aria-hidden>
+          <SignatureStarGlyph />
+        </span>
         <span className={`font-semibold ${HOVER_PILL}`}>Mayar</span>
         <button
           type="button"
@@ -83,7 +82,7 @@ export default function TopStatusBar({ onAboutMe }) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={label}
-            className="flex shrink-0 items-center justify-center rounded-md p-1 transition-colors duration-100 hover:bg-black/[0.06]"
+            className="flex shrink-0 items-center justify-center rounded-md p-1 transition-colors duration-100 hover:bg-gray-100/80"
           >
             <img src={icon} alt={label} className="h-[16px] w-[16px] block" draggable={false} />
           </a>
@@ -96,12 +95,6 @@ export default function TopStatusBar({ onAboutMe }) {
         <span className="sr-only">Wi-Fi</span>
         <span className={HOVER_PILL + ' flex items-center'}>
           <img src={IcWifi} alt="" aria-hidden className="h-[14px] w-[14px] block" draggable={false} />
-        </span>
-
-        {/* Battery */}
-        <span className="sr-only">Battery</span>
-        <span className={HOVER_PILL + ' flex items-center'}>
-          <BatteryGlyph />
         </span>
 
         {/* Clock */}
