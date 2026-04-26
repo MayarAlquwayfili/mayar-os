@@ -23,7 +23,7 @@ export const DESKTOP_FOLDERS = [
   { id: 2, title: 'Folder #02',  icon: FolderIcon,    ...randomFolderPos() },
   {
     id: 'lab',
-    title: 'Lab',
+    title: 'Creative Lab',
     windowTitle: 'Creative Lab',
     icon: FolderIcon,
     subtitle: 'Folder',

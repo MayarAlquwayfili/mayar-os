@@ -38,27 +38,26 @@ const BODY =
   'text-[15px] leading-[1.8] tracking-[0.01em] text-gray-600 text-center'
 
 /**
- * Curated scatter: overlap corners (z-30) vs whitespace (z-[12]).
- * Positions are % of the gallery stage (hero + duo row).
+ * Stickers for 2-column portrait grid — `seam: true` centers on the gutter (translateX -50%).
  */
 const STICKER_LAYOUT = [
-  { top: '6%', left: '2%', size: 56, rotate: -14, z: 30 },
-  { top: '4%', left: '42%', size: 48, rotate: 8, z: 12 },
-  { top: '10%', right: '-2%', size: 62, rotate: 18, z: 30 },
-  { top: '28%', left: '-3%', size: 44, rotate: -6, z: 12 },
-  { top: '34%', right: '8%', size: 52, rotate: -11, z: 30 },
-  { top: '48%', left: '6%', size: 40, rotate: 22, z: 30 },
-  { top: '52%', left: '48%', size: 50, rotate: -4, z: 12 },
-  { top: '58%', right: '4%', size: 46, rotate: 14, z: 12 },
-  { top: '72%', left: '-4%', size: 54, rotate: -20, z: 30 },
-  { top: '78%', left: '22%', size: 38, rotate: 6, z: 12 },
-  { top: '76%', left: '52%', size: 48, rotate: -9, z: 30 },
-  { top: '82%', right: '12%', size: 42, rotate: 16, z: 12 },
-  { top: '88%', left: '8%', size: 36, rotate: -12, z: 12 },
-  { top: '62%', left: '30%', size: 34, rotate: 10, z: 12 },
-  { top: '18%', right: '18%', size: 40, rotate: -7, z: 12 },
-  { top: '40%', left: '18%', size: 44, rotate: 19, z: 12 },
-  { top: '92%', right: '2%', size: 50, rotate: -15, z: 30 },
+  { top: '4%', left: '6%', size: 50, rotate: -16, z: 28 },
+  { top: '8%', left: '50%', size: 56, rotate: 6, z: 38, seam: true },
+  { top: '18%', left: '48%', size: 48, rotate: -10, z: 40, seam: true },
+  { top: '12%', right: '4%', size: 44, rotate: 14, z: 26 },
+  { top: '32%', left: '2%', size: 42, rotate: 8, z: 30 },
+  { top: '38%', left: '50%', size: 54, rotate: -12, z: 42, seam: true },
+  { top: '48%', left: '50%', size: 46, rotate: 18, z: 40, seam: true },
+  { top: '52%', right: '6%', size: 40, rotate: -6, z: 28 },
+  { top: '62%', left: '8%', size: 52, rotate: 11, z: 32 },
+  { top: '68%', left: '50%', size: 44, rotate: -14, z: 38, seam: true },
+  { top: '72%', left: '50%', size: 50, rotate: 9, z: 41, seam: true },
+  { top: '78%', right: '8%', size: 38, rotate: -20, z: 30 },
+  { top: '88%', left: '12%', size: 46, rotate: 15, z: 28 },
+  { top: '22%', right: '12%', size: 36, rotate: -8, z: 24 },
+  { top: '56%', right: '14%', size: 42, rotate: 12, z: 26 },
+  { top: '28%', left: '50%', size: 34, rotate: 20, z: 35, seam: true },
+  { top: '92%', left: '50%', size: 48, rotate: -11, z: 36, seam: true },
 ]
 
 export default function BrewchaContent() {
@@ -90,32 +89,54 @@ export default function BrewchaContent() {
 
           <div className={`space-y-6 ${BODY}`}>
             <p>
-              We fielded a structured survey with{' '}
-              <span className="font-semibold text-gray-800">81 respondents</span> to stress-test demand
-              before the live prototype. A majority said they would rather join a small, hands-on beverage
-              session than watch a passive demo; open responses repeatedly asked for customization,
-              visible ingredients, and a takeaway they could photograph and share. Those signals set the
-              bar for how much participation the workshop had to deliver—not just taste, but ownership.
-            </p>
-            <p>
-              BrewCha was designed as the answer: a shift from{' '}
+              Before we cut a single label, we ran a survey with{' '}
+              <span className="font-semibold text-gray-800">81 respondents</span> to learn where people sat
+              on the spectrum from{' '}
               <span className="font-semibold" style={{ color: PLUM }}>
                 passive experience
               </span>{' '}
-              toward guests as{' '}
+              (watching someone else make the drink) to showing up as{' '}
               <span className="font-semibold" style={{ color: MATCHA }}>
                 creators
-              </span>
-              —measuring, brewing, labeling, and leaving with a finished bottle. Survey themes mapped
-              directly to the run-of-show: clearer instructions for first-timers, optional “challenge”
-              cards for confident makers, and sticker moments that turned the table into a collage of
-              personal marks. The live prototype became the validation layer on top of those 81 voices.
+              </span>{' '}
+              (measuring, mixing, and signing their own bottle). The numbers didn’t whisper—they pointed at
+              a workshop-shaped gap in how beverage ideas are usually pitched.
             </p>
+
+            <div
+              className="mx-auto flex max-w-lg flex-col gap-4 rounded-2xl border border-gray-100 bg-gray-50/80 px-6 py-5 sm:flex-row sm:items-stretch sm:justify-center sm:gap-6"
+              role="group"
+              aria-label="Key survey results"
+            >
+              <div className="flex flex-1 flex-col items-center justify-center border-b border-gray-200/80 pb-4 sm:border-b-0 sm:border-r sm:pb-0 sm:pr-6">
+                <p
+                  className="text-[34px] font-black tabular-nums leading-none sm:text-[40px]"
+                  style={{ color: PLUM }}
+                >
+                  77%
+                </p>
+                <p className="mt-2 text-[13px] font-medium leading-snug text-gray-600">
+                  chose a hands-on, make-your-own session over a passive tasting or demo-only format
+                </p>
+              </div>
+              <div className="flex flex-1 flex-col items-center justify-center pt-1 sm:pt-0">
+                <p
+                  className="text-[34px] font-black tabular-nums leading-none sm:text-[40px]"
+                  style={{ color: MATCHA }}
+                >
+                  67%
+                </p>
+                <p className="mt-2 text-[13px] font-medium leading-snug text-gray-600">
+                  said they’d rather leave with something they personally assembled than a pre-made sample
+                </p>
+              </div>
+            </div>
+
             <p>
-              In the room, the same contrasts we saw in the data appeared in behavior: people who expected
-              to observe ended up leading pours for their group; others used the sticker bar to “sign”
-              their blend like a release poster. The narrative we wrote from the survey held—when guests
-              feel like owners, the product story writes itself.
+              BrewCha became the physical expression of that data: fewer rows of chairs, more stations,
+              prompts that assume you’re the one in charge. The live prototype wasn’t a mood board—it was
+              the moment we asked whether the story still held when ink, syrup, and ice were in guests’
+              hands instead of ours.
             </p>
           </div>
         </div>
@@ -135,62 +156,72 @@ export default function BrewchaContent() {
         </div>
       </section>
 
-      {/* ── 2. Curated gallery + watermark + sticker explosion ── */}
+      {/* ── 2. Portrait grid + watermark + stickers ── */}
       <section className="py-24 px-4 sm:px-6">
-        <div className="relative mx-auto max-w-5xl">
-          {/* Watermark — large, behind the grid */}
+        <div className="relative mx-auto max-w-4xl">
+          {/* Watermark */}
           <div
-            className="pointer-events-none absolute left-1/2 top-[42%] z-0 -translate-x-1/2 -translate-y-1/2 select-none"
+            className="pointer-events-none absolute left-1/2 top-1/2 z-0 -translate-x-1/2 -translate-y-1/2 select-none"
             aria-hidden
           >
             <span
-              className="block bg-gradient-to-br from-neutral-300/25 via-[#6B3FA0]/[0.07] to-neutral-300/20 bg-clip-text text-center text-[clamp(3.5rem,16vw,10.5rem)] font-black leading-none tracking-tight text-transparent"
+              className="block bg-gradient-to-br from-neutral-300/25 via-[#6B3FA0]/[0.07] to-neutral-300/20 bg-clip-text text-center text-[clamp(3rem,14vw,8rem)] font-black leading-none tracking-tight text-transparent"
             >
               BREWCHA
             </span>
           </div>
 
-          {/* Photo grid */}
+          {/* 2-column portrait grid: left spans 2 rows; right stacks pic02 + pic03 */}
           <div className="relative z-10 grid grid-cols-2 gap-3 sm:gap-4">
-            <div className="relative col-span-2 overflow-hidden rounded-2xl shadow-md ring-1 ring-black/[0.04]">
-              <img
-                src={Pic01}
-                alt="BrewCha workshop — hero"
-                className="aspect-[21/10] w-full object-cover sm:aspect-[2.2/1]"
-                draggable={false}
-              />
+            <div className="col-start-1 row-start-1 row-span-2 flex min-h-0">
+              <div className="flex min-h-0 flex-1 overflow-hidden rounded-2xl border border-gray-100 shadow-md">
+                <img
+                  src={Pic01}
+                  alt="BrewCha workshop — portrait"
+                  className="h-full w-full min-h-[280px] object-cover object-center sm:min-h-[360px]"
+                  draggable={false}
+                />
+              </div>
             </div>
-            <div className="relative overflow-hidden rounded-2xl shadow-sm ring-1 ring-black/[0.04]">
+            <div className="col-start-2 row-start-1 overflow-hidden rounded-2xl border border-gray-100 shadow-md">
               <img
                 src={Pic02}
                 alt="BrewCha workshop — detail"
-                className="aspect-[4/3] w-full object-cover"
+                className="aspect-[3/4] w-full object-cover sm:aspect-[2/3]"
                 draggable={false}
               />
             </div>
-            <div className="relative overflow-hidden rounded-2xl shadow-sm ring-1 ring-black/[0.04]">
+            <div className="col-start-2 row-start-2 overflow-hidden rounded-2xl border border-gray-100 shadow-md">
               <img
                 src={Pic03}
                 alt="BrewCha workshop — detail"
-                className="aspect-[4/3] w-full object-cover"
+                className="aspect-[3/4] w-full object-cover sm:aspect-[2/3]"
                 draggable={false}
               />
             </div>
           </div>
 
-          {/* Stickers — fill gaps, overlap corners */}
           <div className="pointer-events-none absolute inset-0 z-[25] overflow-visible" aria-hidden>
             {STICKER_LAYOUT.map((place, i) => {
               const src = STICKER_ASSETS[i]
+              const rot = place.rotate
               const style = {
                 top: place.top,
                 width: place.size,
                 height: 'auto',
-                transform: `rotate(${place.rotate}deg)`,
                 zIndex: place.z,
               }
-              if (place.left != null) style.left = place.left
-              if (place.right != null) style.right = place.right
+              if (place.left != null) {
+                style.left = place.left
+                style.transform = place.seam
+                  ? `translateX(-50%) rotate(${rot}deg)`
+                  : `rotate(${rot}deg)`
+              } else if (place.right != null) {
+                style.right = place.right
+                style.transform = `rotate(${rot}deg)`
+              } else {
+                style.transform = `rotate(${rot}deg)`
+              }
 
               return (
                 <img
