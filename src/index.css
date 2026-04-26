@@ -14,6 +14,17 @@ body,
   overflow: hidden;
 }
 
+/* Brand-aligned text selection (global) */
+::selection {
+  background-color: rgba(123, 63, 242, 0.22);
+  color: #171717;
+}
+
+::-moz-selection {
+  background-color: rgba(123, 63, 242, 0.22);
+  color: #171717;
+}
+
 /* Smooth ambient orb pulse */
 @keyframes pulse-slow {
   0%, 100% { opacity: 0.7; transform: scale(1); }
