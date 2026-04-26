@@ -38,26 +38,26 @@ const BODY =
   'text-[15px] leading-[1.8] tracking-[0.01em] text-gray-600 text-center'
 
 /**
- * Stickers for 2-column portrait grid — `seam: true` centers on the gutter (translateX -50%).
+ * Large stickers, mostly in outer margin (negative inset) — minimal overlap on photo edges.
  */
 const STICKER_LAYOUT = [
-  { top: '4%', left: '6%', size: 50, rotate: -16, z: 28 },
-  { top: '8%', left: '50%', size: 56, rotate: 6, z: 38, seam: true },
-  { top: '18%', left: '48%', size: 48, rotate: -10, z: 40, seam: true },
-  { top: '12%', right: '4%', size: 44, rotate: 14, z: 26 },
-  { top: '32%', left: '2%', size: 42, rotate: 8, z: 30 },
-  { top: '38%', left: '50%', size: 54, rotate: -12, z: 42, seam: true },
-  { top: '48%', left: '50%', size: 46, rotate: 18, z: 40, seam: true },
-  { top: '52%', right: '6%', size: 40, rotate: -6, z: 28 },
-  { top: '62%', left: '8%', size: 52, rotate: 11, z: 32 },
-  { top: '68%', left: '50%', size: 44, rotate: -14, z: 38, seam: true },
-  { top: '72%', left: '50%', size: 50, rotate: 9, z: 41, seam: true },
-  { top: '78%', right: '8%', size: 38, rotate: -20, z: 30 },
-  { top: '88%', left: '12%', size: 46, rotate: 15, z: 28 },
-  { top: '22%', right: '12%', size: 36, rotate: -8, z: 24 },
-  { top: '56%', right: '14%', size: 42, rotate: 12, z: 26 },
-  { top: '28%', left: '50%', size: 34, rotate: 20, z: 35, seam: true },
-  { top: '92%', left: '50%', size: 48, rotate: -11, z: 36, seam: true },
+  { top: '-0.5rem', left: '-2.25rem', size: 92, rotate: -14, z: 14 },
+  { top: '-0.75rem', right: '-1.75rem', size: 88, rotate: 11, z: 14 },
+  { top: '14%', left: '-2.5rem', size: 96, rotate: 7, z: 14 },
+  { top: '40%', left: '-2rem', size: 84, rotate: -9, z: 14 },
+  { top: '66%', left: '-2.25rem', size: 90, rotate: 13, z: 14 },
+  { top: '10%', right: '-2.25rem', size: 94, rotate: -11, z: 14 },
+  { top: '36%', right: '-2rem', size: 86, rotate: 9, z: 14 },
+  { top: '62%', right: '-2.5rem', size: 92, rotate: -15, z: 14 },
+  { bottom: '-0.5rem', left: '-1.5rem', size: 88, rotate: 12, z: 14 },
+  { bottom: '-0.75rem', right: '-2rem', size: 100, rotate: -8, z: 14 },
+  { top: '-1.25rem', left: '18%', size: 80, rotate: 18, z: 13 },
+  { top: '-1rem', right: '22%', size: 82, rotate: -16, z: 13 },
+  { bottom: '-1.25rem', left: '24%', size: 86, rotate: 10, z: 13 },
+  { bottom: '-1rem', right: '28%', size: 90, rotate: -12, z: 13 },
+  { top: '48%', left: '-0.75rem', size: 72, rotate: 6, z: 16 },
+  { top: '52%', right: '-0.5rem', size: 74, rotate: -7, z: 16 },
+  { bottom: '-1.5rem', left: '12%', size: 78, rotate: 14, z: 15 },
 ]
 
 export default function BrewchaContent() {
@@ -156,72 +156,67 @@ export default function BrewchaContent() {
         </div>
       </section>
 
-      {/* ── 2. Portrait grid + watermark + stickers ── */}
-      <section className="py-24 px-4 sm:px-6">
-        <div className="relative mx-auto max-w-4xl">
+      {/* ── 2. Compact portrait grid + watermark + margin stickers (gallery only) ── */}
+      <section className="relative overflow-x-visible py-16 px-4 sm:px-8">
+        <div className="relative mx-auto max-w-3xl overflow-visible">
           {/* Watermark */}
           <div
             className="pointer-events-none absolute left-1/2 top-1/2 z-0 -translate-x-1/2 -translate-y-1/2 select-none"
             aria-hidden
           >
             <span
-              className="block bg-gradient-to-br from-neutral-300/25 via-[#6B3FA0]/[0.07] to-neutral-300/20 bg-clip-text text-center text-[clamp(3rem,14vw,8rem)] font-black leading-none tracking-tight text-transparent"
+              className="block bg-gradient-to-br from-neutral-300/25 via-[#6B3FA0]/[0.07] to-neutral-300/20 bg-clip-text text-center text-[clamp(2.5rem,11vw,6.5rem)] font-black leading-none tracking-tight text-transparent"
             >
               BREWCHA
             </span>
           </div>
 
-          {/* 2-column portrait grid: left spans 2 rows; right stacks pic02 + pic03 */}
-          <div className="relative z-10 grid grid-cols-2 gap-3 sm:gap-4">
-            <div className="col-start-1 row-start-1 row-span-2 flex min-h-0">
-              <div className="flex min-h-0 flex-1 overflow-hidden rounded-2xl border border-gray-100 shadow-md">
+          {/* Fixed-height grid: pic01 full-height left; pic02 + pic03 stacked right */}
+          <div
+            className="relative z-10 grid h-[min(46vh,400px)] grid-cols-2 grid-rows-2 gap-2 sm:h-[min(50vh,430px)] sm:gap-3"
+          >
+            <div className="col-start-1 row-start-1 row-span-2 min-h-0">
+              <div className="h-full min-h-0 overflow-hidden rounded-2xl border border-gray-100 shadow-md">
                 <img
                   src={Pic01}
                   alt="BrewCha workshop — portrait"
-                  className="h-full w-full min-h-[280px] object-cover object-center sm:min-h-[360px]"
+                  className="h-full w-full object-cover object-center"
                   draggable={false}
                 />
               </div>
             </div>
-            <div className="col-start-2 row-start-1 overflow-hidden rounded-2xl border border-gray-100 shadow-md">
+            <div className="col-start-2 row-start-1 min-h-0 overflow-hidden rounded-2xl border border-gray-100 shadow-md">
               <img
                 src={Pic02}
                 alt="BrewCha workshop — detail"
-                className="aspect-[3/4] w-full object-cover sm:aspect-[2/3]"
+                className="h-full w-full object-cover"
                 draggable={false}
               />
             </div>
-            <div className="col-start-2 row-start-2 overflow-hidden rounded-2xl border border-gray-100 shadow-md">
+            <div className="col-start-2 row-start-2 min-h-0 overflow-hidden rounded-2xl border border-gray-100 shadow-md">
               <img
                 src={Pic03}
                 alt="BrewCha workshop — detail"
-                className="aspect-[3/4] w-full object-cover sm:aspect-[2/3]"
+                className="h-full w-full object-cover"
                 draggable={false}
               />
             </div>
           </div>
 
-          <div className="pointer-events-none absolute inset-0 z-[25] overflow-visible" aria-hidden>
+          <div className="pointer-events-none absolute inset-0 z-[20] overflow-visible" aria-hidden>
             {STICKER_LAYOUT.map((place, i) => {
               const src = STICKER_ASSETS[i]
               const rot = place.rotate
               const style = {
-                top: place.top,
                 width: place.size,
                 height: 'auto',
                 zIndex: place.z,
+                transform: `rotate(${rot}deg)`,
               }
-              if (place.left != null) {
-                style.left = place.left
-                style.transform = place.seam
-                  ? `translateX(-50%) rotate(${rot}deg)`
-                  : `rotate(${rot}deg)`
-              } else if (place.right != null) {
-                style.right = place.right
-                style.transform = `rotate(${rot}deg)`
-              } else {
-                style.transform = `rotate(${rot}deg)`
-              }
+              if (place.top != null) style.top = place.top
+              if (place.bottom != null) style.bottom = place.bottom
+              if (place.left != null) style.left = place.left
+              if (place.right != null) style.right = place.right
 
               return (
                 <img
@@ -229,7 +224,7 @@ export default function BrewchaContent() {
                   src={src}
                   alt=""
                   draggable={false}
-                  className="absolute select-none drop-shadow-md"
+                  className="absolute select-none drop-shadow-lg"
                   style={style}
                 />
               )

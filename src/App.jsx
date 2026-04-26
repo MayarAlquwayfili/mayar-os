@@ -990,7 +990,7 @@ function CVEntry({ title, titleHref, meta, date, bullets }) {
 // Per-title window presets: { w, h, centered }
 const WINDOW_PRESETS = {
   'About Me': { w: 420, h: 380, centered: true },
-  'Creative Lab': { w: 440, h: 360, centered: true },
+  Lab: { w: 400, h: 340, centered: true },
 }
 
 function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus, onOpenWindow }) {
@@ -1250,7 +1250,7 @@ function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus, on
           <RECLABContent />
         ) : title === 'Qaffatek' ? (
           <QaftatkContent />
-        ) : title === 'Creative Lab' ? (
+        ) : title === 'Lab' ? (
           <CreativeLabFolderContent onOpenProject={onOpenWindow} />
         ) : title === 'Brewcha' ? (
           <BrewchaContent />
