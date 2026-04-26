@@ -19,23 +19,21 @@ import S14 from '../assets/Brewcha/Stickers/Brewcha_14.svg'
 import S15 from '../assets/Brewcha/Stickers/Brewcha_15.svg'
 import S16 from '../assets/Brewcha/Stickers/Brewcha_16.svg'
 
-const MATCHA = '#10B981'
-const PLUM = '#6B3FA0'
-const COFFEE = '#5C4033'
-
 const STICKER_ASSETS = [
   S01, S02, S03, S04, S05, S06, S07, S08, S09, S10, S11, S12, S13, S14, S15, S16, BrewchaFav,
 ]
 
 const META = [
   { label: 'Timeline', value: '09/2025 – 11/2025' },
-  { label: 'Type', value: 'Entrepreneurship' },
+  { label: 'Project Type', value: 'Entrepreneurship Project (Academic)' },
   { label: 'Category', value: 'Interactive Beverage Workshop' },
   { label: 'Role', value: 'Product Manager & Designer' },
 ]
 
-const BODY =
-  'text-[15px] leading-[1.8] tracking-[0.01em] text-gray-600 text-center'
+const META_KEY = 'text-[10px] font-medium uppercase tracking-[0.12em] text-gray-400 mb-1'
+const META_VAL = 'text-[13px] font-medium text-gray-900'
+
+const BODY = 'text-[15px] leading-[1.8] tracking-[0.01em] text-gray-600 text-center'
 
 /**
  * Large stickers, mostly in outer margin (negative inset) — minimal overlap on photo edges.
@@ -67,76 +65,39 @@ export default function BrewchaContent() {
       <section className="py-24 px-6">
         <div className="mx-auto max-w-[800px] text-center">
           <div className="mb-10 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-            <h1 className="text-[36px] font-bold leading-tight tracking-tight" style={{ color: COFFEE }}>
+            <h1 className="text-[36px] font-bold leading-tight tracking-tight text-gray-900">
               BrewCha Overview
             </h1>
             <span className="hidden sm:inline text-[32px] font-light text-gray-300" aria-hidden>
               |
             </span>
-            <p className="text-[32px] font-medium text-gray-400">Status: Live Prototype</p>
+            <p className="text-[32px] font-normal text-gray-400">Status: Live Prototype</p>
           </div>
 
           <div className="mb-14 grid grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-4 md:gap-y-10">
             {META.map(({ label, value }) => (
               <div key={label} className="text-center">
-                <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-gray-400">
-                  {label}
-                </p>
-                <p className="text-[13px] font-medium leading-snug text-gray-800 md:text-[14px]">{value}</p>
+                <p className={META_KEY}>{label}</p>
+                <p className={META_VAL}>{value}</p>
               </div>
             ))}
           </div>
 
           <div className={`space-y-6 ${BODY}`}>
             <p>
-              Before we cut a single label, we ran a survey with{' '}
-              <span className="font-semibold text-gray-800">81 respondents</span> to learn where people sat
-              on the spectrum from{' '}
-              <span className="font-semibold" style={{ color: PLUM }}>
-                passive experience
-              </span>{' '}
-              (watching someone else make the drink) to showing up as{' '}
-              <span className="font-semibold" style={{ color: MATCHA }}>
-                creators
-              </span>{' '}
-              (measuring, mixing, and signing their own bottle). The numbers didn’t whisper—they pointed at
-              a workshop-shaped gap in how beverage ideas are usually pitched.
+              We all love a good coffee or matcha run. For many, a quick grab-and-go from a traditional café is exactly what they need. However, our research showed that this passive experience leaves out a specific group: the creators who love the process just as much as the product.
             </p>
-
-            <div
-              className="mx-auto flex max-w-lg flex-col gap-4 rounded-2xl border border-gray-100 bg-gray-50/80 px-6 py-5 sm:flex-row sm:items-stretch sm:justify-center sm:gap-6"
-              role="group"
-              aria-label="Key survey results"
-            >
-              <div className="flex flex-1 flex-col items-center justify-center border-b border-gray-200/80 pb-4 sm:border-b-0 sm:border-r sm:pb-0 sm:pr-6">
-                <p
-                  className="text-[34px] font-black tabular-nums leading-none sm:text-[40px]"
-                  style={{ color: PLUM }}
-                >
-                  77%
-                </p>
-                <p className="mt-2 text-[13px] font-medium leading-snug text-gray-600">
-                  chose a hands-on, make-your-own session over a passive tasting or demo-only format
-                </p>
-              </div>
-              <div className="flex flex-1 flex-col items-center justify-center pt-1 sm:pt-0">
-                <p
-                  className="text-[34px] font-black tabular-nums leading-none sm:text-[40px]"
-                  style={{ color: MATCHA }}
-                >
-                  67%
-                </p>
-                <p className="mt-2 text-[13px] font-medium leading-snug text-gray-600">
-                  said they’d rather leave with something they personally assembled than a pre-made sample
-                </p>
-              </div>
-            </div>
-
             <p>
-              BrewCha became the physical expression of that data: fewer rows of chairs, more stations,
-              prompts that assume you’re the one in charge. The live prototype wasn’t a mood board—it was
-              the moment we asked whether the story still held when ink, syrup, and ice were in guests’
-              hands instead of ours.
+              We surveyed 81 respondents; 77% felt that current café experiences have become repetitive, and 67% expressed a strong interest in building their own drinks from scratch.
+            </p>
+            <p>
+              Instead of opening just another cafe, we created Brewcha Studio an interactive beverage workshop. To test and validate this concept with real users, we executed a live prototype.
+            </p>
+            <p>
+              The journey begins at a touchscreen interface. To prevent decision fatigue, I designed UI features like \"Brewcha’s Favorite\" tags to guide users as they build their custom recipes. Once the prep is done, the fun starts. Customers head to the Sticker Bar to customize their cups.
+            </p>
+            <p>
+              Next, they move to their assigned station. We provide them with everything they need: an apron, a kit of pre-portioned ingredients, specialized tools, and an instruction card. Finally, it's time for them to enjoy their creation and capture the perfect photo to share. By empowering the customer to be the creator, we turned a simple drink into a memorable, shareable experience.
             </p>
           </div>
         </div>
