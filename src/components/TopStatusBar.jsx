@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Sparkle } from 'lucide-react'
+import SparkleIcon from '../assets/sparkle.svg'
 import IcWifi from '../assets/Ic_wifi.svg'
 import IcGithub from '../assets/Ic_Github.svg'
 import IcLinkedin from '../assets/Ic_linkedin.svg'
@@ -50,7 +50,13 @@ export default function TopStatusBar({ onAboutMe }) {
       {/* ── Left cluster (sparkle anchor — macOS Apple position) ── */}
       <div className="flex min-w-0 flex-1 flex-nowrap items-center gap-0.5 text-[13px] font-medium leading-none text-neutral-900">
         <span className={`flex items-center justify-center ${STATIC_CLUSTER}`} aria-hidden>
-          <Sparkle className="h-3 w-3 shrink-0" strokeWidth={1.75} absoluteStrokeWidth aria-hidden />
+          <img
+            src={SparkleIcon}
+            alt=""
+            aria-hidden
+            className="h-3 w-3 shrink-0 block"
+            draggable={false}
+          />
         </span>
         <span className={`font-semibold ${STATIC_CLUSTER}`}>Mayar</span>
         <button
