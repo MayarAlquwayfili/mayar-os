@@ -22,6 +22,14 @@ function randomFolderPos() {
 export const DESKTOP_FOLDERS = [
   { id: 2, title: 'Folder #02',  icon: FolderIcon,    ...randomFolderPos() },
   {
+    id: 'lab',
+    title: 'Lab',
+    windowTitle: 'Creative Lab',
+    icon: FolderIcon,
+    subtitle: 'Folder',
+    ...randomFolderPos(),
+  },
+  {
     id: 'cv',
     title: 'Mayar_CV.pdf',
     windowTitle: 'Preview — Mayar_CV.pdf',

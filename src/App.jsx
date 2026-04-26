@@ -18,6 +18,8 @@ import MockupMoheetik03 from './assets/Moheetik/MockupMoheetik03.svg'
 import Dock from './components/Dock'
 import TopStatusBar from './components/TopStatusBar'
 import QaftatkContent from './components/QaftatkContent'
+import BrewchaContent from './components/BrewchaContent'
+import CreativeLabFolderContent from './components/CreativeLabFolderContent'
 import { useWindowManager } from './hooks/useWindowManager'
 import { MOHEETIK_TOOLS, RECLAB_TOOLS, QAFFATEK_TOOLS, DESKTOP_FOLDERS } from './constants/projects'
 
@@ -988,9 +990,10 @@ function CVEntry({ title, titleHref, meta, date, bullets }) {
 // Per-title window presets: { w, h, centered }
 const WINDOW_PRESETS = {
   'About Me': { w: 420, h: 380, centered: true },
+  'Creative Lab': { w: 440, h: 360, centered: true },
 }
 
-function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus }) {
+function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus, onOpenWindow }) {
   const preset   = WINDOW_PRESETS[title] ?? {}
   const defaultW = preset.w ?? 700
   const defaultH = preset.h ?? 500
@@ -1247,6 +1250,10 @@ function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus }) 
           <RECLABContent />
         ) : title === 'Qaffatek' ? (
           <QaftatkContent />
+        ) : title === 'Creative Lab' ? (
+          <CreativeLabFolderContent onOpenProject={onOpenWindow} />
+        ) : title === 'Brewcha' ? (
+          <BrewchaContent />
         ) : title === 'Preview — Mayar_CV.pdf' ? (
           <CVContent />
         ) : title === 'About Me' ? (
@@ -1487,6 +1494,7 @@ export default function App() {
             initialY={win.initialY}
             onClose={() => closeWindow(win.id)}
             onFocus={() => bringToFront(win.id)}
+            onOpenWindow={openOrFocusWindow}
           />
         ))}
       </main>
