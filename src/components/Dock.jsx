@@ -1,11 +1,13 @@
 import AppIconMoheetik from '../assets/Moheetik/AppIconMoheetik.svg'
 import AppIconQaffatek from '../assets/AppIconQaffatek.svg'
 import AppIconRECLAB from '../assets/RECLAB/AppIconRECLAB.svg'
+import BrewchaIcon from "../assets/Brewcha/Brewcha's_fav.svg"
 
 const DOCK_APPS = [
   { id: 'Moheetik', label: 'Moheetik', icon: AppIconMoheetik },
   { id: 'Qaffatek', label: 'Qaffatek', icon: AppIconQaffatek },
   { id: 'RECLAB',   label: 'RECLAB',   icon: AppIconRECLAB   },
+  { id: 'Brewcha',  label: 'Brewcha',  icon: BrewchaIcon     },
 ]
 
 export default function Dock({ openWindows = [], onOpen }) {
