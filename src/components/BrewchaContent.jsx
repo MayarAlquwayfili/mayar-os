@@ -34,28 +34,38 @@ export default function BrewchaContent() {
   return (
     <div className="h-full overflow-y-auto overflow-x-hidden bg-white font-sans text-neutral-900 antialiased">
       {/* ── 1. Identity header + narrative ── */}
-      <section className="py-24 px-6">
-        <div className="mx-auto max-w-[800px] text-center">
-          <div className="mb-10 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+      <section className="py-24 px-6 sm:px-10">
+        <div className="mx-auto max-w-[1200px]">
+          {/* Header + pill */}
+          <div className="flex flex-wrap items-center justify-center gap-3 text-center">
             <h1 className="text-[36px] font-bold leading-tight tracking-tight text-gray-900">
               BrewCha Overview
             </h1>
-            <span className="hidden sm:inline text-[32px] font-light text-gray-300" aria-hidden>
-              |
+            <span className="inline-flex items-center gap-2 rounded-full bg-[#10B981]/10 px-3 py-1 text-[12px] font-bold text-[#10B981]">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#10B981]" aria-hidden />
+              Status: Live Prototype
             </span>
-            <p className="text-[32px] font-normal text-gray-400">Status: Live Prototype</p>
           </div>
 
-          <div className="mb-14 grid grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-4 md:gap-y-10">
-            {META.map(({ label, value }) => (
-              <div key={label} className="text-center">
-                <p className={META_KEY}>{label}</p>
-                <p className={META_VAL}>{value}</p>
-              </div>
-            ))}
+          <div className="border-b border-gray-100 pb-8" />
+
+          {/* Metadata grid */}
+          <div className="pt-8">
+            <div className="grid grid-cols-2 gap-x-6 gap-y-8 text-center md:grid-cols-4 md:gap-y-10">
+              {META.map(({ label, value }) => (
+                <div key={label}>
+                  <p className={META_KEY}>{label}</p>
+                  <p className={META_VAL}>{value}</p>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div className={`relative space-y-6 ${BODY}`}>
+          <div className="border-b border-gray-100 pt-8" />
+
+          {/* Narrative (centered) */}
+          <div className="pt-10">
+            <div className={`relative mx-auto max-w-[800px] space-y-6 ${BODY}`}>
             {/* Subtle sticker callouts (no grid overlap) */}
             <div className="pointer-events-none absolute inset-0 overflow-visible" aria-hidden>
               {CALLOUT_LAYOUT.map((p, i) => {
@@ -97,6 +107,7 @@ export default function BrewchaContent() {
             <p>
               Next, they move to their assigned station. We provide them with everything they need: an apron, a kit of pre-portioned ingredients, specialized tools, and an instruction card. Finally, it's time for them to enjoy their creation and capture the perfect photo to share. By empowering the customer to be the creator, we turned a simple drink into a memorable, shareable experience.
             </p>
+            </div>
           </div>
         </div>
 
