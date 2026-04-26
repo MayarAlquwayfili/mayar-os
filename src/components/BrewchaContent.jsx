@@ -5,23 +5,10 @@ import Pic03 from '../assets/Brewcha/Brewcha_pic03.jpg'
 import S01 from '../assets/Brewcha/Stickers/Brewcha_01.svg'
 import S02 from '../assets/Brewcha/Stickers/Brewcha_02.svg'
 import S03 from '../assets/Brewcha/Stickers/Brewcha_03.svg'
-import S04 from '../assets/Brewcha/Stickers/Brewcha_04.svg'
 import S05 from '../assets/Brewcha/Stickers/Brewcha_05.svg'
-import S06 from '../assets/Brewcha/Stickers/Brewcha_06.svg'
-import S07 from '../assets/Brewcha/Stickers/Brewcha_07.svg'
-import S08 from '../assets/Brewcha/Stickers/Brewcha_08.svg'
-import S09 from '../assets/Brewcha/Stickers/Brewcha_09.svg'
-import S10 from '../assets/Brewcha/Stickers/Brewcha_10.svg'
 import S11 from '../assets/Brewcha/Stickers/Brewcha_11.svg'
-import S12 from '../assets/Brewcha/Stickers/Brewcha_12.svg'
-import S13 from '../assets/Brewcha/Stickers/Brewcha_13.svg'
-import S14 from '../assets/Brewcha/Stickers/Brewcha_14.svg'
-import S15 from '../assets/Brewcha/Stickers/Brewcha_15.svg'
-import S16 from '../assets/Brewcha/Stickers/Brewcha_16.svg'
 
-const STICKER_ASSETS = [
-  S01, S02, S03, S04, S05, S06, S07, S08, S09, S10, S11, S12, S13, S14, S15, S16, BrewchaFav,
-]
+const CALLOUT_STICKERS = [S01, S02, S03, S05, S11, BrewchaFav]
 
 const META = [
   { label: 'Timeline', value: '09/2025 – 11/2025' },
@@ -35,27 +22,12 @@ const META_VAL = 'text-[13px] font-medium text-gray-900'
 
 const BODY = 'text-[15px] leading-[1.8] tracking-[0.01em] text-gray-600 text-center'
 
-/**
- * Large stickers, mostly in outer margin (negative inset) — minimal overlap on photo edges.
- */
-const STICKER_LAYOUT = [
-  { top: '-0.5rem', left: '-2.25rem', size: 92, rotate: -14, z: 14 },
-  { top: '-0.75rem', right: '-1.75rem', size: 88, rotate: 11, z: 14 },
-  { top: '14%', left: '-2.5rem', size: 96, rotate: 7, z: 14 },
-  { top: '40%', left: '-2rem', size: 84, rotate: -9, z: 14 },
-  { top: '66%', left: '-2.25rem', size: 90, rotate: 13, z: 14 },
-  { top: '10%', right: '-2.25rem', size: 94, rotate: -11, z: 14 },
-  { top: '36%', right: '-2rem', size: 86, rotate: 9, z: 14 },
-  { top: '62%', right: '-2.5rem', size: 92, rotate: -15, z: 14 },
-  { bottom: '-0.5rem', left: '-1.5rem', size: 88, rotate: 12, z: 14 },
-  { bottom: '-0.75rem', right: '-2rem', size: 100, rotate: -8, z: 14 },
-  { top: '-1.25rem', left: '18%', size: 80, rotate: 18, z: 13 },
-  { top: '-1rem', right: '22%', size: 82, rotate: -16, z: 13 },
-  { bottom: '-1.25rem', left: '24%', size: 86, rotate: 10, z: 13 },
-  { bottom: '-1rem', right: '28%', size: 90, rotate: -12, z: 13 },
-  { top: '48%', left: '-0.75rem', size: 72, rotate: 6, z: 16 },
-  { top: '52%', right: '-0.5rem', size: 74, rotate: -7, z: 16 },
-  { bottom: '-1.5rem', left: '12%', size: 78, rotate: 14, z: 15 },
+const CALLOUT_LAYOUT = [
+  { top: '-12px', left: '-26px', size: 72, rotate: -10, opacity: 0.95 },
+  { top: '18px', right: '-34px', size: 76, rotate: 14, opacity: 0.9 },
+  { top: '168px', left: '-38px', size: 68, rotate: 8, opacity: 0.88 },
+  { top: '236px', right: '-26px', size: 70, rotate: -12, opacity: 0.9 },
+  { bottom: '-18px', left: '18%', size: 74, rotate: 11, opacity: 0.92 },
 ]
 
 export default function BrewchaContent() {
@@ -83,7 +55,33 @@ export default function BrewchaContent() {
             ))}
           </div>
 
-          <div className={`space-y-6 ${BODY}`}>
+          <div className={`relative space-y-6 ${BODY}`}>
+            {/* Subtle sticker callouts (no grid overlap) */}
+            <div className="pointer-events-none absolute inset-0 overflow-visible" aria-hidden>
+              {CALLOUT_LAYOUT.map((p, i) => {
+                const src = CALLOUT_STICKERS[i]
+                const style = {
+                  width: p.size,
+                  height: 'auto',
+                  transform: `rotate(${p.rotate}deg)`,
+                  opacity: p.opacity,
+                }
+                if (p.top != null) style.top = p.top
+                if (p.bottom != null) style.bottom = p.bottom
+                if (p.left != null) style.left = p.left
+                if (p.right != null) style.right = p.right
+                return (
+                  <img
+                    key={`${src}-${i}`}
+                    src={src}
+                    alt=""
+                    draggable={false}
+                    className="absolute -z-[1] select-none"
+                    style={style}
+                  />
+                )
+              })}
+            </div>
             <p>
               We all love a good coffee or matcha run. For many, a quick grab-and-go from a traditional café is exactly what they need. However, our research showed that this passive experience leaves out a specific group: the creators who love the process just as much as the product.
             </p>
@@ -162,34 +160,6 @@ export default function BrewchaContent() {
                 draggable={false}
               />
             </div>
-          </div>
-
-          <div className="pointer-events-none absolute inset-0 z-[20] overflow-visible" aria-hidden>
-            {STICKER_LAYOUT.map((place, i) => {
-              const src = STICKER_ASSETS[i]
-              const rot = place.rotate
-              const style = {
-                width: place.size,
-                height: 'auto',
-                zIndex: place.z,
-                transform: `rotate(${rot}deg)`,
-              }
-              if (place.top != null) style.top = place.top
-              if (place.bottom != null) style.bottom = place.bottom
-              if (place.left != null) style.left = place.left
-              if (place.right != null) style.right = place.right
-
-              return (
-                <img
-                  key={`${src}-${i}`}
-                  src={src}
-                  alt=""
-                  draggable={false}
-                  className="absolute select-none drop-shadow-lg"
-                  style={style}
-                />
-              )
-            })}
           </div>
         </div>
       </section>
