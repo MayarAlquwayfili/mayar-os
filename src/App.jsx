@@ -993,7 +993,7 @@ const WINDOW_PRESETS = {
   Lab: { w: 400, h: 340, centered: true },
 }
 
-function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus, onOpenWindow }) {
+function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus, openOrFocusWindow }) {
   const preset   = WINDOW_PRESETS[title] ?? {}
   const defaultW = preset.w ?? 700
   const defaultH = preset.h ?? 500
@@ -1251,7 +1251,7 @@ function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus, on
         ) : title === 'Qaffatek' ? (
           <QaftatkContent />
         ) : title === 'Lab' ? (
-          <CreativeLabFolderContent onOpenProject={onOpenWindow} />
+          <CreativeLabFolderContent onOpenProject={openOrFocusWindow} />
         ) : title === 'Brewcha' ? (
           <BrewchaContent />
         ) : title === 'Preview — Mayar_CV.pdf' ? (
@@ -1261,7 +1261,6 @@ function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus, on
         ) : (
           <div className="p-6 text-sm text-gray-600">
             <p className="font-medium text-gray-800">{title}</p>
-            <p className="mt-2">No additional content for this folder.</p>
           </div>
         )}
       </div>
@@ -1494,7 +1493,7 @@ export default function App() {
             initialY={win.initialY}
             onClose={() => closeWindow(win.id)}
             onFocus={() => bringToFront(win.id)}
-            onOpenWindow={openOrFocusWindow}
+            openOrFocusWindow={openOrFocusWindow}
           />
         ))}
       </main>
