@@ -27,7 +27,7 @@ export default function CreativeLabFolderContent({ onOpenProject }) {
           aria-label="Brewcha — double-click to open project"
           className={`group flex w-[140px] cursor-default flex-col items-center gap-2 rounded-xl border p-2 text-center outline-none transition-colors ${
             selected
-              ? 'bg-[#007AFF]/10 border-[#007AFF]/20'
+              ? 'bg-[#6B3FA0]/10 border-[#6B3FA0]/20'
               : 'bg-transparent border-transparent hover:bg-black/5'
           } focus-visible:ring-2 focus-visible:ring-[#10B981]/40 focus-visible:ring-offset-2`}
           onClick={(e) => {
