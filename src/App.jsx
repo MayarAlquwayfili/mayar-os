@@ -20,6 +20,7 @@ import TopStatusBar from './components/TopStatusBar'
 import QaftatkContent from './components/QaftatkContent'
 import BrewchaContent from './components/BrewchaContent'
 import CreativeLabFolderContent from './components/CreativeLabFolderContent'
+import SideBFolderContent from './components/SideBFolderContent'
 import { useWindowManager } from './hooks/useWindowManager'
 import { MOHEETIK_TOOLS, RECLAB_TOOLS, QAFFATEK_TOOLS, DESKTOP_FOLDERS } from './constants/projects'
 
@@ -991,6 +992,7 @@ function CVEntry({ title, titleHref, meta, date, bullets }) {
 const WINDOW_PRESETS = {
   'About Me': { w: 420, h: 380, centered: true },
   Lab: { w: 400, h: 340, centered: true },
+  'Side B': { w: 440, h: 400, centered: true },
 }
 
 function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus, openOrFocusWindow }) {
@@ -1252,6 +1254,8 @@ function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus, op
           <QaftatkContent />
         ) : title === 'Lab' ? (
           <CreativeLabFolderContent onOpenProject={openOrFocusWindow} />
+        ) : title === 'Side B' ? (
+          <SideBFolderContent onOpenProject={openOrFocusWindow} />
         ) : title === 'Brewcha' ? (
           <BrewchaContent />
         ) : title === 'Preview — Mayar_CV.pdf' ? (
