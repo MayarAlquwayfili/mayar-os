@@ -37,7 +37,7 @@ export default function BrewchaContent() {
       <section className="py-24 px-6 sm:px-10">
         <div className="mx-auto max-w-[1200px]">
           {/* Header + pill */}
-          <div className="flex flex-wrap items-center justify-end gap-3 text-right">
+          <div className="flex flex-wrap items-center justify-start gap-3 text-left">
             <h1 className="text-[36px] font-bold leading-tight tracking-tight text-gray-900">
               BrewCha
             </h1>
@@ -50,7 +50,7 @@ export default function BrewchaContent() {
 
           {/* Metadata grid */}
           <div className="pt-8">
-            <div className="grid grid-cols-2 gap-x-6 gap-y-8 text-right md:grid-cols-4 md:gap-y-10">
+            <div className="grid grid-cols-2 gap-x-6 gap-y-8 text-left md:grid-cols-4 md:gap-y-10">
               {META.map(({ label, value }) => (
                 <div key={label}>
                   <p className={META_KEY}>{label}</p>
