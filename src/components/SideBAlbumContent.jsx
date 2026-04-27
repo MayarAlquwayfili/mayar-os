@@ -21,7 +21,7 @@ export default function SideBAlbumContent({ projectKey, onOpenPreview }) {
 
   return (
     <div ref={rootRef} className="h-full overflow-auto bg-white">
-      <div className="grid grid-cols-3 gap-4 p-6 sm:grid-cols-4 sm:gap-5">
+      <div className="grid grid-cols-3 gap-4 p-6 sm:grid-cols-4">
         {items.map((item) => {
           const isSelected = selectedId === item.id
           return (
@@ -29,8 +29,8 @@ export default function SideBAlbumContent({ projectKey, onOpenPreview }) {
               key={item.id}
               type="button"
               data-album-tile
-              aria-label={`${item.caption} — double-click to preview`}
-              className={`group flex w-full cursor-default flex-col gap-1.5 rounded-xl border p-1.5 text-center outline-none transition-colors ${
+              aria-label={`${item.placeholder ?? item.id} — double-click to preview`}
+              className={`group w-full cursor-default rounded-xl border p-1.5 outline-none transition-colors ${
                 isSelected
                   ? 'border-[#6B3FA0]/20 bg-[#6B3FA0]/10'
                   : 'border-transparent hover:bg-black/5'
@@ -59,9 +59,6 @@ export default function SideBAlbumContent({ projectKey, onOpenPreview }) {
                   </div>
                 )}
               </div>
-              <span className="px-0.5 text-center text-[10px] text-gray-500">
-                {item.caption}
-              </span>
             </button>
           )
         })}
