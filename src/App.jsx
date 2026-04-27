@@ -1391,8 +1391,10 @@ function DraggableFolder({
       onDoubleClick={handleDoubleClick}
     >
       <div
-        className={`box-border flex h-[72px] w-[72px] shrink-0 items-center justify-center rounded-md p-1 ${
-          isSelected ? 'bg-black/20' : 'bg-transparent'
+        className={`box-border flex h-[72px] w-[72px] shrink-0 items-center justify-center rounded-md border p-1 transition-colors ${
+          isSelected
+            ? 'bg-[#6B3FA0]/10 border-[#6B3FA0]/20'
+            : 'bg-transparent border-transparent hover:bg-black/5'
         }`}
       >
         <img
@@ -1407,7 +1409,7 @@ function DraggableFolder({
         <span
           className={`line-clamp-1 text-[12px] font-medium leading-tight tracking-wide ${
             isSelected
-              ? 'font-semibold text-amber-900'
+              ? 'font-semibold text-gray-900'
               : 'text-gray-800'
           }`}
         >
@@ -1415,7 +1417,7 @@ function DraggableFolder({
         </span>
         <span
           className={`line-clamp-1 text-[11px] leading-tight ${
-            isSelected ? 'font-medium text-amber-800' : 'text-gray-600'
+            isSelected ? 'font-medium text-gray-700' : 'text-gray-600'
           }`}
         >
           {subtitle ?? '2 items'}
