@@ -34,7 +34,7 @@ export default function BrewchaContent() {
   return (
     <div className="h-full overflow-y-auto overflow-x-hidden bg-white font-sans text-neutral-900 antialiased">
       {/* ── 1. Identity header + narrative ── */}
-      <section className="py-24 px-6 sm:px-10">
+      <section className="px-6 pt-8 pb-24 sm:px-10">
         <div className="mx-auto max-w-[1200px]">
           {/* Header + pill */}
           <div className="flex flex-wrap items-center justify-start gap-3 text-left">
@@ -108,20 +108,6 @@ export default function BrewchaContent() {
             </p>
             </div>
           </div>
-        </div>
-
-        {/* Bridge: intro → gallery */}
-        <div className="mx-auto mt-16 flex max-w-[800px] flex-col items-center justify-center gap-2 px-6 text-center">
-          <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-gray-400">Scroll for more</p>
-          <span
-            className="inline-flex animate-bounce text-gray-400"
-            style={{ animationDuration: '2.2s' }}
-            aria-hidden
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M12 5v14M5 12l7 7 7-7" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </span>
         </div>
       </section>
 
