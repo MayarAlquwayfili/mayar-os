@@ -992,7 +992,7 @@ function CVEntry({ title, titleHref, meta, date, bullets }) {
 const WINDOW_PRESETS = {
   'About Me': { w: 420, h: 380, centered: true },
   Lab: { w: 400, h: 340, centered: true },
-  'Side B': { w: 440, h: 400, centered: true },
+  'Side B': { w: 560, h: 320, centered: true },
 }
 
 function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus, openOrFocusWindow }) {
@@ -1255,7 +1255,7 @@ function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus, op
         ) : title === 'Lab' ? (
           <CreativeLabFolderContent onOpenProject={openOrFocusWindow} />
         ) : title === 'Side B' ? (
-          <SideBFolderContent onOpenProject={openOrFocusWindow} />
+          <SideBFolderContent />
         ) : title === 'Brewcha' ? (
           <BrewchaContent />
         ) : title === 'Preview — Mayar_CV.pdf' ? (
@@ -1388,7 +1388,7 @@ function DraggableFolder({
     <div
       ref={rootRef}
       aria-label={`Folder ${id}: ${title}`}
-      className="absolute flex w-[88px] cursor-grab flex-col items-center gap-1 select-none active:cursor-grabbing"
+      className="absolute flex w-[132px] cursor-grab flex-col items-center gap-1 select-none active:cursor-grabbing"
       style={{ left: position.x, top: position.y }}
       onMouseDown={onMouseDown}
       onClick={onClick}
@@ -1409,9 +1409,9 @@ function DraggableFolder({
         />
       </div>
 
-      <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-1 py-0.5 text-center">
+      <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 py-0.5 text-center">
         <span
-          className={`line-clamp-1 text-[12px] font-medium leading-tight tracking-wide ${
+          className={`line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide ${
             isSelected
               ? 'font-semibold text-gray-900'
               : 'text-gray-800'
@@ -1420,7 +1420,7 @@ function DraggableFolder({
           {title}
         </span>
         <span
-          className={`line-clamp-1 text-[11px] leading-tight ${
+          className={`w-full break-words text-[11px] leading-snug ${
             isSelected ? 'font-medium text-gray-700' : 'text-gray-600'
           }`}
         >
