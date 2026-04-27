@@ -992,7 +992,7 @@ function CVEntry({ title, titleHref, meta, date, bullets }) {
 const WINDOW_PRESETS = {
   'About Me': { w: 420, h: 380, centered: true },
   Lab: { w: 400, h: 340, centered: true },
-  'Side B': { w: 560, h: 320, centered: true },
+  'Side B': { w: 640, h: 360, centered: true },
 }
 
 function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus, openOrFocusWindow }) {

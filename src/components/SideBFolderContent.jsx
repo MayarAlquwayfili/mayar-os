@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import FolderIcon from '../assets/Folder.svg'
 
 const ARCHIVE_ITEMS = [
-  { id: 'moheetik', label: 'Side B_Moheetik' },
-  { id: 'qaffatek', label: 'Side B_Qaffatek' },
-  { id: 'reclab', label: 'Side B_RECLAB' },
-  { id: 'brewcha', label: 'Side B_BrewCha' },
+  { id: 'moheetik', name: 'Moheetik' },
+  { id: 'qaffatek', name: 'Qaffatek' },
+  { id: 'reclab', name: 'RECLAB' },
+  { id: 'brewcha', name: 'BrewCha' },
 ]
 
 /**
@@ -27,16 +27,17 @@ export default function SideBFolderContent() {
 
   return (
     <div ref={rootRef} className="h-full overflow-auto bg-white">
-      <div className="grid grid-cols-4 gap-x-6 gap-y-8 p-8 justify-items-start">
+      <div className="grid grid-cols-4 content-start gap-x-12 gap-y-16 p-10 justify-items-start">
         {ARCHIVE_ITEMS.map((item) => {
           const isSelected = selectedId === item.id
+          const ariaLabel = `Side B_${item.name}`
           return (
             <button
               key={item.id}
               type="button"
               data-icon-item
-              aria-label={item.label}
-              className={`group flex w-[100px] cursor-default flex-col items-start gap-2 rounded-xl border p-2 text-left outline-none transition-colors ${
+              aria-label={ariaLabel}
+              className={`group flex min-w-0 cursor-default flex-col items-center gap-2 rounded-xl border px-3 py-2.5 text-center outline-none transition-colors ${
                 isSelected
                   ? 'bg-[#6B3FA0]/10 border-[#6B3FA0]/20'
                   : 'bg-transparent border-transparent hover:bg-black/5'
@@ -46,15 +47,22 @@ export default function SideBFolderContent() {
                 setSelectedId(item.id)
               }}
             >
-              <img
-                src={FolderIcon}
-                alt=""
-                draggable={false}
-                className="h-[72px] w-[72px] shrink-0 object-contain drop-shadow-sm transition-transform duration-200 group-hover:scale-[1.02]"
-              />
-              <span className="w-full break-words text-[11px] font-medium leading-tight text-gray-800">
-                {item.label}
-              </span>
+              <div className="flex w-full flex-col items-center text-center">
+                <img
+                  src={FolderIcon}
+                  alt=""
+                  draggable={false}
+                  className="h-[90px] w-[90px] shrink-0 object-contain drop-shadow-sm transition-transform duration-200 group-hover:scale-[1.02]"
+                />
+                <div className="mt-1 flex w-full max-w-[7.5rem] flex-col items-center text-center">
+                  <span className="text-[11px] font-medium leading-tight text-gray-800">
+                    Side B_
+                  </span>
+                  <span className="text-[11px] font-medium leading-tight text-gray-800">
+                    {item.name}
+                  </span>
+                </div>
+              </div>
             </button>
           )
         })}
