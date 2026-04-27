@@ -21,20 +21,35 @@ export function useWindowManager() {
     return zCounterRef.current
   }
 
-  /** Open a new window or bring an existing one to the front. */
-  const openOrFocusWindow = useCallback((title) => {
+  /**
+   * Open or focus a window. Pass a string (legacy) or an object with at least `id`.
+   * Extra fields (variant, sideBAlbumKey, imagePreview, …) are stored on the window record.
+   */
+  const openOrFocusWindow = useCallback((arg) => {
+    const spec =
+      typeof arg === 'string'
+        ? { id: arg, title: arg, variant: 'default' }
+        : {
+            variant: 'default',
+            ...arg,
+            id: arg.id,
+            title: arg.title ?? arg.id,
+          }
+    if (!spec.id) return
+
     setOpenWindows((prev) => {
-      const existing = prev.find((w) => w.id === title)
+      const existing = prev.find((w) => w.id === spec.id)
       const newZ = nextZ()
       if (existing) {
-        return prev.map((w) => w.id === title ? { ...w, zIndex: newZ } : w)
+        return prev.map((w) =>
+          w.id === spec.id ? { ...w, ...spec, zIndex: newZ } : w
+        )
       }
       const idx = prev.length
       return [
         ...prev,
         {
-          id: title,
-          title,
+          ...spec,
           zIndex: newZ,
           initialX: 60 + idx * 24,
           initialY: 48 + idx * 24,

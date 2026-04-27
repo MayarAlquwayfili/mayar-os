@@ -21,6 +21,8 @@ import QaftatkContent from './components/QaftatkContent'
 import BrewchaContent from './components/BrewchaContent'
 import CreativeLabFolderContent from './components/CreativeLabFolderContent'
 import SideBFolderContent from './components/SideBFolderContent'
+import SideBAlbumContent from './components/SideBAlbumContent'
+import ImagePreviewContent from './components/ImagePreviewContent'
 import { useWindowManager } from './hooks/useWindowManager'
 import { MOHEETIK_TOOLS, RECLAB_TOOLS, QAFFATEK_TOOLS, DESKTOP_FOLDERS } from './constants/projects'
 
@@ -993,10 +995,29 @@ const WINDOW_PRESETS = {
   'About Me': { w: 420, h: 380, centered: true },
   Lab: { w: 400, h: 340, centered: true },
   'Side B': { w: 640, h: 360, centered: true },
+  SIDE_B_ALBUM: { w: 720, h: 520, centered: true },
+  IMAGE_PREVIEW: { w: 820, h: 680, centered: true },
 }
 
-function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus, openOrFocusWindow }) {
-  const preset   = WINDOW_PRESETS[title] ?? {}
+function MacWindow({
+  id,
+  title,
+  zIndex,
+  initialX,
+  initialY,
+  onClose,
+  onFocus,
+  openOrFocusWindow,
+  variant = 'default',
+  sideBAlbumKey,
+  imagePreview,
+}) {
+  const preset =
+    variant === 'side-b-album'
+      ? WINDOW_PRESETS.SIDE_B_ALBUM ?? {}
+      : variant === 'image-preview'
+        ? WINDOW_PRESETS.IMAGE_PREVIEW ?? {}
+        : WINDOW_PRESETS[title] ?? {}
   const defaultW = preset.w ?? 700
   const defaultH = preset.h ?? 500
 
@@ -1245,8 +1266,31 @@ function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus, op
         {/* Title intentionally omitted — shown in sidebar */}
       </div>
 
-      <div className="min-h-0 flex-1 overflow-hidden bg-white">
-        {title === 'Moheetik' ? (
+      <div
+        className={`min-h-0 flex-1 overflow-hidden ${
+          variant === 'image-preview' ? 'bg-[#fafafa]' : 'bg-white'
+        }`}
+      >
+        {variant === 'image-preview' && imagePreview ? (
+          <ImagePreviewContent {...imagePreview} />
+        ) : variant === 'side-b-album' && sideBAlbumKey ? (
+          <SideBAlbumContent
+            projectKey={sideBAlbumKey}
+            onOpenPreview={(item) =>
+              openOrFocusWindow({
+                id: `side-b-preview-${sideBAlbumKey}-${item.id}`,
+                title: item.caption ?? 'Preview',
+                variant: 'image-preview',
+                imagePreview: {
+                  caption: item.caption,
+                  placeholder: item.placeholder,
+                  src: item.src,
+                  alt: item.caption,
+                },
+              })
+            }
+          />
+        ) : title === 'Moheetik' ? (
           <MoheetikSplitContent />
         ) : title === 'RECLAB' ? (
           <RECLABContent />
@@ -1255,7 +1299,7 @@ function MacWindow({ id, title, zIndex, initialX, initialY, onClose, onFocus, op
         ) : title === 'Lab' ? (
           <CreativeLabFolderContent onOpenProject={openOrFocusWindow} />
         ) : title === 'Side B' ? (
-          <SideBFolderContent />
+          <SideBFolderContent openOrFocusWindow={openOrFocusWindow} />
         ) : title === 'Brewcha' ? (
           <BrewchaContent />
         ) : title === 'Preview — Mayar_CV.pdf' ? (
@@ -1497,6 +1541,9 @@ export default function App() {
             zIndex={win.zIndex}
             initialX={win.initialX}
             initialY={win.initialY}
+            variant={win.variant}
+            sideBAlbumKey={win.sideBAlbumKey}
+            imagePreview={win.imagePreview}
             onClose={() => closeWindow(win.id)}
             onFocus={() => bringToFront(win.id)}
             openOrFocusWindow={openOrFocusWindow}

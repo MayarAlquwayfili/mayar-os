@@ -9,9 +9,9 @@ const ARCHIVE_ITEMS = [
 ]
 
 /**
- * Side B — static archive folders (selection only; no project links).
+ * Side B — archive folders; double-click opens album window for that project.
  */
-export default function SideBFolderContent() {
+export default function SideBFolderContent({ openOrFocusWindow }) {
   const rootRef = useRef(null)
   const [selectedId, setSelectedId] = useState(null)
 
@@ -45,6 +45,16 @@ export default function SideBFolderContent() {
               onClick={(e) => {
                 e.stopPropagation()
                 setSelectedId(item.id)
+              }}
+              onDoubleClick={(e) => {
+                e.stopPropagation()
+                setSelectedId(item.id)
+                openOrFocusWindow?.({
+                  id: `side-b-album-${item.id}`,
+                  title: `Side B — ${item.name}`,
+                  variant: 'side-b-album',
+                  sideBAlbumKey: item.id,
+                })
               }}
             >
               <div className="flex w-full flex-col items-center text-center">
