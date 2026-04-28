@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { createPortal } from 'react-dom'
 import FolderIcon from './assets/Folder.svg'
 import FolderpdfIcon from './assets/Folderpdf.svg'
 import AppIconMoheetik from './assets/Moheetik/AppIconMoheetik.svg'
@@ -29,6 +28,8 @@ import ImagePreviewContent from './components/ImagePreviewContent'
 import HowToWorkContent from './components/HowToWorkContent'
 import NotionSliderContent from './components/NotionSliderContent'
 import DraggableDesktopItem from './components/DraggableDesktopItem'
+import AdminFolderCursorTip from './components/AdminFolderCursorTip'
+import AdminNotifications from './components/AdminNotifications'
 import NotionFolderIcon from './assets/Admin/Notion_Folder.svg'
 import V60FolderIcon from './assets/Admin/V60_Folder.svg'
 import { useWindowManager } from './hooks/useWindowManager'
@@ -1526,35 +1527,6 @@ function randomFolderPosInBounds() {
   return { x, y }
 }
 
-function AdminFolderCursorTip({ label, children }) {
-  const [tip, setTip] = useState({ show: false, x: 0, y: 0 })
-  const OFFSET = 14
-
-  const onMove = (e) => {
-    setTip({ show: true, x: e.clientX + OFFSET, y: e.clientY + OFFSET })
-  }
-  const onLeave = () => setTip((t) => ({ ...t, show: false }))
-
-  return (
-    <>
-      <div className="inline-block cursor-grab active:cursor-grabbing" onMouseMove={onMove} onMouseLeave={onLeave}>
-        {children}
-      </div>
-      {tip.show &&
-        createPortal(
-          <div
-            role="tooltip"
-            className="pointer-events-none fixed z-[9998] max-w-[min(280px,calc(100vw-24px))] rounded-full bg-[#6B3FA0] px-3 py-1.5 text-center text-[11px] font-medium leading-tight text-white"
-            style={{ left: tip.x, top: tip.y }}
-          >
-            {label}
-          </div>,
-          document.body,
-        )}
-    </>
-  )
-}
-
 const LS_KEY = 'mayaros-folder-positions'
 
 function loadLayout() {
@@ -1769,7 +1741,7 @@ export default function App() {
             className="z-[1] cursor-grab active:cursor-grabbing"
             draggingClassName="cursor-grabbing"
           >
-            <div className="max-w-[min(560px,46vw)] text-left text-5xl font-bold leading-[1.05] tracking-tight text-[#6B3FA0] transition-opacity duration-200 hover:opacity-90 sm:text-6xl md:text-7xl">
+            <div className="max-w-[min(560px,46vw)] animate-pulse text-left text-5xl font-bold leading-[1.05] tracking-tight text-[#9CA3AF] sm:text-6xl md:text-7xl">
               {`Who\u2019s the Admin?`}
             </div>
           </DraggableDesktopItem>
@@ -1882,58 +1854,20 @@ export default function App() {
           ))}
       </main>
 
-      {/* ── Notifications (Admin flow) ───────────────────────────────────── */}
-      {adminNotifs.length > 0 && (
-        <div className="pointer-events-none fixed right-4 top-16 z-[8000] flex w-80 flex-col gap-3">
-          {adminNotifs.map((n) => (
-            <div
-              key={n.id}
-              className="pointer-events-auto w-80 rounded-xl border border-[#6B3FA0]/15 bg-[#f3f1eb] p-4"
-            >
-              <p className="text-[11px] font-normal uppercase tracking-[0.12em] text-[#6B3FA0]">
-                {n.header}
-              </p>
-              <p className="mt-1.5 text-[13px] font-normal leading-snug text-gray-800">
-                {formatNotifBody(n.body)}
-              </p>
-
-              {n.isActionable && (
-                <div className="mt-3">
-                  <button
-                    type="button"
-                    className={`inline-flex items-center justify-center rounded-lg px-4 py-1.5 text-sm font-medium ${
-                      adminFlow === 'loading'
-                        ? 'cursor-default bg-gray-200 text-gray-600'
-                        : 'bg-[#6B3FA0] text-white hover:opacity-90'
-                    }`}
-                    onClick={() => {
-                      if (adminFlow !== 'waiting_accept') return
-                      setAdminFlow('loading')
-                      clearAdminTimers()
-                      const t = setTimeout(() => {
-                        setAdminFlow('accepted')
-                      }, 2000)
-                      timeoutsRef.current.push(t)
-                    }}
-                  >
-                    {adminFlow === 'loading' ? (
-                      <span className="inline-flex items-center gap-2">
-                        <span
-                          className="h-4 w-4 animate-spin rounded-full border-2 border-gray-400 border-t-transparent"
-                          aria-hidden
-                        />
-                        Connecting...
-                      </span>
-                    ) : (
-                      'Accept'
-                    )}
-                  </button>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
+      <AdminNotifications
+        items={adminNotifs}
+        adminFlow={adminFlow}
+        formatBody={formatNotifBody}
+        onAccept={() => {
+          if (adminFlow !== 'waiting_accept') return
+          setAdminFlow('loading')
+          clearAdminTimers()
+          const t = setTimeout(() => {
+            setAdminFlow('accepted')
+          }, 2000)
+          timeoutsRef.current.push(t)
+        }}
+      />
 
       <Dock
         openWindows={openWindows}
