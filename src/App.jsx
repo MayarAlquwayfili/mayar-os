@@ -1637,7 +1637,7 @@ export default function App() {
 
       {/* ── Notifications (Admin flow) ───────────────────────────────────── */}
       {adminNotifs.length > 0 && (
-        <div className="pointer-events-none fixed right-4 top-11 z-[8000] flex w-80 flex-col gap-3">
+        <div className="pointer-events-none fixed right-4 top-4 z-[8000] flex w-80 flex-col gap-3">
           {adminNotifs.map((n) => (
             <div
               key={n.id}
