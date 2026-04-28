@@ -1,19 +1,12 @@
 import AppIconMoheetik from '../assets/Moheetik/AppIconMoheetik.svg'
 import AppIconQaffatek from '../assets/AppIconQaffatek.svg'
 import AppIconRECLAB from '../assets/RECLAB/AppIconRECLAB.svg'
-import { DESKTOP_FOLDERS } from '../constants/projects'
 
 const DOCK_APPS = [
   { id: 'Moheetik', label: 'Moheetik', icon: AppIconMoheetik },
   { id: 'Qaffatek', label: 'Qaffatek', icon: AppIconQaffatek },
   { id: 'RECLAB', label: 'RECLAB', icon: AppIconRECLAB },
 ]
-
-const DESKTOP_FOLDER_DOCK = DESKTOP_FOLDERS.map((f) => ({
-  id: f.windowTitle ?? f.title,
-  label: f.id === 'cv' ? 'CV' : f.title,
-  icon: f.icon,
-}))
 
 function isWindowOpenOnDesktop(openWindows, id) {
   const w = openWindows.find((o) => o.id === id)
@@ -80,9 +73,6 @@ export default function Dock({ openWindows = [], onOpen, supplementalApps = [] }
     >
       {DOCK_APPS.map((app) => (
         <DockTile key={app.id} {...app} openWindows={openWindows} onOpen={onOpen} iconFit="cover" />
-      ))}
-      {DESKTOP_FOLDER_DOCK.map((app) => (
-        <DockTile key={app.id} {...app} openWindows={openWindows} onOpen={onOpen} iconFit="contain" />
       ))}
 
       {supplementalApps.length > 0 && (
