@@ -48,8 +48,8 @@ const DESKTOP_ITEM_FRAME_BASE =
 
 function desktopItemSelectionClass(isSelected) {
   return isSelected
-    ? 'border-[#6B3FA0]/30 bg-[#6B3FA0]/15 hover:bg-[#6B3FA0]/18'
-    : 'border-transparent bg-transparent hover:border-transparent hover:bg-[#6B3FA0]/8'
+    ? 'border-[#6B3FA0]/20 bg-[#6B3FA0]/10 hover:bg-[#6B3FA0]/12'
+    : 'border-transparent bg-transparent hover:border-transparent hover:bg-black/5'
 }
 const EDGE_PX = 10
 const MIN_W = 380
