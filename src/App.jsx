@@ -1468,8 +1468,10 @@ function DraggableFolder({
     <div
       ref={rootRef}
       aria-label={`Folder ${id}: ${title}`}
-      className={`absolute box-border flex w-[132px] cursor-grab flex-col items-center gap-2 rounded-xl p-3 select-none transition-colors hover:bg-black/5 active:cursor-grabbing ${
-        isSelected ? 'bg-black/5' : 'bg-transparent'
+      className={`absolute box-border flex w-[132px] cursor-grab flex-col items-center gap-2 rounded-xl p-3 select-none transition-colors active:cursor-grabbing ${
+        isSelected
+          ? 'bg-[#6B3FA0]/12 hover:bg-[#6B3FA0]/18'
+          : 'bg-transparent hover:bg-black/5'
       }`}
       style={{ left: position.x, top: position.y }}
       onMouseDown={onMouseDown}
@@ -1486,10 +1488,18 @@ function DraggableFolder({
       </div>
 
       <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
-        <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-gray-800">
+        <span
+          className={`line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide ${
+            isSelected ? 'text-gray-900' : 'text-gray-800'
+          }`}
+        >
           {title}
         </span>
-        <span className="w-full break-words text-[11px] leading-snug text-gray-600">
+        <span
+          className={`w-full break-words text-[11px] leading-snug ${
+            isSelected ? 'text-gray-700' : 'text-gray-600'
+          }`}
+        >
           {subtitle ?? '2 items'}
         </span>
       </div>
