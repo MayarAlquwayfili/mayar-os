@@ -1817,7 +1817,7 @@ export default function App() {
                   </div>
                   <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
                     <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-gray-800">
-                      V60
+                      Coffee
                     </span>
                   </div>
                 </div>

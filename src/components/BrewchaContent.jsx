@@ -42,7 +42,7 @@ export default function BrewchaContent() {
               BrewCha
             </h1>
             <span className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-[12px] font-bold text-gray-600">
-              Status: Live Prototype
+              Live Prototype
             </span>
           </div>
 
@@ -101,7 +101,7 @@ export default function BrewchaContent() {
               Instead of opening just another cafe, we created Brewcha Studio an interactive beverage workshop. To test and validate this concept with real users, we executed a live prototype.
             </p>
             <p>
-              The journey begins at a touchscreen interface. To prevent decision fatigue, I designed UI features like \"Brewcha’s Favorite\" tags to guide users as they build their custom recipes. Once the prep is done, the fun starts. Customers head to the Sticker Bar to customize their cups.
+              The journey begins at a touchscreen interface. To prevent decision fatigue, I designed UI features like "Brewcha’s Favorite" tags to guide users as they build their custom recipes. Once the prep is done, the fun starts. Customers head to the Sticker Bar to customize their cups.
             </p>
             <p>
               Next, they move to their assigned station. We provide them with everything they need: an apron, a kit of pre-portioned ingredients, specialized tools, and an instruction card. Finally, it's time for them to enjoy their creation and capture the perfect photo to share. By empowering the customer to be the creator, we turned a simple drink into a memorable, shareable experience.
@@ -128,12 +128,12 @@ export default function BrewchaContent() {
 
           {/* Fixed-height grid: pic01 full-height left; pic02 + pic03 stacked right */}
           <div
-            className="relative z-10 grid h-[min(46vh,400px)] grid-cols-2 grid-rows-2 gap-2 sm:h-[min(50vh,430px)] sm:gap-3"
+            className="relative z-10 grid h-[min(46vh,400px)] grid-cols-2 grid-rows-2 gap-2 sm:h-[min(150vh,600px)] sm:gap-3"
           >
             <div className="col-start-1 row-start-1 row-span-2 min-h-0">
               <div className="h-full min-h-0 overflow-hidden rounded-2xl border border-gray-100 shadow-md">
                 <img
-                  src={Pic01}
+                  src={Pic02}
                   alt="BrewCha workshop — portrait"
                   className="h-full w-full object-cover object-center"
                   draggable={false}
@@ -142,7 +142,7 @@ export default function BrewchaContent() {
             </div>
             <div className="col-start-2 row-start-1 min-h-0 overflow-hidden rounded-2xl border border-gray-100 shadow-md">
               <img
-                src={Pic02}
+                src={Pic03}
                 alt="BrewCha workshop — detail"
                 className="h-full w-full object-cover"
                 draggable={false}
@@ -150,7 +150,7 @@ export default function BrewchaContent() {
             </div>
             <div className="col-start-2 row-start-2 min-h-0 overflow-hidden rounded-2xl border border-gray-100 shadow-md">
               <img
-                src={Pic03}
+                src={Pic01}
                 alt="BrewCha workshop — detail"
                 className="h-full w-full object-cover"
                 draggable={false}
