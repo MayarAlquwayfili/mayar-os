@@ -5,15 +5,20 @@ import AppIconRECLAB from '../assets/RECLAB/AppIconRECLAB.svg'
 const DOCK_APPS = [
   { id: 'Moheetik', label: 'Moheetik', icon: AppIconMoheetik },
   { id: 'Qaffatek', label: 'Qaffatek', icon: AppIconQaffatek },
-  { id: 'RECLAB',   label: 'RECLAB',   icon: AppIconRECLAB   },
+  { id: 'RECLAB', label: 'RECLAB', icon: AppIconRECLAB },
 ]
 
-export default function Dock({ openWindows = [], onOpen }) {
-  const openIds = new Set(openWindows.map((w) => w.id))
+function isWindowOpenOnDesktop(openWindows, id) {
+  const w = openWindows.find((o) => o.id === id)
+  return Boolean(w && !w.minimized)
+}
+
+export default function Dock({ openWindows = [], onOpen, supplementalApps = [] }) {
+  const allApps = [...DOCK_APPS, ...supplementalApps]
 
   return (
     <div
-      className="fixed bottom-4 left-1/2 -translate-x-1/2 flex items-end gap-5 px-5 py-2 rounded-[22px] border border-white/30"
+      className="fixed bottom-4 left-1/2 flex -translate-x-1/2 items-end gap-5 rounded-[22px] border border-white/30 px-5 py-2"
       style={{
         zIndex: 5000,
         background: 'rgba(255,255,255,0.18)',
@@ -23,18 +28,16 @@ export default function Dock({ openWindows = [], onOpen }) {
       }}
       onClick={(e) => e.stopPropagation()}
     >
-      {DOCK_APPS.map(({ id, label, icon }) => (
-        <div key={id} className="relative flex flex-col items-center group">
-
-          {/* Tooltip — fades in above icon on hover */}
-          <div className="absolute -top-11 left-1/2 -translate-x-1/2 pointer-events-none select-none opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+      {allApps.map(({ id, label, icon }) => (
+        <div key={id} className="group relative flex flex-col items-center">
+          <div className="pointer-events-none absolute -top-11 left-1/2 -translate-x-1/2 select-none opacity-0 transition-opacity duration-150 group-hover:opacity-100">
             <div
-              className="relative bg-white/90 text-black text-[11px] font-medium px-3 py-1 rounded-lg whitespace-nowrap"
+              className="relative whitespace-nowrap rounded-lg bg-white/90 px-3 py-1 text-[11px] font-medium text-black"
               style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08)' }}
             >
               {label}
               <span
-                className="absolute left-1/2 -translate-x-1/2 -bottom-[5px] w-0 h-0"
+                className="absolute -bottom-[5px] left-1/2 h-0 w-0 -translate-x-1/2"
                 style={{
                   borderLeft: '5px solid transparent',
                   borderRight: '5px solid transparent',
@@ -44,26 +47,24 @@ export default function Dock({ openWindows = [], onOpen }) {
             </div>
           </div>
 
-          {/* Icon */}
           <button
             type="button"
             aria-label={`Open ${label}`}
-            className="w-[54px] h-[54px] rounded-[12px] hover:scale-[1.3] hover:-translate-y-2 active:scale-100 focus:outline-none"
-            style={{ transition: 'all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}
+            className="h-[54px] w-[54px] rounded-[12px] transition-[transform] duration-500 hover:-translate-y-2 hover:scale-[1.3] focus:outline-none active:scale-100"
+            style={{ transitionTimingFunction: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}
             onClick={() => onOpen?.(id)}
           >
             <img
               src={icon}
               alt={label}
               draggable={false}
-              className="w-full h-full rounded-[12px] object-cover"
+              className="h-full w-full rounded-[12px] object-cover"
             />
           </button>
 
-          {/* Active dot — scales up with icon on hover */}
           <span
             className={`mt-1.5 h-1 w-1 rounded-full transition-all duration-500 group-hover:scale-125 ${
-              openIds.has(id) ? 'bg-gray-600 opacity-100' : 'opacity-0'
+              isWindowOpenOnDesktop(openWindows, id) ? 'bg-gray-600 opacity-100' : 'opacity-0'
             }`}
             style={{ transitionTimingFunction: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}
           />

@@ -42,7 +42,9 @@ export function useWindowManager() {
       const newZ = nextZ()
       if (existing) {
         return prev.map((w) =>
-          w.id === spec.id ? { ...w, ...spec, zIndex: newZ } : w
+          w.id === spec.id
+            ? { ...w, ...spec, zIndex: newZ, minimized: false }
+            : w
         )
       }
       const idx = prev.length
@@ -51,6 +53,7 @@ export function useWindowManager() {
         {
           ...spec,
           zIndex: newZ,
+          minimized: false,
           initialX: 60 + idx * 24,
           initialY: 48 + idx * 24,
         },
@@ -66,12 +69,25 @@ export function useWindowManager() {
     })
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+  /** Collapse window to dock (still in stack). */
+  const minimizeWindow = useCallback((id) => {
+    setOpenWindows((prev) =>
+      prev.map((w) => (w.id === id ? { ...w, minimized: true } : w)),
+    )
+  }, [])
+
   /** Remove a window from the stack entirely. */
   const closeWindow = useCallback((id) => {
     setOpenWindows((prev) => prev.filter((w) => w.id !== id))
   }, [])
 
-  return { openWindows, openOrFocusWindow, bringToFront, closeWindow }
+  return {
+    openWindows,
+    openOrFocusWindow,
+    bringToFront,
+    minimizeWindow,
+    closeWindow,
+  }
 }
 
 export default useWindowManager

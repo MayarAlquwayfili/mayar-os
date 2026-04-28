@@ -73,14 +73,7 @@ export const LAB_FOLDER_CONTENTS = [
 
 // ─── Desktop folder definitions ───────────────────────────────────────────────
 
-function randomFolderPos() {
-  const vw = typeof window !== 'undefined' ? window.innerWidth : 1200
-  const vh = typeof window !== 'undefined' ? window.innerHeight : 800
-  const x = Math.max(20, Math.floor(Math.random() * vw * 0.72))
-  const y = Math.max(20, Math.floor(Math.random() * (vh - 28) * 0.72))
-  return { x, y }
-}
-
+/** Fallback x/y when restoring layout; real first-time positions come from App (random in bounds). */
 export const DESKTOP_FOLDERS = [
   {
     id: 'side-b',
@@ -88,7 +81,8 @@ export const DESKTOP_FOLDERS = [
     windowTitle: 'Side B',
     icon: FolderIcon,
     subtitle: 'Behind the Scenes',
-    ...randomFolderPos(),
+    x: 72,
+    y: 100,
   },
   {
     id: 'lab',
@@ -97,7 +91,8 @@ export const DESKTOP_FOLDERS = [
     icon: FolderIcon,
     subtitle: 'Folder',
     contents: LAB_FOLDER_CONTENTS,
-    ...randomFolderPos(),
+    x: 240,
+    y: 120,
   },
   {
     id: 'cv',
@@ -105,6 +100,7 @@ export const DESKTOP_FOLDERS = [
     windowTitle: 'Preview — Mayar_CV.pdf',
     icon: FolderpdfIcon,
     subtitle: 'PDF Document',
-    ...randomFolderPos(),
+    x: 400,
+    y: 140,
   },
 ]

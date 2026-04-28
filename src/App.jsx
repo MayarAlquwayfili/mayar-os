@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import FolderIcon from './assets/Folder.svg'
 import AppIconMoheetik from './assets/Moheetik/AppIconMoheetik.svg'
 import AppIconQaffatek from './assets/AppIconQaffatek.svg'
@@ -1015,6 +1016,7 @@ function MacWindow({
   initialX,
   initialY,
   onClose,
+  onMinimize,
   onFocus,
   openOrFocusWindow,
   variant = 'default',
@@ -1264,7 +1266,16 @@ function MacWindow({
             onMouseDown={(e) => e.stopPropagation()}
             onClick={onClose}
           />
-          <span className="h-3 w-3 rounded-full bg-[#ffbd2e]" aria-hidden />
+          <button
+            type="button"
+            aria-label="Minimize window"
+            className={`h-3 w-3 rounded-full bg-[#ffbd2e] transition-opacity ${
+              onMinimize ? 'cursor-pointer hover:opacity-80' : 'cursor-default opacity-90'
+            }`}
+            onMouseDown={(e) => e.stopPropagation()}
+            onClick={() => onMinimize?.()}
+            disabled={!onMinimize}
+          />
           <button
             type="button"
             aria-label={isMaximized ? 'Restore window' : 'Maximize window'}
@@ -1497,6 +1508,51 @@ function DraggableFolder({
   )
 }
 
+/** Random spawn for first-time visitors; folder ~132×128px, respects menu + dock. */
+function randomFolderPosInBounds() {
+  const vw = typeof window !== 'undefined' ? window.innerWidth : 1200
+  const vh = typeof window !== 'undefined' ? window.innerHeight : 800
+  const FOLDER_W = 132
+  const FOLDER_H = 128
+  const MARGIN = 16
+  const minX = MARGIN
+  const maxX = Math.max(minX, vw - FOLDER_W - MARGIN)
+  const minY = MENU_BAR_PX + MARGIN
+  const maxY = Math.max(minY, vh - DOCK_SAFE_PX - FOLDER_H - MARGIN)
+  const x = minX + Math.floor(Math.random() * (maxX - minX + 1))
+  const y = minY + Math.floor(Math.random() * (maxY - minY + 1))
+  return { x, y }
+}
+
+function AdminFolderCursorTip({ label, children }) {
+  const [tip, setTip] = useState({ show: false, x: 0, y: 0 })
+  const OFFSET = 14
+
+  const onMove = (e) => {
+    setTip({ show: true, x: e.clientX + OFFSET, y: e.clientY + OFFSET })
+  }
+  const onLeave = () => setTip((t) => ({ ...t, show: false }))
+
+  return (
+    <>
+      <div className="inline-block cursor-grab active:cursor-grabbing" onMouseMove={onMove} onMouseLeave={onLeave}>
+        {children}
+      </div>
+      {tip.show &&
+        createPortal(
+          <div
+            role="tooltip"
+            className="pointer-events-none fixed z-[9998] max-w-[min(280px,calc(100vw-24px))] rounded-full bg-[#6B3FA0] px-3 py-1.5 text-center text-[11px] font-medium leading-tight text-white"
+            style={{ left: tip.x, top: tip.y }}
+          >
+            {label}
+          </div>,
+          document.body,
+        )}
+    </>
+  )
+}
+
 const LS_KEY = 'mayaros-folder-positions'
 
 function loadLayout() {
@@ -1529,12 +1585,25 @@ function defaultAdminV60Pos() {
 function getInitialFolderPositions() {
   const saved = loadLayout()
   const result = {}
-  if (saved == null) {
+  const hasFolderData =
+    saved &&
+    DESKTOP_FOLDERS.some(
+      (f) =>
+        saved[f.id] &&
+        typeof saved[f.id].x === 'number' &&
+        typeof saved[f.id].y === 'number',
+    )
+
+  if (!hasFolderData) {
     DESKTOP_FOLDERS.forEach((f) => {
-      result[f.id] = { x: f.x, y: f.y }
+      result[f.id] = saved?.[f.id] ?? randomFolderPosInBounds()
     })
     try {
-      localStorage.setItem(LS_KEY, JSON.stringify(result))
+      const cur = saved && typeof saved === 'object' ? { ...saved } : {}
+      DESKTOP_FOLDERS.forEach((f) => {
+        cur[f.id] = result[f.id]
+      })
+      localStorage.setItem(LS_KEY, JSON.stringify(cur))
     } catch {}
     return result
   }
@@ -1555,20 +1624,13 @@ function getInitialAdminLayout() {
 
 function formatNotifBody(body) {
   const parts = String(body).split(/(Admin)/g)
-  return parts.map((part, idx) =>
-    part === 'Admin' ? (
-      <strong key={idx} className="font-bold text-gray-900">
-        Admin
-      </strong>
-    ) : (
-      <span key={idx}>{part}</span>
-    )
-  )
+  return parts.map((part, idx) => <span key={idx}>{part}</span>)
 }
 
 export default function App() {
   const [selectedFolderId, setSelectedFolderId] = useState(null)
-  const { openWindows, openOrFocusWindow, bringToFront, closeWindow } = useWindowManager()
+  const { openWindows, openOrFocusWindow, bringToFront, minimizeWindow, closeWindow } =
+    useWindowManager()
   const [folderPositions, setFolderPositions] = useState(() => getInitialFolderPositions())
   const [adminLayout, setAdminLayout] = useState(() => getInitialAdminLayout())
 
@@ -1719,9 +1781,9 @@ export default function App() {
               className="z-[1] cursor-grab active:cursor-grabbing"
               draggingClassName="cursor-grabbing"
             >
-              <div className="group relative">
+              <AdminFolderCursorTip label="My Second Brain">
                 <div
-                  className="flex w-[120px] cursor-grab flex-col items-center gap-2 rounded-xl border border-transparent p-2 text-center outline-none transition-colors hover:bg-black/5 active:cursor-grabbing"
+                  className="flex w-[120px] flex-col items-center gap-2 rounded-xl p-3 text-center outline-none transition-colors hover:bg-black/5"
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => {
@@ -1746,28 +1808,11 @@ export default function App() {
                     src={NotionFolderIcon}
                     alt=""
                     draggable={false}
-                    className="h-[88px] w-[88px] object-contain drop-shadow-sm"
+                    className="h-[72px] w-[72px] shrink-0 object-contain"
                   />
                   <span className="text-[12px] font-medium text-gray-800">Notion</span>
                 </div>
-                <div
-                  className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 w-max -translate-x-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-                  aria-hidden
-                >
-                  <div
-                    className="admin-desktop-folder-tip-inner min-w-[220px] max-w-[280px] rounded-2xl border border-[#6B3FA0]/35 bg-gradient-to-b from-white/95 to-[#6B3FA0]/10 px-3 py-3 shadow-[0_12px_40px_rgba(107,63,160,0.22)] backdrop-blur-md"
-                    data-admin-tip="My Second Brain"
-                  >
-                    <input
-                      type="text"
-                      readOnly
-                      value=""
-                      tabIndex={-1}
-                      className="pointer-events-none w-full rounded-lg border border-[#6B3FA0]/25 bg-white/95 px-2.5 py-2 text-sm text-gray-800 outline-none"
-                    />
-                  </div>
-                </div>
-              </div>
+              </AdminFolderCursorTip>
             </DraggableDesktopItem>
 
             <DraggableDesktopItem
@@ -1777,9 +1822,9 @@ export default function App() {
               className="z-[1] cursor-grab active:cursor-grabbing"
               draggingClassName="cursor-grabbing"
             >
-              <div className="group relative">
+              <AdminFolderCursorTip label="Fueling Creativity">
                 <div
-                  className="flex w-[120px] cursor-grab flex-col items-center gap-2 rounded-xl border border-transparent p-2 text-center outline-none transition-colors hover:bg-black/5 active:cursor-grabbing"
+                  className="flex w-[120px] flex-col items-center gap-2 rounded-xl p-3 text-center outline-none transition-colors hover:bg-black/5"
                   role="presentation"
                   onDoubleClick={(e) => e.stopPropagation()}
                 >
@@ -1787,28 +1832,11 @@ export default function App() {
                     src={V60FolderIcon}
                     alt=""
                     draggable={false}
-                    className="h-[88px] w-[88px] object-contain drop-shadow-sm"
+                    className="h-[72px] w-[72px] shrink-0 object-contain"
                   />
                   <span className="text-[12px] font-medium text-gray-800">V60</span>
                 </div>
-                <div
-                  className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 w-max -translate-x-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-                  aria-hidden
-                >
-                  <div
-                    className="admin-desktop-folder-tip-inner min-w-[220px] max-w-[280px] rounded-2xl border border-[#6B3FA0]/35 bg-gradient-to-b from-white/95 to-[#6B3FA0]/10 px-3 py-3 shadow-[0_12px_40px_rgba(107,63,160,0.22)] backdrop-blur-md"
-                    data-admin-tip="Fueling Creativity"
-                  >
-                    <input
-                      type="text"
-                      readOnly
-                      value=""
-                      tabIndex={-1}
-                      className="pointer-events-none w-full rounded-lg border border-[#6B3FA0]/25 bg-white/95 px-2.5 py-2 text-sm text-gray-800 outline-none"
-                    />
-                  </div>
-                </div>
-              </div>
+              </AdminFolderCursorTip>
             </DraggableDesktopItem>
           </>
         )}
@@ -1828,36 +1856,39 @@ export default function App() {
             onPositionChange={(pos) => handleFolderPositionChange(folder.id, pos)}
           />
         ))}
-        {openWindows.map((win) => (
-          <MacWindow
-            key={win.id}
-            id={win.id}
-            title={win.title}
-            zIndex={win.zIndex}
-            initialX={win.initialX}
-            initialY={win.initialY}
-            variant={win.variant}
-            sideBAlbumKey={win.sideBAlbumKey}
-            imagePreview={win.imagePreview}
-            onClose={() => closeWindow(win.id)}
-            onFocus={() => bringToFront(win.id)}
-            openOrFocusWindow={openOrFocusWindow}
-          />
-        ))}
+        {openWindows
+          .filter((w) => !w.minimized)
+          .map((win) => (
+            <MacWindow
+              key={win.id}
+              id={win.id}
+              title={win.title}
+              zIndex={win.zIndex}
+              initialX={win.initialX}
+              initialY={win.initialY}
+              variant={win.variant}
+              sideBAlbumKey={win.sideBAlbumKey}
+              imagePreview={win.imagePreview}
+              onClose={() => closeWindow(win.id)}
+              onMinimize={() => minimizeWindow(win.id)}
+              onFocus={() => bringToFront(win.id)}
+              openOrFocusWindow={openOrFocusWindow}
+            />
+          ))}
       </main>
 
       {/* ── Notifications (Admin flow) ───────────────────────────────────── */}
       {adminNotifs.length > 0 && (
-        <div className="pointer-events-none fixed right-4 top-16 z-[8000] flex w-80 flex-col gap-4">
+        <div className="pointer-events-none fixed right-4 top-16 z-[8000] flex w-80 flex-col gap-3">
           {adminNotifs.map((n) => (
             <div
               key={n.id}
-              className="pointer-events-auto w-80 rounded-2xl border border-white/25 border-l-[3px] border-l-[#6B3FA0]/70 bg-white/75 p-4 shadow-[0_12px_32px_rgba(0,0,0,0.14)] backdrop-blur-md transition-all duration-300 dark:border-white/15 dark:bg-black/70"
+              className="pointer-events-auto w-80 rounded-xl border border-[#6B3FA0]/15 bg-[#f3f1eb] p-4"
             >
-              <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#6B3FA0]">
+              <p className="text-[11px] font-normal uppercase tracking-[0.12em] text-[#6B3FA0]">
                 {n.header}
               </p>
-              <p className="mt-1 text-[13px] font-medium leading-snug text-gray-800">
+              <p className="mt-1.5 text-[13px] font-normal leading-snug text-gray-800">
                 {formatNotifBody(n.body)}
               </p>
 
@@ -1868,14 +1899,13 @@ export default function App() {
                     className={`inline-flex items-center justify-center rounded-lg px-4 py-1.5 text-sm font-medium ${
                       adminFlow === 'loading'
                         ? 'cursor-default bg-gray-200 text-gray-600'
-                        : 'bg-[#007AFF] text-white hover:brightness-95'
+                        : 'bg-[#6B3FA0] text-white hover:opacity-90'
                     }`}
                     onClick={() => {
                       if (adminFlow !== 'waiting_accept') return
                       setAdminFlow('loading')
                       clearAdminTimers()
                       const t = setTimeout(() => {
-                        console.log('Open Bento')
                         setAdminFlow('accepted')
                       }, 2000)
                       timeoutsRef.current.push(t)
@@ -1900,7 +1930,21 @@ export default function App() {
         </div>
       )}
 
-      <Dock openWindows={openWindows} onOpen={openOrFocusWindow} />
+      <Dock
+        openWindows={openWindows}
+        onOpen={openOrFocusWindow}
+        supplementalApps={
+          adminFlow === 'accepted'
+            ? [
+                {
+                  id: 'How to work with Mayar?',
+                  label: 'Work Guide',
+                  icon: FolderIcon,
+                },
+              ]
+            : []
+        }
+      />
     </div>
   )
 }
