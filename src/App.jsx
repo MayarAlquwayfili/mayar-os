@@ -26,6 +26,7 @@ import SideBAlbumContent from './components/SideBAlbumContent'
 import ImagePreviewContent from './components/ImagePreviewContent'
 import AdminWorkGuideContent from './components/AdminWorkGuideContent'
 import NotionSliderContent from './components/NotionSliderContent'
+import DraggableDesktopItem from './components/DraggableDesktopItem'
 import NotionFolderIcon from './assets/Admin/Notion_Folder.svg'
 import V60FolderIcon from './assets/Admin/V60_Folder.svg'
 import { useWindowManager } from './hooks/useWindowManager'
@@ -1378,6 +1379,11 @@ function DraggableFolder({
   const lastPositionRef = useRef({ x: initialX, y: initialY })
 
   useEffect(() => {
+    setPosition({ x: initialX, y: initialY })
+    lastPositionRef.current = { x: initialX, y: initialY }
+  }, [initialX, initialY])
+
+  useEffect(() => {
     if (!isDragging) return
 
     const onMouseMove = (e) => {
@@ -1493,23 +1499,58 @@ function DraggableFolder({
 
 const LS_KEY = 'mayaros-folder-positions'
 
-function initFolderPositions() {
+function loadLayout() {
   try {
-    const saved = localStorage.getItem(LS_KEY)
-    if (saved) {
-      const parsed = JSON.parse(saved)
-      const result = {}
-      DESKTOP_FOLDERS.forEach((f) => {
-        result[f.id] = parsed[f.id] ?? { x: f.x, y: f.y }
-      })
-      return result
-    }
-  } catch {}
-  // First load — persist random positions so they survive refreshes
-  const defaults = {}
-  DESKTOP_FOLDERS.forEach((f) => { defaults[f.id] = { x: f.x, y: f.y } })
-  try { localStorage.setItem(LS_KEY, JSON.stringify(defaults)) } catch {}
-  return defaults
+    const raw = localStorage.getItem(LS_KEY)
+    if (raw == null) return null
+    const parsed = JSON.parse(raw)
+    return typeof parsed === 'object' && parsed !== null ? parsed : null
+  } catch {
+    return null
+  }
+}
+
+function defaultAdminTriggerPos() {
+  const w = typeof window !== 'undefined' ? window.innerWidth : 1200
+  const h = typeof window !== 'undefined' ? window.innerHeight : 800
+  return { x: Math.max(16, w - 420), y: Math.max(16, Math.round(h * 0.34)) }
+}
+
+function defaultAdminNotionPos() {
+  const w = typeof window !== 'undefined' ? window.innerWidth : 1200
+  return { x: Math.max(16, w - 140), y: 96 }
+}
+
+function defaultAdminV60Pos() {
+  const w = typeof window !== 'undefined' ? window.innerWidth : 1200
+  return { x: Math.max(16, w - 140), y: 240 }
+}
+
+function getInitialFolderPositions() {
+  const saved = loadLayout()
+  const result = {}
+  if (saved == null) {
+    DESKTOP_FOLDERS.forEach((f) => {
+      result[f.id] = { x: f.x, y: f.y }
+    })
+    try {
+      localStorage.setItem(LS_KEY, JSON.stringify(result))
+    } catch {}
+    return result
+  }
+  DESKTOP_FOLDERS.forEach((f) => {
+    result[f.id] = saved[f.id] ?? { x: f.x, y: f.y }
+  })
+  return result
+}
+
+function getInitialAdminLayout() {
+  const saved = loadLayout()
+  return {
+    trigger: saved?.['admin-trigger'] ?? defaultAdminTriggerPos(),
+    notion: saved?.['admin-notion'] ?? defaultAdminNotionPos(),
+    v60: saved?.['admin-v60'] ?? defaultAdminV60Pos(),
+  }
 }
 
 function formatNotifBody(body) {
@@ -1528,7 +1569,8 @@ function formatNotifBody(body) {
 export default function App() {
   const [selectedFolderId, setSelectedFolderId] = useState(null)
   const { openWindows, openOrFocusWindow, bringToFront, closeWindow } = useWindowManager()
-  const [folderPositions] = useState(initFolderPositions)
+  const [folderPositions, setFolderPositions] = useState(() => getInitialFolderPositions())
+  const [adminLayout, setAdminLayout] = useState(() => getInitialAdminLayout())
 
   // ─── Admin login flow ─────────────────────────────────────────────────────
   const [adminFlow, setAdminFlow] = useState('idle') // idle → triggering_notifications → waiting_accept → loading → accepted
@@ -1602,14 +1644,48 @@ export default function App() {
     openOrFocusWindow('How to work with Mayar?')
   }, [adminFlow, openOrFocusWindow])
 
-  const handleFolderPositionChange = useCallback((id, pos) => {
+  const persistLayoutPatch = useCallback((patch) => {
     try {
       const raw = localStorage.getItem(LS_KEY)
-      const current = raw ? JSON.parse(raw) : {}
-      current[id] = pos
-      localStorage.setItem(LS_KEY, JSON.stringify(current))
-    } catch {}
+      const cur = raw ? JSON.parse(raw) : {}
+      Object.assign(cur, patch)
+      localStorage.setItem(LS_KEY, JSON.stringify(cur))
+    } catch {
+      /* ignore */
+    }
   }, [])
+
+  const handleFolderPositionChange = useCallback(
+    (id, pos) => {
+      setFolderPositions((p) => ({ ...p, [id]: pos }))
+      persistLayoutPatch({ [id]: pos })
+    },
+    [persistLayoutPatch],
+  )
+
+  const handleAdminTriggerPos = useCallback(
+    (pos) => {
+      setAdminLayout((a) => ({ ...a, trigger: pos }))
+      persistLayoutPatch({ 'admin-trigger': pos })
+    },
+    [persistLayoutPatch],
+  )
+
+  const handleAdminNotionPos = useCallback(
+    (pos) => {
+      setAdminLayout((a) => ({ ...a, notion: pos }))
+      persistLayoutPatch({ 'admin-notion': pos })
+    },
+    [persistLayoutPatch],
+  )
+
+  const handleAdminV60Pos = useCallback(
+    (pos) => {
+      setAdminLayout((a) => ({ ...a, v60: pos }))
+      persistLayoutPatch({ 'admin-v60': pos })
+    },
+    [persistLayoutPatch],
+  )
 
   return (
     <div className="fixed inset-0 min-h-0 w-full overflow-hidden bg-[#f8f6f0] font-sans antialiased">
@@ -1620,95 +1696,121 @@ export default function App() {
         onClick={() => setSelectedFolderId(null)}
       >
         {adminFlow === 'idle' && (
-          <button
-            type="button"
-            className="absolute right-10 top-[34%] z-[1] max-w-[min(560px,46vw)] select-none text-left text-5xl font-bold leading-[1.05] tracking-tight text-[#6B3FA0] transition-opacity duration-200 hover:opacity-90 sm:text-6xl md:text-7xl"
-            onClick={(e) => {
-              e.stopPropagation()
-              setAdminFlow('triggering_notifications')
-            }}
+          <DraggableDesktopItem
+            initialX={adminLayout.trigger.x}
+            initialY={adminLayout.trigger.y}
+            onPositionChange={handleAdminTriggerPos}
+            onCleanClick={() => setAdminFlow('triggering_notifications')}
+            className="z-[1] cursor-grab active:cursor-grabbing"
+            draggingClassName="cursor-grabbing"
           >
-            Who is the Admin?
-          </button>
+            <div className="max-w-[min(560px,46vw)] text-left text-5xl font-bold leading-[1.05] tracking-tight text-[#6B3FA0] transition-opacity duration-200 hover:opacity-90 sm:text-6xl md:text-7xl">
+              Who is the Admin?
+            </div>
+          </DraggableDesktopItem>
         )}
 
         {adminFlow === 'accepted' && (
-          <div className="pointer-events-auto absolute right-10 top-24 z-[1] flex flex-col items-center gap-10">
-            <div className="group relative">
-              <button
-                type="button"
-                className="flex w-[120px] cursor-default flex-col items-center gap-2 rounded-xl border border-transparent p-2 text-center outline-none transition-colors hover:bg-black/5"
-                onClick={(e) => e.stopPropagation()}
-                onDoubleClick={(e) => {
-                  e.stopPropagation()
-                  openOrFocusWindow({
-                    id: 'admin-notion-slider',
-                    title: 'Notion',
-                    variant: 'notion-slider',
-                  })
-                }}
-              >
-                <img
-                  src={NotionFolderIcon}
-                  alt=""
-                  draggable={false}
-                  className="h-[88px] w-[88px] object-contain drop-shadow-sm"
-                />
-                <span className="text-[12px] font-medium text-gray-800">Notion</span>
-              </button>
-              <div
-                className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 w-max -translate-x-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-                aria-hidden
-              >
+          <>
+            <DraggableDesktopItem
+              initialX={adminLayout.notion.x}
+              initialY={adminLayout.notion.y}
+              onPositionChange={handleAdminNotionPos}
+              className="z-[1] cursor-grab active:cursor-grabbing"
+              draggingClassName="cursor-grabbing"
+            >
+              <div className="group relative">
                 <div
-                  className="admin-desktop-folder-tip-inner min-w-[220px] max-w-[280px] rounded-2xl border border-[#6B3FA0]/35 bg-gradient-to-b from-white/95 to-[#6B3FA0]/10 px-3 py-3 shadow-[0_12px_40px_rgba(107,63,160,0.22)] backdrop-blur-md"
-                  data-admin-tip="My Second Brain"
+                  className="flex w-[120px] cursor-grab flex-col items-center gap-2 rounded-xl border border-transparent p-2 text-center outline-none transition-colors hover:bg-black/5 active:cursor-grabbing"
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key !== 'Enter' && e.key !== ' ') return
+                    e.preventDefault()
+                    openOrFocusWindow({
+                      id: 'admin-notion-slider',
+                      title: 'Notion',
+                      variant: 'notion-slider',
+                    })
+                  }}
+                  onDoubleClick={(e) => {
+                    e.stopPropagation()
+                    openOrFocusWindow({
+                      id: 'admin-notion-slider',
+                      title: 'Notion',
+                      variant: 'notion-slider',
+                    })
+                  }}
                 >
-                  <input
-                    type="text"
-                    readOnly
-                    value=""
-                    tabIndex={-1}
-                    className="pointer-events-none w-full rounded-lg border border-[#6B3FA0]/25 bg-white/95 px-2.5 py-2 text-sm text-gray-800 outline-none"
+                  <img
+                    src={NotionFolderIcon}
+                    alt=""
+                    draggable={false}
+                    className="h-[88px] w-[88px] object-contain drop-shadow-sm"
                   />
+                  <span className="text-[12px] font-medium text-gray-800">Notion</span>
+                </div>
+                <div
+                  className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 w-max -translate-x-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+                  aria-hidden
+                >
+                  <div
+                    className="admin-desktop-folder-tip-inner min-w-[220px] max-w-[280px] rounded-2xl border border-[#6B3FA0]/35 bg-gradient-to-b from-white/95 to-[#6B3FA0]/10 px-3 py-3 shadow-[0_12px_40px_rgba(107,63,160,0.22)] backdrop-blur-md"
+                    data-admin-tip="My Second Brain"
+                  >
+                    <input
+                      type="text"
+                      readOnly
+                      value=""
+                      tabIndex={-1}
+                      className="pointer-events-none w-full rounded-lg border border-[#6B3FA0]/25 bg-white/95 px-2.5 py-2 text-sm text-gray-800 outline-none"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
+            </DraggableDesktopItem>
 
-            <div className="group relative">
-              <button
-                type="button"
-                className="flex w-[120px] cursor-default flex-col items-center gap-2 rounded-xl border border-transparent p-2 text-center outline-none transition-colors hover:bg-black/5"
-                onClick={(e) => e.stopPropagation()}
-                onDoubleClick={(e) => e.stopPropagation()}
-              >
-                <img
-                  src={V60FolderIcon}
-                  alt=""
-                  draggable={false}
-                  className="h-[88px] w-[88px] object-contain drop-shadow-sm"
-                />
-                <span className="text-[12px] font-medium text-gray-800">V60</span>
-              </button>
-              <div
-                className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 w-max -translate-x-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-                aria-hidden
-              >
+            <DraggableDesktopItem
+              initialX={adminLayout.v60.x}
+              initialY={adminLayout.v60.y}
+              onPositionChange={handleAdminV60Pos}
+              className="z-[1] cursor-grab active:cursor-grabbing"
+              draggingClassName="cursor-grabbing"
+            >
+              <div className="group relative">
                 <div
-                  className="admin-desktop-folder-tip-inner min-w-[220px] max-w-[280px] rounded-2xl border border-[#6B3FA0]/35 bg-gradient-to-b from-white/95 to-[#6B3FA0]/10 px-3 py-3 shadow-[0_12px_40px_rgba(107,63,160,0.22)] backdrop-blur-md"
-                  data-admin-tip="Fueling Creativity"
+                  className="flex w-[120px] cursor-grab flex-col items-center gap-2 rounded-xl border border-transparent p-2 text-center outline-none transition-colors hover:bg-black/5 active:cursor-grabbing"
+                  role="presentation"
+                  onDoubleClick={(e) => e.stopPropagation()}
                 >
-                  <input
-                    type="text"
-                    readOnly
-                    value=""
-                    tabIndex={-1}
-                    className="pointer-events-none w-full rounded-lg border border-[#6B3FA0]/25 bg-white/95 px-2.5 py-2 text-sm text-gray-800 outline-none"
+                  <img
+                    src={V60FolderIcon}
+                    alt=""
+                    draggable={false}
+                    className="h-[88px] w-[88px] object-contain drop-shadow-sm"
                   />
+                  <span className="text-[12px] font-medium text-gray-800">V60</span>
+                </div>
+                <div
+                  className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 w-max -translate-x-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+                  aria-hidden
+                >
+                  <div
+                    className="admin-desktop-folder-tip-inner min-w-[220px] max-w-[280px] rounded-2xl border border-[#6B3FA0]/35 bg-gradient-to-b from-white/95 to-[#6B3FA0]/10 px-3 py-3 shadow-[0_12px_40px_rgba(107,63,160,0.22)] backdrop-blur-md"
+                    data-admin-tip="Fueling Creativity"
+                  >
+                    <input
+                      type="text"
+                      readOnly
+                      value=""
+                      tabIndex={-1}
+                      className="pointer-events-none w-full rounded-lg border border-[#6B3FA0]/25 bg-white/95 px-2.5 py-2 text-sm text-gray-800 outline-none"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </DraggableDesktopItem>
+          </>
         )}
 
         {DESKTOP_FOLDERS.map((folder) => (
