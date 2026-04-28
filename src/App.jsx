@@ -1505,6 +1505,73 @@ export default function App() {
   const { openWindows, openOrFocusWindow, bringToFront, closeWindow } = useWindowManager()
   const [folderPositions] = useState(initFolderPositions)
 
+  // ─── Admin login flow ─────────────────────────────────────────────────────
+  const [adminFlow, setAdminFlow] = useState('idle') // idle → triggering_notifications → waiting_accept → loading → accepted
+  const [adminNotifs, setAdminNotifs] = useState([])
+  const timeoutsRef = useRef([])
+
+  const clearAdminTimers = useCallback(() => {
+    timeoutsRef.current.forEach((t) => clearTimeout(t))
+    timeoutsRef.current = []
+  }, [])
+
+  useEffect(() => {
+    return () => clearAdminTimers()
+  }, [clearAdminTimers])
+
+  useEffect(() => {
+    if (adminFlow !== 'triggering_notifications') return
+
+    clearAdminTimers()
+    setAdminNotifs([])
+
+    const push = (notif) => {
+      setAdminNotifs((prev) => [
+        ...prev,
+        {
+          id: notif.id,
+          header: notif.header,
+          body: notif.body,
+          isActionable: !!notif.isActionable,
+        },
+      ])
+    }
+
+    push({
+      id: 'n1',
+      header: 'System',
+      body: 'Admin: Mayar logged in.',
+    })
+
+    timeoutsRef.current.push(
+      setTimeout(() => {
+        push({
+          id: 'n2',
+          header: 'System',
+          body: 'Welcome to my OS.',
+        })
+      }, 1000)
+    )
+
+    timeoutsRef.current.push(
+      setTimeout(() => {
+        push({
+          id: 'n3',
+          header: 'Screen Sharing',
+          body: 'Admin (Mayar) would like to share "Admin_Desktop" with you.',
+          isActionable: true,
+        })
+        setAdminFlow('waiting_accept')
+      }, 2500)
+    )
+  }, [adminFlow, clearAdminTimers])
+
+  useEffect(() => {
+    if (adminFlow !== 'accepted') return
+    const t = setTimeout(() => setAdminNotifs([]), 350)
+    return () => clearTimeout(t)
+  }, [adminFlow])
+
   const handleFolderPositionChange = useCallback((id, pos) => {
     try {
       const raw = localStorage.getItem(LS_KEY)
@@ -1522,6 +1589,19 @@ export default function App() {
         className="absolute inset-x-0 bottom-0 top-7 z-0 overflow-hidden"
         onClick={() => setSelectedFolderId(null)}
       >
+        {adminFlow === 'idle' && (
+          <button
+            type="button"
+            className="absolute right-16 top-[38%] z-[1] select-none text-left text-4xl font-semibold tracking-tight text-white/50 transition-colors duration-200 hover:text-white animate-pulse"
+            onClick={(e) => {
+              e.stopPropagation()
+              setAdminFlow('triggering_notifications')
+            }}
+          >
+            Who is the Admin?
+          </button>
+        )}
+
         {DESKTOP_FOLDERS.map((folder) => (
           <DraggableFolder
             key={folder.id}
@@ -1554,6 +1634,61 @@ export default function App() {
           />
         ))}
       </main>
+
+      {/* ── Notifications (Admin flow) ───────────────────────────────────── */}
+      {adminNotifs.length > 0 && (
+        <div className="pointer-events-none fixed right-4 top-11 z-[8000] flex w-80 flex-col gap-3">
+          {adminNotifs.map((n) => (
+            <div
+              key={n.id}
+              className="pointer-events-auto w-80 rounded-2xl border border-white/20 bg-white/70 p-4 shadow-lg backdrop-blur-md transition-all duration-300 dark:bg-black/70"
+              style={{ boxShadow: '0 12px 32px rgba(0,0,0,0.18)' }}
+            >
+              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-500">
+                {n.header}
+              </p>
+              <p className="mt-1 text-[13px] font-medium leading-snug text-gray-800">
+                {n.body}
+              </p>
+
+              {n.isActionable && (
+                <div className="mt-3">
+                  <button
+                    type="button"
+                    className={`inline-flex items-center justify-center rounded-lg px-4 py-1.5 text-sm font-medium ${
+                      adminFlow === 'loading'
+                        ? 'cursor-default bg-gray-200 text-gray-600'
+                        : 'bg-[#007AFF] text-white hover:brightness-95'
+                    }`}
+                    onClick={() => {
+                      if (adminFlow !== 'waiting_accept') return
+                      setAdminFlow('loading')
+                      clearAdminTimers()
+                      const t = setTimeout(() => {
+                        console.log('Open Bento')
+                        setAdminFlow('accepted')
+                      }, 2000)
+                      timeoutsRef.current.push(t)
+                    }}
+                  >
+                    {adminFlow === 'loading' ? (
+                      <span className="inline-flex items-center gap-2">
+                        <span
+                          className="h-4 w-4 animate-spin rounded-full border-2 border-gray-400 border-t-transparent"
+                          aria-hidden
+                        />
+                        Connecting...
+                      </span>
+                    ) : (
+                      'Accept'
+                    )}
+                  </button>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
 
       <Dock openWindows={openWindows} onOpen={openOrFocusWindow} />
     </div>
