@@ -39,3 +39,14 @@ body,
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
+
+/* Admin desktop folder hover — purple tooltip + ::after caption (data-admin-tip) */
+.admin-desktop-folder-tip-inner[data-admin-tip]::after {
+  content: attr(data-admin-tip);
+  display: block;
+  margin-top: 8px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #6b3fa0;
+}

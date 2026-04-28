@@ -28,8 +28,6 @@ import AdminWorkGuideContent from './components/AdminWorkGuideContent'
 import NotionSliderContent from './components/NotionSliderContent'
 import NotionFolderIcon from './assets/Admin/Notion_Folder.svg'
 import V60FolderIcon from './assets/Admin/V60_Folder.svg'
-import CursorNotionPng from './assets/Admin/Cursor_Notion.png'
-import CursorCoffeePng from './assets/Admin/Cursor_Coffee.png'
 import { useWindowManager } from './hooks/useWindowManager'
 import { MOHEETIK_TOOLS, RECLAB_TOOLS, QAFFATEK_TOOLS, DESKTOP_FOLDERS } from './constants/projects'
 
@@ -1624,7 +1622,7 @@ export default function App() {
         {adminFlow === 'idle' && (
           <button
             type="button"
-            className="absolute right-10 top-[34%] z-[1] max-w-[min(520px,42vw)] select-none text-left text-6xl font-bold leading-[1.05] tracking-tight text-[#6B3FA0] transition-colors duration-200 hover:text-black sm:text-7xl"
+            className="absolute right-10 top-[34%] z-[1] max-w-[min(560px,46vw)] select-none text-left text-5xl font-bold leading-[1.05] tracking-tight text-[#6B3FA0] transition-opacity duration-200 hover:opacity-90 sm:text-6xl md:text-7xl"
             onClick={(e) => {
               e.stopPropagation()
               setAdminFlow('triggering_notifications')
@@ -1636,55 +1634,80 @@ export default function App() {
 
         {adminFlow === 'accepted' && (
           <div className="pointer-events-auto absolute right-10 top-24 z-[1] flex flex-col items-center gap-10">
-            <button
-              type="button"
-              title="My Second Brain"
-              className="flex w-[120px] cursor-default flex-col items-center gap-2 rounded-xl border border-transparent p-2 text-center outline-none transition-colors hover:bg-black/5"
-              onClick={(e) => e.stopPropagation()}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.cursor = `url(${CursorNotionPng}) 0 0, auto`
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.cursor = ''
-              }}
-              onDoubleClick={(e) => {
-                e.stopPropagation()
-                openOrFocusWindow({
-                  id: 'admin-notion-slider',
-                  title: 'Notion',
-                  variant: 'notion-slider',
-                })
-              }}
-            >
-              <img
-                src={NotionFolderIcon}
-                alt=""
-                draggable={false}
-                className="h-[88px] w-[88px] object-contain drop-shadow-sm"
-              />
-              <span className="text-[12px] font-medium text-gray-800">Notion</span>
-            </button>
-            <button
-              type="button"
-              title="Fueling Creativity"
-              className="flex w-[120px] cursor-default flex-col items-center gap-2 rounded-xl border border-transparent p-2 text-center outline-none transition-colors hover:bg-black/5"
-              onClick={(e) => e.stopPropagation()}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.cursor = `url(${CursorCoffeePng}) 0 0, auto`
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.cursor = ''
-              }}
-              onDoubleClick={(e) => e.stopPropagation()}
-            >
-              <img
-                src={V60FolderIcon}
-                alt=""
-                draggable={false}
-                className="h-[88px] w-[88px] object-contain drop-shadow-sm"
-              />
-              <span className="text-[12px] font-medium text-gray-800">V60</span>
-            </button>
+            <div className="group relative">
+              <button
+                type="button"
+                className="flex w-[120px] cursor-default flex-col items-center gap-2 rounded-xl border border-transparent p-2 text-center outline-none transition-colors hover:bg-black/5"
+                onClick={(e) => e.stopPropagation()}
+                onDoubleClick={(e) => {
+                  e.stopPropagation()
+                  openOrFocusWindow({
+                    id: 'admin-notion-slider',
+                    title: 'Notion',
+                    variant: 'notion-slider',
+                  })
+                }}
+              >
+                <img
+                  src={NotionFolderIcon}
+                  alt=""
+                  draggable={false}
+                  className="h-[88px] w-[88px] object-contain drop-shadow-sm"
+                />
+                <span className="text-[12px] font-medium text-gray-800">Notion</span>
+              </button>
+              <div
+                className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 w-max -translate-x-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+                aria-hidden
+              >
+                <div
+                  className="admin-desktop-folder-tip-inner min-w-[220px] max-w-[280px] rounded-2xl border border-[#6B3FA0]/35 bg-gradient-to-b from-white/95 to-[#6B3FA0]/10 px-3 py-3 shadow-[0_12px_40px_rgba(107,63,160,0.22)] backdrop-blur-md"
+                  data-admin-tip="My Second Brain"
+                >
+                  <input
+                    type="text"
+                    readOnly
+                    value=""
+                    tabIndex={-1}
+                    className="pointer-events-none w-full rounded-lg border border-[#6B3FA0]/25 bg-white/95 px-2.5 py-2 text-sm text-gray-800 outline-none"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="group relative">
+              <button
+                type="button"
+                className="flex w-[120px] cursor-default flex-col items-center gap-2 rounded-xl border border-transparent p-2 text-center outline-none transition-colors hover:bg-black/5"
+                onClick={(e) => e.stopPropagation()}
+                onDoubleClick={(e) => e.stopPropagation()}
+              >
+                <img
+                  src={V60FolderIcon}
+                  alt=""
+                  draggable={false}
+                  className="h-[88px] w-[88px] object-contain drop-shadow-sm"
+                />
+                <span className="text-[12px] font-medium text-gray-800">V60</span>
+              </button>
+              <div
+                className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 w-max -translate-x-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+                aria-hidden
+              >
+                <div
+                  className="admin-desktop-folder-tip-inner min-w-[220px] max-w-[280px] rounded-2xl border border-[#6B3FA0]/35 bg-gradient-to-b from-white/95 to-[#6B3FA0]/10 px-3 py-3 shadow-[0_12px_40px_rgba(107,63,160,0.22)] backdrop-blur-md"
+                  data-admin-tip="Fueling Creativity"
+                >
+                  <input
+                    type="text"
+                    readOnly
+                    value=""
+                    tabIndex={-1}
+                    className="pointer-events-none w-full rounded-lg border border-[#6B3FA0]/25 bg-white/95 px-2.5 py-2 text-sm text-gray-800 outline-none"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
@@ -1723,14 +1746,13 @@ export default function App() {
 
       {/* ── Notifications (Admin flow) ───────────────────────────────────── */}
       {adminNotifs.length > 0 && (
-        <div className="pointer-events-none fixed right-4 top-16 z-[8000] flex w-80 flex-col gap-3">
+        <div className="pointer-events-none fixed right-4 top-16 z-[8000] flex w-80 flex-col gap-4">
           {adminNotifs.map((n) => (
             <div
               key={n.id}
-              className="pointer-events-auto w-80 rounded-2xl border border-white/20 bg-white/70 p-4 shadow-lg backdrop-blur-md transition-all duration-300 dark:bg-black/70"
-              style={{ boxShadow: '0 12px 32px rgba(0,0,0,0.18)' }}
+              className="pointer-events-auto w-80 rounded-2xl border border-white/25 border-l-[3px] border-l-[#6B3FA0]/70 bg-white/75 p-4 shadow-[0_12px_32px_rgba(0,0,0,0.14)] backdrop-blur-md transition-all duration-300 dark:border-white/15 dark:bg-black/70"
             >
-              <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-600">
+              <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#6B3FA0]">
                 {n.header}
               </p>
               <p className="mt-1 text-[13px] font-medium leading-snug text-gray-800">
