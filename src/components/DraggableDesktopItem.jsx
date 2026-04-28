@@ -55,14 +55,16 @@ export default function DraggableDesktopItem({
       if (dx > MOVE_THRESHOLD_PX || dy > MOVE_THRESHOLD_PX) movedRef.current = true
 
       const pr = parent.getBoundingClientRect()
-      const fr = el.getBoundingClientRect()
+      const itemW = el.offsetWidth
+      const itemH = el.offsetHeight
       const off = dragOffsetRef.current
 
       let nx = ev.clientX - pr.left - off.x
       let ny = ev.clientY - pr.top - off.y
 
-      const maxX = Math.max(0, pr.width - fr.width)
-      const maxY = Math.max(0, pr.height - fr.height)
+      // Clamp X so the item can reach the viewport’s right edge (parent may not fill full innerWidth).
+      const maxX = Math.max(0, window.innerWidth - pr.left - itemW)
+      const maxY = Math.max(0, pr.height - itemH)
 
       const newPos = {
         x: Math.max(0, Math.min(nx, maxX)),

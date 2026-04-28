@@ -26,7 +26,7 @@ import SideBFolderContent from './components/SideBFolderContent'
 import CashResearchContent from './components/CashResearchContent'
 import SideBAlbumContent from './components/SideBAlbumContent'
 import ImagePreviewContent from './components/ImagePreviewContent'
-import AdminWorkGuideContent from './components/AdminWorkGuideContent'
+import HowToWorkContent from './components/HowToWorkContent'
 import NotionSliderContent from './components/NotionSliderContent'
 import DraggableDesktopItem from './components/DraggableDesktopItem'
 import NotionFolderIcon from './assets/Admin/Notion_Folder.svg'
@@ -1332,7 +1332,7 @@ function MacWindow({
         ) : variant === 'notion-slider' ? (
           <NotionSliderContent />
         ) : title === 'How to work with Mayar?' ? (
-          <AdminWorkGuideContent />
+          <HowToWorkContent />
         ) : title === 'About Me' ? (
           <AboutMeContent />
         ) : (
@@ -1405,14 +1405,15 @@ function DraggableFolder({
       if (!parent) return
 
       const pr = parent.getBoundingClientRect()
-      const fr = el.getBoundingClientRect()
+      const itemW = el.offsetWidth
+      const itemH = el.offsetHeight
       const off = dragOffsetRef.current
 
       let nx = e.clientX - pr.left - off.x
       let ny = e.clientY - pr.top - off.y
 
-      const maxX = Math.max(0, pr.width - fr.width)
-      const maxY = Math.max(0, pr.height - fr.height)
+      const maxX = Math.max(0, window.innerWidth - pr.left - itemW)
+      const maxY = Math.max(0, pr.height - itemH)
 
       const newPos = {
         x: Math.max(0, Math.min(nx, maxX)),
@@ -1769,7 +1770,7 @@ export default function App() {
             draggingClassName="cursor-grabbing"
           >
             <div className="max-w-[min(560px,46vw)] text-left text-5xl font-bold leading-[1.05] tracking-tight text-[#6B3FA0] transition-opacity duration-200 hover:opacity-90 sm:text-6xl md:text-7xl">
-              Who is the Admin?
+              {`Who\u2019s the Admin?`}
             </div>
           </DraggableDesktopItem>
         )}
