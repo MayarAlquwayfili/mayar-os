@@ -15,6 +15,8 @@ const TOOL_PILLS = [
   'Market Analysis',
 ]
 
+const FIGURE_CLS = 'w-full rounded-none object-contain shadow-none'
+
 const fade = {
   initial: { opacity: 0, y: 16 },
   whileInView: { opacity: 1, y: 0 },
@@ -33,9 +35,8 @@ function FadeBlock({ className = '', children }) {
 export default function CashResearchContent() {
   return (
     <div className="h-full overflow-y-auto overflow-x-hidden bg-white font-sans antialiased">
-      {/* ── Header + metadata (matches RECLABContent structure) ── */}
-      <div className="mx-auto w-full max-w-[1200px] px-6 pb-4 pt-8 sm:px-8 md:px-10">
-        <header className="mb-6 border-b border-gray-100 pb-4 text-left">
+      <div className="mx-auto w-full max-w-[1200px] px-6 pb-20 pt-8 text-left sm:px-8 md:px-10">
+        <header className="mb-6 border-b border-gray-100 pb-4">
           <div className="flex flex-wrap items-center gap-2">
             <h1 className="text-[36px] font-bold leading-tight tracking-tight text-gray-900">
               Will Cash Become Obsolete?
@@ -44,12 +45,15 @@ export default function CashResearchContent() {
               Completed (Awarded A+)
             </span>
           </div>
-          <p className="mt-0.5 text-[13px] font-medium text-gray-500">
+          <p className="mt-2 text-[20px] font-semibold text-gray-700">
+            The Rise of Digital Payments and Their Impact on Korean SMEs
+          </p>
+          <p className="mt-1 text-[13px] font-medium text-gray-500">
             Economics Research
           </p>
         </header>
 
-        <div className="grid grid-cols-2 gap-x-8 gap-y-5 border-b border-gray-100 pb-6 text-left md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-x-8 gap-y-5 border-b border-gray-100 pb-6 md:grid-cols-4">
           <div>
             <p className={META_KEY}>Timeline</p>
             <p className={META_VAL}>09/2025 – 11/2025</p>
@@ -78,10 +82,8 @@ export default function CashResearchContent() {
             </div>
           </div>
         </div>
-      </div>
 
-      <section className="mx-auto max-w-[800px] px-6 pb-20 pt-8 text-left sm:px-8 md:px-10">
-        <div className="space-y-10">
+        <div className="space-y-10 pt-8">
           <FadeBlock>
             <p className={BODY}>
               The &quot;tap&quot; of a digital payment symbolizes modern convenience.
@@ -121,7 +123,7 @@ export default function CashResearchContent() {
             <img
               src={Figure1}
               alt="Figure 1: Trend Digital Payment Adoption Rate (2015-2024)"
-              className="w-full object-contain"
+              className={FIGURE_CLS}
             />
             <p className={CAPTION}>
               Figure 1: Trend Digital Payment Adoption Rate (2015-2024)
@@ -140,7 +142,7 @@ export default function CashResearchContent() {
             <img
               src={Table1}
               alt="Table 1: Multiple Linear Regression Results on SME Resilience"
-              className="w-full object-contain"
+              className={FIGURE_CLS}
             />
             <p className={CAPTION}>
               Table 1: Multiple Linear Regression Results on SME Resilience
@@ -159,7 +161,7 @@ export default function CashResearchContent() {
             <img
               src={Figure3}
               alt="Figure 3 SME Loan Delinquency Rate Trend (2015-2024)"
-              className="w-full object-contain"
+              className={FIGURE_CLS}
             />
             <p className={CAPTION}>
               Figure 3 SME Loan Delinquency Rate Trend (2015-2024)
@@ -174,7 +176,7 @@ export default function CashResearchContent() {
             </p>
           </FadeBlock>
         </div>
-      </section>
+      </div>
     </div>
   )
 }
