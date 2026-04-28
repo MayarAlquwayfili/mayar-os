@@ -38,7 +38,7 @@ export default function AdminFolderCursorTip({ label, children }) {
               className="h-0 w-0 shrink-0 border-y-[7px] border-y-transparent border-r-[9px] border-r-[#6B3FA0]"
               aria-hidden
             />
-            <span className="max-w-[min(280px,calc(100vw-48px))] rounded-full bg-[#6B3FA0] px-4 py-1.5 text-left text-[11px] font-medium leading-snug text-white">
+            <span className="inline-flex max-w-[min(280px,calc(100vw-48px))] items-center rounded-full bg-[#6B3FA0] px-4 py-1.5 text-left text-[11px] font-medium leading-snug text-white">
               {label}
             </span>
           </div>,

@@ -38,6 +38,19 @@ import { MOHEETIK_TOOLS, RECLAB_TOOLS, QAFFATEK_TOOLS, DESKTOP_FOLDERS } from '.
 const MENU_BAR_PX = 28
 // Dock: bottom-4 (16px) + py-2 (16px) + icon (54px) + dot gap + dot = ~96px clearance
 const DOCK_SAFE_PX = 96
+
+/** Post-admin-flow desktop items — share selection state with standard folders. */
+const ADMIN_DESKTOP_NOTION_ID = 'admin-notion'
+const ADMIN_DESKTOP_COFFEE_ID = 'admin-coffee'
+
+const DESKTOP_ITEM_FRAME_BASE =
+  'box-border flex w-[132px] flex-col items-center gap-2 rounded-xl border p-3 text-center outline-none transition-colors'
+
+function desktopItemSelectionClass(isSelected) {
+  return isSelected
+    ? 'border-[#6B3FA0]/30 bg-[#6B3FA0]/15 hover:bg-[#6B3FA0]/18'
+    : 'border-transparent bg-transparent hover:border-transparent hover:bg-[#6B3FA0]/8'
+}
 const EDGE_PX = 10
 const MIN_W = 380
 const MIN_H = 320
@@ -1468,11 +1481,9 @@ function DraggableFolder({
     <div
       ref={rootRef}
       aria-label={`Folder ${id}: ${title}`}
-      className={`absolute box-border flex w-[132px] cursor-grab flex-col items-center gap-2 rounded-xl border p-3 select-none transition-colors active:cursor-grabbing ${
-        isSelected
-          ? 'border-[#6B3FA0]/30 bg-[#6B3FA0]/15 hover:bg-[#6B3FA0]/18'
-          : 'border-transparent bg-transparent hover:border-transparent hover:bg-[#6B3FA0]/8'
-      }`}
+      className={`absolute ${DESKTOP_ITEM_FRAME_BASE} cursor-grab select-none active:cursor-grabbing ${desktopItemSelectionClass(
+        isSelected,
+      )}`}
       style={{ left: position.x, top: position.y }}
       onMouseDown={onMouseDown}
       onClick={onClick}
@@ -1598,7 +1609,7 @@ function formatNotifBody(body) {
 }
 
 export default function App() {
-  const [selectedFolderId, setSelectedFolderId] = useState(null)
+  const [selectedDesktopItemId, setSelectedDesktopItemId] = useState(null)
   const { openWindows, openOrFocusWindow, bringToFront, minimizeWindow, closeWindow } =
     useWindowManager()
   const [folderPositions, setFolderPositions] = useState(() => getInitialFolderPositions())
@@ -1725,7 +1736,7 @@ export default function App() {
 
       <main
         className="absolute inset-x-0 bottom-0 top-7 z-0 overflow-hidden"
-        onClick={() => setSelectedFolderId(null)}
+        onClick={() => setSelectedDesktopItemId(null)}
       >
         {adminFlow === 'idle' && (
           <DraggableDesktopItem
@@ -1733,7 +1744,7 @@ export default function App() {
             initialY={adminLayout.trigger.y}
             onPositionChange={handleAdminTriggerPos}
             onCleanClick={() => setAdminFlow('triggering_notifications')}
-            onInteract={() => setSelectedFolderId(null)}
+            onInteract={() => setSelectedDesktopItemId(null)}
             className="z-[1] cursor-grab active:cursor-grabbing"
             draggingClassName="cursor-grabbing"
           >
@@ -1749,13 +1760,15 @@ export default function App() {
               initialX={adminLayout.notion.x}
               initialY={adminLayout.notion.y}
               onPositionChange={handleAdminNotionPos}
-              onInteract={() => setSelectedFolderId(null)}
+              onInteract={() => setSelectedDesktopItemId(ADMIN_DESKTOP_NOTION_ID)}
               className="z-[1] cursor-grab active:cursor-grabbing"
               draggingClassName="cursor-grabbing"
             >
               <AdminFolderCursorTip label="it\u2019s all documented.">
                 <div
-                  className="box-border flex w-[132px] flex-col items-center gap-2 rounded-xl p-3 text-center outline-none transition-colors hover:bg-black/5"
+                  className={`${DESKTOP_ITEM_FRAME_BASE} ${desktopItemSelectionClass(
+                    selectedDesktopItemId === ADMIN_DESKTOP_NOTION_ID,
+                  )}`}
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => {
@@ -1785,7 +1798,13 @@ export default function App() {
                     />
                   </div>
                   <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
-                    <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-gray-800">
+                    <span
+                      className={`line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide ${
+                        selectedDesktopItemId === ADMIN_DESKTOP_NOTION_ID
+                          ? 'text-gray-900'
+                          : 'text-gray-800'
+                      }`}
+                    >
                       Notion
                     </span>
                   </div>
@@ -1797,13 +1816,15 @@ export default function App() {
               initialX={adminLayout.v60.x}
               initialY={adminLayout.v60.y}
               onPositionChange={handleAdminV60Pos}
-              onInteract={() => setSelectedFolderId(null)}
+              onInteract={() => setSelectedDesktopItemId(ADMIN_DESKTOP_COFFEE_ID)}
               className="z-[1] cursor-grab active:cursor-grabbing"
               draggingClassName="cursor-grabbing"
             >
               <AdminFolderCursorTip label="trust the process.">
                 <div
-                  className="box-border flex w-[132px] flex-col items-center gap-2 rounded-xl p-3 text-center outline-none transition-colors hover:bg-black/5"
+                  className={`${DESKTOP_ITEM_FRAME_BASE} ${desktopItemSelectionClass(
+                    selectedDesktopItemId === ADMIN_DESKTOP_COFFEE_ID,
+                  )}`}
                   role="presentation"
                   onDoubleClick={(e) => e.stopPropagation()}
                 >
@@ -1816,7 +1837,13 @@ export default function App() {
                     />
                   </div>
                   <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
-                    <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-gray-800">
+                    <span
+                      className={`line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide ${
+                        selectedDesktopItemId === ADMIN_DESKTOP_COFFEE_ID
+                          ? 'text-gray-900'
+                          : 'text-gray-800'
+                      }`}
+                    >
                       Coffee
                     </span>
                   </div>
@@ -1835,8 +1862,8 @@ export default function App() {
             subtitle={folder.subtitle}
             initialX={folderPositions[folder.id]?.x ?? folder.x}
             initialY={folderPositions[folder.id]?.y ?? folder.y}
-            isSelected={selectedFolderId === folder.id}
-            onSelect={() => setSelectedFolderId(folder.id)}
+            isSelected={selectedDesktopItemId === folder.id}
+            onSelect={() => setSelectedDesktopItemId(folder.id)}
             onDoubleClick={() => openOrFocusWindow(folder.windowTitle ?? folder.title)}
             onPositionChange={(pos) => handleFolderPositionChange(folder.id, pos)}
           />
