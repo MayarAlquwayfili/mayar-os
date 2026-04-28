@@ -1745,7 +1745,7 @@ export default function App() {
             >
               <AdminFolderCursorTip label="it\u2019s all documented.">
                 <div
-                  className="flex w-[120px] flex-col items-center gap-2 rounded-xl p-3 text-center outline-none transition-colors hover:bg-black/5"
+                  className="box-border flex w-[132px] flex-col items-center gap-2 rounded-xl p-3 text-center outline-none transition-colors hover:bg-black/5"
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => {
@@ -1766,13 +1766,19 @@ export default function App() {
                     })
                   }}
                 >
-                  <img
-                    src={NotionFolderIcon}
-                    alt=""
-                    draggable={false}
-                    className="h-[72px] w-[72px] shrink-0 object-contain"
-                  />
-                  <span className="text-[12px] font-medium text-gray-800">Notion</span>
+                  <div className="box-border flex h-[72px] w-[72px] shrink-0 items-center justify-center p-1">
+                    <img
+                      src={NotionFolderIcon}
+                      alt=""
+                      draggable={false}
+                      className="h-16 w-16 shrink-0 object-contain"
+                    />
+                  </div>
+                  <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
+                    <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-gray-800">
+                      Notion
+                    </span>
+                  </div>
                 </div>
               </AdminFolderCursorTip>
             </DraggableDesktopItem>
@@ -1787,17 +1793,23 @@ export default function App() {
             >
               <AdminFolderCursorTip label="trust the process.">
                 <div
-                  className="flex w-[120px] flex-col items-center gap-2 rounded-xl p-3 text-center outline-none transition-colors hover:bg-black/5"
+                  className="box-border flex w-[132px] flex-col items-center gap-2 rounded-xl p-3 text-center outline-none transition-colors hover:bg-black/5"
                   role="presentation"
                   onDoubleClick={(e) => e.stopPropagation()}
                 >
-                  <img
-                    src={V60FolderIcon}
-                    alt=""
-                    draggable={false}
-                    className="h-[72px] w-[72px] shrink-0 object-contain"
-                  />
-                  <span className="text-[12px] font-medium text-gray-800">V60</span>
+                  <div className="box-border flex h-[72px] w-[72px] shrink-0 items-center justify-center p-1">
+                    <img
+                      src={V60FolderIcon}
+                      alt=""
+                      draggable={false}
+                      className="h-16 w-16 shrink-0 object-contain"
+                    />
+                  </div>
+                  <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
+                    <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-gray-800">
+                      V60
+                    </span>
+                  </div>
                 </div>
               </AdminFolderCursorTip>
             </DraggableDesktopItem>

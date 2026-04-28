@@ -16,7 +16,11 @@ export default function AdminFolderCursorTip({ label, children }) {
 
   return (
     <>
-      <div className="inline-block cursor-grab active:cursor-grabbing" onMouseMove={onMove} onMouseLeave={onLeave}>
+      <div
+        className="block w-[132px] cursor-grab select-none active:cursor-grabbing"
+        onMouseMove={onMove}
+        onMouseLeave={onLeave}
+      >
         {children}
       </div>
       {tip.show &&
