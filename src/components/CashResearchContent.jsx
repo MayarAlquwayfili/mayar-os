@@ -15,7 +15,9 @@ const TOOL_PILLS = [
   'Market Analysis',
 ]
 
-const FIGURE_CLS = 'w-full rounded-none object-contain shadow-none'
+const FIGURE_CLS =
+  'w-full max-h-[500px] rounded-none object-contain shadow-none'
+const FIGURE_WRAP = 'mx-auto w-full max-w-[800px]'
 
 const fade = {
   initial: { opacity: 0, y: 16 },
@@ -53,7 +55,7 @@ export default function CashResearchContent() {
           </p>
         </header>
 
-        <div className="grid grid-cols-2 gap-x-8 gap-y-5 border-b border-gray-100 pb-6 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-x-8 gap-y-5 border-b border-gray-100 pb-6 md:grid-cols-3">
           <div>
             <p className={META_KEY}>Timeline</p>
             <p className={META_VAL}>09/2025 – 11/2025</p>
@@ -61,12 +63,6 @@ export default function CashResearchContent() {
           <div>
             <p className={META_KEY}>My Role</p>
             <p className={META_VAL}>Principal Researcher &amp; Data Analyst</p>
-          </div>
-          <div>
-            <p className={META_KEY}>Project Type</p>
-            <p className={META_VAL}>
-              Applied Economic Research (Independent)
-            </p>
           </div>
           <div>
             <p className={META_KEY}>Tools</p>
@@ -120,14 +116,16 @@ export default function CashResearchContent() {
           </FadeBlock>
 
           <FadeBlock>
-            <img
-              src={Figure1}
-              alt="Figure 1: Trend Digital Payment Adoption Rate (2015-2024)"
-              className={FIGURE_CLS}
-            />
-            <p className={CAPTION}>
-              Figure 1: Trend Digital Payment Adoption Rate (2015-2024)
-            </p>
+            <div className={FIGURE_WRAP}>
+              <img
+                src={Figure1}
+                alt="Figure 1: Trend Digital Payment Adoption Rate (2015-2024)"
+                className={FIGURE_CLS}
+              />
+              <p className={CAPTION}>
+                Figure 1: Trend Digital Payment Adoption Rate (2015-2024)
+              </p>
+            </div>
           </FadeBlock>
 
           <FadeBlock>
@@ -139,14 +137,16 @@ export default function CashResearchContent() {
           </FadeBlock>
 
           <FadeBlock>
-            <img
-              src={Table1}
-              alt="Table 1: Multiple Linear Regression Results on SME Resilience"
-              className={FIGURE_CLS}
-            />
-            <p className={CAPTION}>
-              Table 1: Multiple Linear Regression Results on SME Resilience
-            </p>
+            <div className={FIGURE_WRAP}>
+              <img
+                src={Table1}
+                alt="Table 1: Multiple Linear Regression Results on SME Resilience"
+                className={FIGURE_CLS}
+              />
+              <p className={CAPTION}>
+                Table 1: Multiple Linear Regression Results on SME Resilience
+              </p>
+            </div>
           </FadeBlock>
 
           <FadeBlock>
@@ -158,14 +158,16 @@ export default function CashResearchContent() {
           </FadeBlock>
 
           <FadeBlock>
-            <img
-              src={Figure3}
-              alt="Figure 3 SME Loan Delinquency Rate Trend (2015-2024)"
-              className={FIGURE_CLS}
-            />
-            <p className={CAPTION}>
-              Figure 3 SME Loan Delinquency Rate Trend (2015-2024)
-            </p>
+            <div className={FIGURE_WRAP}>
+              <img
+                src={Figure3}
+                alt="Figure 3 SME Loan Delinquency Rate Trend (2015-2024)"
+                className={FIGURE_CLS}
+              />
+              <p className={CAPTION}>
+                Figure 3 SME Loan Delinquency Rate Trend (2015-2024)
+              </p>
+            </div>
           </FadeBlock>
 
           <FadeBlock>
