@@ -1535,6 +1535,15 @@ function randomFolderPosInBounds() {
 }
 
 const LS_KEY = 'mayaros-folder-positions'
+const LS_ADMIN_STATUS = 'mayaros-admin-status'
+
+function loadPersistedAdminFlow() {
+  try {
+    return localStorage.getItem(LS_ADMIN_STATUS) === 'accepted' ? 'accepted' : 'idle'
+  } catch {
+    return 'idle'
+  }
+}
 
 function loadLayout() {
   try {
@@ -1616,7 +1625,12 @@ export default function App() {
   const [adminLayout, setAdminLayout] = useState(() => getInitialAdminLayout())
 
   // ─── Admin login flow ─────────────────────────────────────────────────────
-  const [adminFlow, setAdminFlow] = useState('idle') // idle → triggering_notifications → waiting_accept → loading → accepted
+  const skipWorkGuideOpenOnAdminRestoreRef = useRef(false)
+  const [adminFlow, setAdminFlow] = useState(() => {
+    const initial = loadPersistedAdminFlow()
+    if (initial === 'accepted') skipWorkGuideOpenOnAdminRestoreRef.current = true
+    return initial
+  }) // idle → triggering_notifications → waiting_accept → loading → accepted
   const [adminNotifs, setAdminNotifs] = useState([])
   const timeoutsRef = useRef([])
 
@@ -1683,7 +1697,21 @@ export default function App() {
   }, [adminFlow])
 
   useEffect(() => {
+    try {
+      if (adminFlow === 'accepted') {
+        localStorage.setItem(LS_ADMIN_STATUS, 'accepted')
+      }
+    } catch {
+      /* ignore */
+    }
+  }, [adminFlow])
+
+  useEffect(() => {
     if (adminFlow !== 'accepted') return
+    if (skipWorkGuideOpenOnAdminRestoreRef.current) {
+      skipWorkGuideOpenOnAdminRestoreRef.current = false
+      return
+    }
     openOrFocusWindow('How to work with Mayar?')
   }, [adminFlow, openOrFocusWindow])
 
@@ -1748,7 +1776,7 @@ export default function App() {
             className="z-[1] cursor-grab active:cursor-grabbing"
             draggingClassName="cursor-grabbing"
           >
-            <div className="max-w-[min(560px,46vw)] animate-pulse text-left text-5xl font-bold leading-[1.05] tracking-tight text-[#9CA3AF] sm:text-6xl md:text-7xl">
+            <div className="max-w-[min(560px,46vw)] text-left text-5xl font-bold leading-[1.05] tracking-tight text-[#6B3FA0] transition-colors hover:text-[#6B3FA0]/70 sm:text-6xl md:text-7xl">
               {`Who\u2019s the Admin?`}
             </div>
           </DraggableDesktopItem>

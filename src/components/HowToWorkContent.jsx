@@ -11,6 +11,28 @@ const INITIAL_ITEMS = [
   { id: 4, text: 'Respect the Multipotentialite flow', done: false },
 ]
 
+const LS_WORK_GUIDE_CHECKLIST = 'mayaros-work-guide-checklist'
+
+function loadSavedChecklist() {
+  try {
+    const raw = localStorage.getItem(LS_WORK_GUIDE_CHECKLIST)
+    if (raw == null) return null
+    const parsed = JSON.parse(raw)
+    if (!Array.isArray(parsed)) return null
+    const doneById = new Map(
+      parsed
+        .filter((row) => row && typeof row.id === 'number' && typeof row.done === 'boolean')
+        .map((row) => [row.id, row.done]),
+    )
+    return INITIAL_ITEMS.map((i) => ({
+      ...i,
+      done: Boolean(doneById.get(i.id)),
+    }))
+  } catch {
+    return null
+  }
+}
+
 const listContainer = {
   hidden: { opacity: 0 },
   show: {
@@ -29,12 +51,23 @@ const listItem = {
 }
 
 export default function HowToWorkContent() {
-  const [items, setItems] = useState(() => INITIAL_ITEMS.map((i) => ({ ...i })))
+  const [items, setItems] = useState(
+    () => loadSavedChecklist() ?? INITIAL_ITEMS.map((i) => ({ ...i })),
+  )
 
   const toggle = (id) =>
-    setItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, done: !item.done } : item))
-    )
+    setItems((prev) => {
+      const next = prev.map((item) => (item.id === id ? { ...item, done: !item.done } : item))
+      try {
+        localStorage.setItem(
+          LS_WORK_GUIDE_CHECKLIST,
+          JSON.stringify(next.map(({ id: itemId, done }) => ({ id: itemId, done }))),
+        )
+      } catch {
+        /* ignore */
+      }
+      return next
+    })
 
   return (
     <div className="flex h-full w-full flex-col items-start justify-start overflow-y-auto
