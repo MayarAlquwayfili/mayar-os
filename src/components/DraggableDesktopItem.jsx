@@ -10,6 +10,7 @@ export default function DraggableDesktopItem({
   initialY,
   onPositionChange,
   onCleanClick,
+  onInteract,
   children,
   className = '',
   style,
@@ -30,6 +31,7 @@ export default function DraggableDesktopItem({
   const onPointerDown = (e) => {
     if (e.button !== 0) return
     e.stopPropagation()
+    onInteract?.()
     const el = rootRef.current
     if (!el) return
 

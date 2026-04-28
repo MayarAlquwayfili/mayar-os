@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import FolderIcon from './assets/Folder.svg'
+import FolderpdfIcon from './assets/Folderpdf.svg'
 import AppIconMoheetik from './assets/Moheetik/AppIconMoheetik.svg'
 import AppIconQaffatek from './assets/AppIconQaffatek.svg'
 import AppIconRECLAB from './assets/RECLAB/AppIconRECLAB.svg'
@@ -1465,7 +1466,7 @@ function DraggableFolder({
     <div
       ref={rootRef}
       aria-label={`Folder ${id}: ${title}`}
-      className="absolute flex w-[132px] cursor-grab flex-col items-center gap-1 select-none active:cursor-grabbing"
+      className="absolute box-border flex w-[132px] cursor-grab flex-col items-center gap-2 rounded-xl p-3 select-none transition-colors hover:bg-black/5 active:cursor-grabbing"
       style={{ left: position.x, top: position.y }}
       onMouseDown={onMouseDown}
       onClick={onClick}
@@ -1475,7 +1476,7 @@ function DraggableFolder({
         className={`box-border flex h-[72px] w-[72px] shrink-0 items-center justify-center rounded-md border p-1 transition-colors ${
           isSelected
             ? 'bg-[#6B3FA0]/10 border-[#6B3FA0]/20'
-            : 'bg-transparent border-transparent hover:bg-black/5'
+            : 'border-transparent bg-transparent'
         }`}
       >
         <img
@@ -1486,7 +1487,7 @@ function DraggableFolder({
         />
       </div>
 
-      <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 py-0.5 text-center">
+      <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
         <span
           className={`line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide ${
             isSelected
@@ -1763,6 +1764,7 @@ export default function App() {
             initialY={adminLayout.trigger.y}
             onPositionChange={handleAdminTriggerPos}
             onCleanClick={() => setAdminFlow('triggering_notifications')}
+            onInteract={() => setSelectedFolderId(null)}
             className="z-[1] cursor-grab active:cursor-grabbing"
             draggingClassName="cursor-grabbing"
           >
@@ -1778,10 +1780,11 @@ export default function App() {
               initialX={adminLayout.notion.x}
               initialY={adminLayout.notion.y}
               onPositionChange={handleAdminNotionPos}
+              onInteract={() => setSelectedFolderId(null)}
               className="z-[1] cursor-grab active:cursor-grabbing"
               draggingClassName="cursor-grabbing"
             >
-              <AdminFolderCursorTip label="My Second Brain">
+              <AdminFolderCursorTip label="it\u2019s all documented.">
                 <div
                   className="flex w-[120px] flex-col items-center gap-2 rounded-xl p-3 text-center outline-none transition-colors hover:bg-black/5"
                   role="button"
@@ -1819,10 +1822,11 @@ export default function App() {
               initialX={adminLayout.v60.x}
               initialY={adminLayout.v60.y}
               onPositionChange={handleAdminV60Pos}
+              onInteract={() => setSelectedFolderId(null)}
               className="z-[1] cursor-grab active:cursor-grabbing"
               draggingClassName="cursor-grabbing"
             >
-              <AdminFolderCursorTip label="Fueling Creativity">
+              <AdminFolderCursorTip label="trust the process.">
                 <div
                   className="flex w-[120px] flex-col items-center gap-2 rounded-xl p-3 text-center outline-none transition-colors hover:bg-black/5"
                   role="presentation"
@@ -1939,7 +1943,7 @@ export default function App() {
                 {
                   id: 'How to work with Mayar?',
                   label: 'Work Guide',
-                  icon: FolderIcon,
+                  icon: FolderpdfIcon,
                 },
               ]
             : []
