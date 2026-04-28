@@ -27,10 +27,10 @@ export default function AdminNotifications({ items, adminFlow, onAccept, formatB
                   type="button"
                   aria-busy={adminFlow === 'loading'}
                   aria-label={adminFlow === 'loading' ? 'Loading' : 'Accept'}
-                  className={`inline-flex min-h-[40px] min-w-[6.5rem] items-center rounded-lg px-5 py-2.5 text-sm font-medium ${
+                  className={`inline-flex min-h-[40px] items-center rounded-lg py-2.5 text-sm font-medium ${
                     adminFlow === 'loading'
-                      ? 'cursor-default justify-start bg-[#6B3FA0]/12 text-[#6B3FA0]'
-                      : 'justify-center bg-[#6B3FA0] text-white hover:opacity-90'
+                      ? 'w-full cursor-default justify-start bg-[#6B3FA0]/12 pl-0 pr-5 text-[#6B3FA0]'
+                      : 'min-w-[6.5rem] justify-center bg-[#6B3FA0] px-5 text-white hover:opacity-90'
                   }`}
                   onClick={onAccept}
                 >

@@ -1468,10 +1468,10 @@ function DraggableFolder({
     <div
       ref={rootRef}
       aria-label={`Folder ${id}: ${title}`}
-      className={`absolute box-border flex w-[132px] cursor-grab flex-col items-center gap-2 rounded-xl p-3 select-none transition-colors active:cursor-grabbing ${
+      className={`absolute box-border flex w-[132px] cursor-grab flex-col items-center gap-2 rounded-xl border p-3 select-none transition-colors active:cursor-grabbing ${
         isSelected
-          ? 'bg-[#6B3FA0]/12 hover:bg-[#6B3FA0]/18'
-          : 'bg-transparent hover:bg-black/5'
+          ? 'border-[#6B3FA0]/30 bg-[#6B3FA0]/15 hover:bg-[#6B3FA0]/18'
+          : 'border-transparent bg-transparent hover:border-transparent hover:bg-[#6B3FA0]/8'
       }`}
       style={{ left: position.x, top: position.y }}
       onMouseDown={onMouseDown}

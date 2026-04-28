@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 
-// Mirrors About Me checklist (`AboutMeContent` in App.jsx) — same accent, typography, padding.
+// Identical accent + checklist markup as `AboutMeContent` / `ABOUT_ACCENT` in App.jsx (#544EAE).
 const WORK_ACCENT = '#544EAE'
 
 const INITIAL_ITEMS = [
@@ -36,19 +36,15 @@ export default function HowToWorkContent() {
       prev.map((item) => (item.id === id ? { ...item, done: !item.done } : item))
     )
 
-  const remaining = items.filter((i) => !i.done).length
-
   return (
-    <div
-      className="flex h-full w-full flex-col items-start justify-start overflow-y-auto
+    <div className="flex h-full w-full flex-col items-start justify-start overflow-y-auto
                     bg-white font-sans
                     [&::-webkit-scrollbar]:w-1
                     [&::-webkit-scrollbar-track]:bg-transparent
                     [&::-webkit-scrollbar-thumb]:rounded-full
-                    [&::-webkit-scrollbar-thumb]:bg-gray-200"
-    >
+                    [&::-webkit-scrollbar-thumb]:bg-gray-200">
       <div className="w-full p-6">
-        {/* ── Title + subtitle (same as About Me) ───────────────────── */}
+        {/* ── Title + subtitle ────────────────────────────────────── */}
         <motion.div
           className="mb-4"
           initial={{ opacity: 0, y: 8 }}
@@ -62,11 +58,13 @@ export default function HowToWorkContent() {
             How to work with Mayar?
           </h1>
           <p className="mt-0.5 text-[12px]" style={{ color: '#8e8e93' }}>
-            {remaining === 0 ? 'All caught up! ' : `${remaining} items`}
+            {items.filter((i) => !i.done).length === 0
+              ? 'All caught up! '
+              : `${items.filter((i) => !i.done).length} items`}
           </p>
         </motion.div>
 
-        {/* ── Checklist (same structure as About Me) ───────────────── */}
+        {/* ── Checklist ───────────────────────────────────────────── */}
         <motion.ul
           className="flex w-full flex-col items-start"
           variants={listContainer}
@@ -79,6 +77,7 @@ export default function HowToWorkContent() {
               className="flex w-full items-start gap-3 py-2"
               variants={listItem}
             >
+              {/* Circle checkbox — 16 px, aligned to text cap-height */}
               <button
                 type="button"
                 aria-label={item.done ? 'Mark as incomplete' : 'Mark as complete'}
@@ -103,6 +102,7 @@ export default function HowToWorkContent() {
                 )}
               </button>
 
+              {/* Item text — wraps naturally, never breaks layout */}
               <p
                 className="min-w-0 flex-1 text-[13px] leading-[1.6] transition-all duration-150"
                 style={{
