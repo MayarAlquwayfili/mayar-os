@@ -24,6 +24,12 @@ import SideBFolderContent from './components/SideBFolderContent'
 import CashResearchContent from './components/CashResearchContent'
 import SideBAlbumContent from './components/SideBAlbumContent'
 import ImagePreviewContent from './components/ImagePreviewContent'
+import AdminWorkGuideContent from './components/AdminWorkGuideContent'
+import NotionSliderContent from './components/NotionSliderContent'
+import NotionFolderIcon from './assets/Admin/Notion_Folder.svg'
+import V60FolderIcon from './assets/Admin/V60_Folder.svg'
+import CursorNotionPng from './assets/Admin/Cursor_Notion.png'
+import CursorCoffeePng from './assets/Admin/Cursor_Coffee.png'
 import { useWindowManager } from './hooks/useWindowManager'
 import { MOHEETIK_TOOLS, RECLAB_TOOLS, QAFFATEK_TOOLS, DESKTOP_FOLDERS } from './constants/projects'
 
@@ -994,11 +1000,13 @@ function CVEntry({ title, titleHref, meta, date, bullets }) {
 // Per-title window presets: { w, h, centered }
 const WINDOW_PRESETS = {
   'About Me': { w: 420, h: 380, centered: true },
+  'How to work with Mayar?': { w: 440, h: 400, centered: true },
   Lab: { w: 440, h: 400, centered: true },
   'cash-obsolete-research': { w: 1080, h: 800, centered: true },
   'Side B': { w: 640, h: 360, centered: true },
   SIDE_B_ALBUM: { w: 720, h: 520, centered: true },
   IMAGE_PREVIEW: { w: 820, h: 680, centered: true },
+  NOTION_SLIDER: { w: 800, h: 620, centered: true },
 }
 
 function MacWindow({
@@ -1019,7 +1027,9 @@ function MacWindow({
       ? WINDOW_PRESETS.SIDE_B_ALBUM ?? {}
       : variant === 'image-preview'
         ? WINDOW_PRESETS.IMAGE_PREVIEW ?? {}
-        : WINDOW_PRESETS[title] ?? {}
+        : variant === 'notion-slider'
+          ? WINDOW_PRESETS.NOTION_SLIDER ?? {}
+          : WINDOW_PRESETS[title] ?? {}
   const defaultW = preset.w ?? 700
   const defaultH = preset.h ?? 500
 
@@ -1308,6 +1318,10 @@ function MacWindow({
           <BrewchaContent />
         ) : title === 'Preview — Mayar_CV.pdf' ? (
           <CVContent />
+        ) : variant === 'notion-slider' ? (
+          <NotionSliderContent />
+        ) : title === 'How to work with Mayar?' ? (
+          <AdminWorkGuideContent />
         ) : title === 'About Me' ? (
           <AboutMeContent />
         ) : (
@@ -1500,6 +1514,19 @@ function initFolderPositions() {
   return defaults
 }
 
+function formatNotifBody(body) {
+  const parts = String(body).split(/(Admin)/g)
+  return parts.map((part, idx) =>
+    part === 'Admin' ? (
+      <strong key={idx} className="font-bold text-gray-900">
+        Admin
+      </strong>
+    ) : (
+      <span key={idx}>{part}</span>
+    )
+  )
+}
+
 export default function App() {
   const [selectedFolderId, setSelectedFolderId] = useState(null)
   const { openWindows, openOrFocusWindow, bringToFront, closeWindow } = useWindowManager()
@@ -1572,6 +1599,11 @@ export default function App() {
     return () => clearTimeout(t)
   }, [adminFlow])
 
+  useEffect(() => {
+    if (adminFlow !== 'accepted') return
+    openOrFocusWindow('How to work with Mayar?')
+  }, [adminFlow, openOrFocusWindow])
+
   const handleFolderPositionChange = useCallback((id, pos) => {
     try {
       const raw = localStorage.getItem(LS_KEY)
@@ -1592,7 +1624,7 @@ export default function App() {
         {adminFlow === 'idle' && (
           <button
             type="button"
-            className="absolute right-16 top-[38%] z-[1] select-none text-left text-4xl font-semibold tracking-tight text-white/50 transition-colors duration-200 hover:text-white animate-pulse"
+            className="absolute right-10 top-[34%] z-[1] max-w-[min(520px,42vw)] select-none text-left text-6xl font-bold leading-[1.05] tracking-tight text-[#6B3FA0] transition-colors duration-200 hover:text-black sm:text-7xl"
             onClick={(e) => {
               e.stopPropagation()
               setAdminFlow('triggering_notifications')
@@ -1600,6 +1632,60 @@ export default function App() {
           >
             Who is the Admin?
           </button>
+        )}
+
+        {adminFlow === 'accepted' && (
+          <div className="pointer-events-auto absolute right-10 top-24 z-[1] flex flex-col items-center gap-10">
+            <button
+              type="button"
+              title="My Second Brain"
+              className="flex w-[120px] cursor-default flex-col items-center gap-2 rounded-xl border border-transparent p-2 text-center outline-none transition-colors hover:bg-black/5"
+              onClick={(e) => e.stopPropagation()}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.cursor = `url(${CursorNotionPng}) 0 0, auto`
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.cursor = ''
+              }}
+              onDoubleClick={(e) => {
+                e.stopPropagation()
+                openOrFocusWindow({
+                  id: 'admin-notion-slider',
+                  title: 'Notion',
+                  variant: 'notion-slider',
+                })
+              }}
+            >
+              <img
+                src={NotionFolderIcon}
+                alt=""
+                draggable={false}
+                className="h-[88px] w-[88px] object-contain drop-shadow-sm"
+              />
+              <span className="text-[12px] font-medium text-gray-800">Notion</span>
+            </button>
+            <button
+              type="button"
+              title="Fueling Creativity"
+              className="flex w-[120px] cursor-default flex-col items-center gap-2 rounded-xl border border-transparent p-2 text-center outline-none transition-colors hover:bg-black/5"
+              onClick={(e) => e.stopPropagation()}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.cursor = `url(${CursorCoffeePng}) 0 0, auto`
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.cursor = ''
+              }}
+              onDoubleClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={V60FolderIcon}
+                alt=""
+                draggable={false}
+                className="h-[88px] w-[88px] object-contain drop-shadow-sm"
+              />
+              <span className="text-[12px] font-medium text-gray-800">V60</span>
+            </button>
+          </div>
         )}
 
         {DESKTOP_FOLDERS.map((folder) => (
@@ -1637,18 +1723,18 @@ export default function App() {
 
       {/* ── Notifications (Admin flow) ───────────────────────────────────── */}
       {adminNotifs.length > 0 && (
-        <div className="pointer-events-none fixed right-4 top-4 z-[8000] flex w-80 flex-col gap-3">
+        <div className="pointer-events-none fixed right-4 top-16 z-[8000] flex w-80 flex-col gap-3">
           {adminNotifs.map((n) => (
             <div
               key={n.id}
               className="pointer-events-auto w-80 rounded-2xl border border-white/20 bg-white/70 p-4 shadow-lg backdrop-blur-md transition-all duration-300 dark:bg-black/70"
               style={{ boxShadow: '0 12px 32px rgba(0,0,0,0.18)' }}
             >
-              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-500">
+              <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-600">
                 {n.header}
               </p>
               <p className="mt-1 text-[13px] font-medium leading-snug text-gray-800">
-                {n.body}
+                {formatNotifBody(n.body)}
               </p>
 
               {n.isActionable && (
