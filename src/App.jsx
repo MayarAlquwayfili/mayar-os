@@ -21,6 +21,7 @@ import QaftatkContent from './components/QaftatkContent'
 import BrewchaContent from './components/BrewchaContent'
 import CreativeLabFolderContent from './components/CreativeLabFolderContent'
 import SideBFolderContent from './components/SideBFolderContent'
+import CashResearchContent from './components/CashResearchContent'
 import SideBAlbumContent from './components/SideBAlbumContent'
 import ImagePreviewContent from './components/ImagePreviewContent'
 import { useWindowManager } from './hooks/useWindowManager'
@@ -993,7 +994,8 @@ function CVEntry({ title, titleHref, meta, date, bullets }) {
 // Per-title window presets: { w, h, centered }
 const WINDOW_PRESETS = {
   'About Me': { w: 420, h: 380, centered: true },
-  Lab: { w: 400, h: 340, centered: true },
+  Lab: { w: 440, h: 400, centered: true },
+  'cash-obsolete-research': { w: 1080, h: 800, centered: true },
   'Side B': { w: 640, h: 360, centered: true },
   SIDE_B_ALBUM: { w: 720, h: 520, centered: true },
   IMAGE_PREVIEW: { w: 820, h: 680, centered: true },
@@ -1298,6 +1300,8 @@ function MacWindow({
           <QaftatkContent />
         ) : title === 'Lab' ? (
           <CreativeLabFolderContent onOpenProject={openOrFocusWindow} />
+        ) : title === 'cash-obsolete-research' ? (
+          <CashResearchContent />
         ) : title === 'Side B' ? (
           <SideBFolderContent openOrFocusWindow={openOrFocusWindow} />
         ) : title === 'Brewcha' ? (

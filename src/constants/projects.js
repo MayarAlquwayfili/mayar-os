@@ -53,6 +53,24 @@ export const SIDE_B_ALBUM_IMAGES = {
   brewcha: brewcha_b_images,
 }
 
+// ─── Lab window — nested projects (double-click opens `openWindowTitle` in App) ─
+
+export const LAB_FOLDER_CONTENTS = [
+  {
+    id: 'brewcha',
+    title: 'Brewcha',
+    openWindowTitle: 'Brewcha',
+    icon: 'brewcha',
+  },
+  {
+    id: 'cash-obsolete-research',
+    title: 'Will Cash Become Obsolete?',
+    subtitle: 'Research Project',
+    openWindowTitle: 'cash-obsolete-research',
+    icon: 'folder',
+  },
+]
+
 // ─── Desktop folder definitions ───────────────────────────────────────────────
 
 function randomFolderPos() {
@@ -78,6 +96,7 @@ export const DESKTOP_FOLDERS = [
     windowTitle: 'Lab',
     icon: FolderIcon,
     subtitle: 'Folder',
+    contents: LAB_FOLDER_CONTENTS,
     ...randomFolderPos(),
   },
   {
