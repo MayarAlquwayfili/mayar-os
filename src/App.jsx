@@ -1538,7 +1538,9 @@ const LS_ADMIN_STATUS = 'mayaros-admin-status'
 
 function loadPersistedAdminFlow() {
   try {
-    return localStorage.getItem(LS_ADMIN_STATUS) === 'accepted' ? 'accepted' : 'idle'
+    // TODO: UNCOMMENT FOR PRODUCTION
+    // return localStorage.getItem(LS_ADMIN_STATUS) === 'accepted' ? 'accepted' : 'idle'
+    return 'idle'
   } catch {
     return 'idle'
   }
@@ -1624,7 +1626,9 @@ export default function App() {
   const [adminLayout, setAdminLayout] = useState(() => getInitialAdminLayout())
 
   // ─── Admin login flow ─────────────────────────────────────────────────────
-  const [adminFlow, setAdminFlow] = useState(() => loadPersistedAdminFlow()) // idle → triggering_notifications → waiting_accept → loading → accepted
+  // TODO: UNCOMMENT FOR PRODUCTION
+  // const [adminFlow, setAdminFlow] = useState(() => loadPersistedAdminFlow()) // idle → triggering_notifications → waiting_accept → loading → accepted
+  const [adminFlow, setAdminFlow] = useState('idle') // idle → triggering_notifications → waiting_accept → loading → accepted
   const [adminNotifs, setAdminNotifs] = useState([])
   const timeoutsRef = useRef([])
 
@@ -1690,15 +1694,17 @@ export default function App() {
     return () => clearTimeout(t)
   }, [adminFlow])
 
-  useEffect(() => {
-    try {
-      if (adminFlow === 'accepted') {
-        localStorage.setItem(LS_ADMIN_STATUS, 'accepted')
-      }
-    } catch {
-      /* ignore */
-    }
-  }, [adminFlow])
+  // TODO: UNCOMMENT FOR PRODUCTION
+  // useEffect(() => {
+  //   try {
+  //     if (adminFlow === 'accepted') {
+  //       // TODO: UNCOMMENT FOR PRODUCTION
+  //       // localStorage.setItem(LS_ADMIN_STATUS, 'accepted')
+  //     }
+  //   } catch {
+  //     /* ignore */
+  //   }
+  // }, [adminFlow])
 
   const persistLayoutPatch = useCallback((patch) => {
     try {
