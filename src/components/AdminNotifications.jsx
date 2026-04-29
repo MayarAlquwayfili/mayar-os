@@ -1,6 +1,28 @@
+import { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { playNotificationSfx, getNotificationSfx } from '../utils/notificationSfx'
 
 export default function AdminNotifications({ items, adminFlow, onAccept, formatBody }) {
+  const seenIdsRef = useRef(new Set())
+
+  useEffect(() => {
+    // Preload on first mount (zero-latency feel).
+    getNotificationSfx()
+  }, [])
+
+  useEffect(() => {
+    // Play for each newly-added notification card.
+    const seen = seenIdsRef.current
+    let newCount = 0
+    for (const n of items) {
+      if (!seen.has(n.id)) {
+        seen.add(n.id)
+        newCount += 1
+      }
+    }
+    for (let k = 0; k < newCount; k += 1) playNotificationSfx()
+  }, [items])
+
   return (
     <div className="pointer-events-none fixed right-4 top-14 z-[8000] flex w-80 flex-col gap-3">
       <AnimatePresence mode="popLayout">
@@ -32,7 +54,10 @@ export default function AdminNotifications({ items, adminFlow, onAccept, formatB
                       ? 'w-full cursor-default justify-start bg-[#6B3FA0]/12 pl-0 pr-5 text-[#6B3FA0]'
                       : 'min-w-[6.5rem] justify-center bg-[#6B3FA0] px-5 text-white hover:opacity-90'
                   }`}
-                  onClick={onAccept}
+                  onClick={() => {
+                    playNotificationSfx()
+                    onAccept?.()
+                  }}
                 >
                   {adminFlow === 'loading' ? (
                     <span
