@@ -1017,7 +1017,7 @@ const WINDOW_PRESETS = {
   'How to work with Mayar?': { w: 440, h: 400, centered: true },
   Lab: { w: 440, h: 400, centered: true },
   'cash-obsolete-research': { w: 1080, h: 800, centered: true },
-  'Side B': { w: 640, h: 360, centered: true },
+  'Side B': { w: 960, h: 640, centered: true },
   SIDE_B_ALBUM: { w: 720, h: 520, centered: true },
   IMAGE_PREVIEW: { w: 820, h: 680, centered: true },
   NOTION_SLIDER: { w: 800, h: 620, centered: true },
@@ -1337,7 +1337,7 @@ function MacWindow({
         ) : title === 'cash-obsolete-research' ? (
           <CashResearchContent />
         ) : title === 'Side B' ? (
-          <SideBFolderContent openOrFocusWindow={openOrFocusWindow} />
+          <SideBFolderContent />
         ) : title === 'Brewcha' ? (
           <BrewchaContent />
         ) : title === 'Preview — Mayar_CV.pdf' ? (
