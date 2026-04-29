@@ -36,19 +36,26 @@ const LS_WORK_GUIDE_CHECKLIST = 'mayaros-work-guide-checklist'
 
 function loadSavedChecklist() {
   try {
-    const raw = localStorage.getItem(LS_WORK_GUIDE_CHECKLIST)
-    if (raw == null) return null
-    const parsed = JSON.parse(raw)
-    if (!Array.isArray(parsed)) return null
-    const doneById = new Map(
-      parsed
-        .filter((row) => row && typeof row.id === 'number' && typeof row.done === 'boolean')
-        .map((row) => [row.id, row.done]),
-    )
-    return BENTO_DEFS.map((d) => ({
-      ...d,
-      done: Boolean(doneById.get(d.id)),
-    }))
+    // TODO: UNCOMMENT FOR PRODUCTION
+    // const raw = localStorage.getItem(LS_WORK_GUIDE_CHECKLIST)
+    // TODO: UNCOMMENT FOR PRODUCTION
+    // if (raw == null) return null
+    // TODO: UNCOMMENT FOR PRODUCTION
+    // const parsed = JSON.parse(raw)
+    // TODO: UNCOMMENT FOR PRODUCTION
+    // if (!Array.isArray(parsed)) return null
+    // TODO: UNCOMMENT FOR PRODUCTION
+    // const doneById = new Map(
+    //   parsed
+    //     .filter((row) => row && typeof row.id === 'number' && typeof row.done === 'boolean')
+    //     .map((row) => [row.id, row.done]),
+    // )
+    // TODO: UNCOMMENT FOR PRODUCTION
+    // return BENTO_DEFS.map((d) => ({
+    //   ...d,
+    //   done: Boolean(doneById.get(d.id)),
+    // }))
+    return null
   } catch {
     return null
   }
@@ -262,16 +269,19 @@ function CardBody({ def, done }) {
 }
 
 export default function HowToWorkContent() {
-  const [items, setItems] = useState(() => loadSavedChecklist() ?? BENTO_DEFS.map((d) => ({ ...d, done: false })))
+  // TODO: UNCOMMENT FOR PRODUCTION
+  // const [items, setItems] = useState(() => loadSavedChecklist() ?? BENTO_DEFS.map((d) => ({ ...d, done: false })))
+  const [items, setItems] = useState(() => BENTO_DEFS.map((d) => ({ ...d, done: false })))
 
   const toggle = (id) =>
     setItems((prev) => {
       const next = prev.map((item) => (item.id === id ? { ...item, done: !item.done } : item))
       try {
-        localStorage.setItem(
-          LS_WORK_GUIDE_CHECKLIST,
-          JSON.stringify(next.map(({ id: itemId, done }) => ({ id: itemId, done }))),
-        )
+        // TODO: UNCOMMENT FOR PRODUCTION
+        // localStorage.setItem(
+        //   LS_WORK_GUIDE_CHECKLIST,
+        //   JSON.stringify(next.map(({ id: itemId, done }) => ({ id: itemId, done }))),
+        // )
       } catch {
         /* ignore */
       }
