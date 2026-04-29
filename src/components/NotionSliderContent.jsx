@@ -1,29 +1,10 @@
 import { useCallback, useState } from 'react'
-import Figure1 from '../assets/Cash/Figure1.png'
-import Table1 from '../assets/Cash/Table1.png'
-import Figure3 from '../assets/Cash/Figure3.png'
 
 /**
  * Slide entries with `src` + `caption`. Leave empty to show the system placeholder
  * until Notion imagery is wired in.
  */
-const SLIDES = [
-  {
-    src: Figure1,
-    caption:
-      'Figure 1: Trend Digital Payment Adoption Rate (2015–2024) — research context.',
-  },
-  {
-    src: Table1,
-    caption:
-      'Table 1: Multiple Linear Regression Results — methodological reference.',
-  },
-  {
-    src: Figure3,
-    caption:
-      'Figure 3: SME Loan Delinquency Rate Trend (2015–2024) — resilience lens.',
-  },
-]
+const SLIDES = []
 
 function NotionSliderPlaceholder() {
   return (

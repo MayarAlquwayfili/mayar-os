@@ -1832,25 +1832,27 @@ export default function App() {
               className="z-[1] cursor-grab active:cursor-grabbing"
               draggingClassName="cursor-grabbing"
             >
-              <div
-                className={`${DESKTOP_ITEM_FRAME_BASE} border-transparent bg-transparent`}
-                role="presentation"
-                onDoubleClick={(e) => e.stopPropagation()}
-              >
-                <div className="box-border flex h-[72px] w-[72px] shrink-0 items-center justify-center p-1">
-                  <img
-                    src={V60FolderIcon}
-                    alt=""
-                    draggable={false}
-                    className="h-16 w-16 shrink-0 object-contain"
-                  />
+              <AdminFolderCursorTip label="trust the process.">
+                <div
+                  className={`${DESKTOP_ITEM_FRAME_BASE} border-transparent bg-transparent`}
+                  role="presentation"
+                  onDoubleClick={(e) => e.stopPropagation()}
+                >
+                  <div className="box-border flex h-[72px] w-[72px] shrink-0 items-center justify-center p-1">
+                    <img
+                      src={V60FolderIcon}
+                      alt=""
+                      draggable={false}
+                      className="h-16 w-16 shrink-0 object-contain"
+                    />
+                  </div>
+                  <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
+                    <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-gray-800">
+                      Coffee
+                    </span>
+                  </div>
                 </div>
-                <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
-                  <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-gray-800">
-                    Coffee
-                  </span>
-                </div>
-              </div>
+              </AdminFolderCursorTip>
             </DraggableDesktopItem>
           </>
         )}
