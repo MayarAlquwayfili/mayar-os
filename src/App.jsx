@@ -1538,9 +1538,7 @@ const LS_ADMIN_STATUS = 'mayaros-admin-status'
 
 function loadPersistedAdminFlow() {
   try {
-    // TODO: UNCOMMENT FOR PRODUCTION
-    // return localStorage.getItem(LS_ADMIN_STATUS) === 'accepted' ? 'accepted' : 'idle'
-    return 'idle'
+    return localStorage.getItem(LS_ADMIN_STATUS) === 'accepted' ? 'accepted' : 'idle'
   } catch {
     return 'idle'
   }
@@ -1626,9 +1624,7 @@ export default function App() {
   const [adminLayout, setAdminLayout] = useState(() => getInitialAdminLayout())
 
   // ─── Admin login flow ─────────────────────────────────────────────────────
-  // TODO: UNCOMMENT FOR PRODUCTION
-  // const [adminFlow, setAdminFlow] = useState(() => loadPersistedAdminFlow()) // idle → triggering_notifications → waiting_accept → loading → accepted
-  const [adminFlow, setAdminFlow] = useState('idle') // idle → triggering_notifications → waiting_accept → loading → accepted
+  const [adminFlow, setAdminFlow] = useState(() => loadPersistedAdminFlow()) // idle → triggering_notifications → waiting_accept → loading → accepted
   const [adminNotifs, setAdminNotifs] = useState([])
   const timeoutsRef = useRef([])
 
@@ -1694,17 +1690,15 @@ export default function App() {
     return () => clearTimeout(t)
   }, [adminFlow])
 
-  // TODO: UNCOMMENT FOR PRODUCTION
-  // useEffect(() => {
-  //   try {
-  //     if (adminFlow === 'accepted') {
-  //       // TODO: UNCOMMENT FOR PRODUCTION
-  //       // localStorage.setItem(LS_ADMIN_STATUS, 'accepted')
-  //     }
-  //   } catch {
-  //     /* ignore */
-  //   }
-  // }, [adminFlow])
+  useEffect(() => {
+    try {
+      if (adminFlow === 'accepted') {
+        localStorage.setItem(LS_ADMIN_STATUS, 'accepted')
+      }
+    } catch {
+      /* ignore */
+    }
+  }, [adminFlow])
 
   const persistLayoutPatch = useCallback((patch) => {
     try {
@@ -1909,6 +1903,10 @@ export default function App() {
           clearAdminTimers()
           const t = setTimeout(() => {
             setAdminFlow('accepted')
+            // After Accept SFX + loading beat: open Work Guide only for this explicit session completion (not on refresh).
+            requestAnimationFrame(() => {
+              openOrFocusWindow('How to work with Mayar?')
+            })
           }, 2000)
           timeoutsRef.current.push(t)
         }}
