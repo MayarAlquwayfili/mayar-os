@@ -1,4 +1,5 @@
 const NOTIFICATION_VOLUME = 0.3
+const START_TIME = 1.0
 
 let audioSingleton = null
 
@@ -24,7 +25,7 @@ export function playNotificationSfx() {
   const a = getNotificationSfx()
   if (!a) return
   try {
-    a.currentTime = 0
+    a.currentTime = START_TIME
   } catch {
     /* ignore */
   }
