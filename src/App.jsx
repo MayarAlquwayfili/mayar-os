@@ -41,7 +41,6 @@ const DOCK_SAFE_PX = 96
 
 /** Post-admin-flow desktop items — share selection state with standard folders. */
 const ADMIN_DESKTOP_NOTION_ID = 'admin-notion'
-const ADMIN_DESKTOP_COFFEE_ID = 'admin-coffee'
 
 const DESKTOP_ITEM_FRAME_BASE =
   'box-border flex w-[132px] flex-col items-center gap-2 rounded-xl border p-3 text-center outline-none transition-colors'
@@ -1625,12 +1624,7 @@ export default function App() {
   const [adminLayout, setAdminLayout] = useState(() => getInitialAdminLayout())
 
   // ─── Admin login flow ─────────────────────────────────────────────────────
-  const skipWorkGuideOpenOnAdminRestoreRef = useRef(false)
-  const [adminFlow, setAdminFlow] = useState(() => {
-    const initial = loadPersistedAdminFlow()
-    if (initial === 'accepted') skipWorkGuideOpenOnAdminRestoreRef.current = true
-    return initial
-  }) // idle → triggering_notifications → waiting_accept → loading → accepted
+  const [adminFlow, setAdminFlow] = useState(() => loadPersistedAdminFlow()) // idle → triggering_notifications → waiting_accept → loading → accepted
   const [adminNotifs, setAdminNotifs] = useState([])
   const timeoutsRef = useRef([])
 
@@ -1705,15 +1699,6 @@ export default function App() {
       /* ignore */
     }
   }, [adminFlow])
-
-  useEffect(() => {
-    if (adminFlow !== 'accepted') return
-    if (skipWorkGuideOpenOnAdminRestoreRef.current) {
-      skipWorkGuideOpenOnAdminRestoreRef.current = false
-      return
-    }
-    openOrFocusWindow('How to work with Mayar?')
-  }, [adminFlow, openOrFocusWindow])
 
   const persistLayoutPatch = useCallback((patch) => {
     try {
@@ -1844,39 +1829,28 @@ export default function App() {
               initialX={adminLayout.v60.x}
               initialY={adminLayout.v60.y}
               onPositionChange={handleAdminV60Pos}
-              onInteract={() => setSelectedDesktopItemId(ADMIN_DESKTOP_COFFEE_ID)}
               className="z-[1] cursor-grab active:cursor-grabbing"
               draggingClassName="cursor-grabbing"
             >
-              <AdminFolderCursorTip label="trust the process.">
-                <div
-                  className={`${DESKTOP_ITEM_FRAME_BASE} ${desktopItemSelectionClass(
-                    selectedDesktopItemId === ADMIN_DESKTOP_COFFEE_ID,
-                  )}`}
-                  role="presentation"
-                  onDoubleClick={(e) => e.stopPropagation()}
-                >
-                  <div className="box-border flex h-[72px] w-[72px] shrink-0 items-center justify-center p-1">
-                    <img
-                      src={V60FolderIcon}
-                      alt=""
-                      draggable={false}
-                      className="h-16 w-16 shrink-0 object-contain"
-                    />
-                  </div>
-                  <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
-                    <span
-                      className={`line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide ${
-                        selectedDesktopItemId === ADMIN_DESKTOP_COFFEE_ID
-                          ? 'text-gray-900'
-                          : 'text-gray-800'
-                      }`}
-                    >
-                      Coffee
-                    </span>
-                  </div>
+              <div
+                className={`${DESKTOP_ITEM_FRAME_BASE} border-transparent bg-transparent`}
+                role="presentation"
+                onDoubleClick={(e) => e.stopPropagation()}
+              >
+                <div className="box-border flex h-[72px] w-[72px] shrink-0 items-center justify-center p-1">
+                  <img
+                    src={V60FolderIcon}
+                    alt=""
+                    draggable={false}
+                    className="h-16 w-16 shrink-0 object-contain"
+                  />
                 </div>
-              </AdminFolderCursorTip>
+                <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
+                  <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-gray-800">
+                    Coffee
+                  </span>
+                </div>
+              </div>
             </DraggableDesktopItem>
           </>
         )}
