@@ -26,6 +26,47 @@ function formatMenuBarClock(d) {
   return `${weekday} ${day} ${month} ${h}:${m}`
 }
 
+function MenuTooltip({ label, children }) {
+  return (
+    <span className="group relative inline-flex">
+      {children}
+      <span
+        role="tooltip"
+        className="pointer-events-none absolute left-1/2 top-[calc(100%+6px)] z-[10001] w-max max-w-[min(280px,calc(100vw-24px))] -translate-x-1/2 rounded-md border border-black/10 bg-white/95 px-2.5 py-1.5 text-center text-[11px] font-medium leading-snug text-neutral-700 opacity-0 shadow-md transition-opacity duration-150 group-hover:opacity-100"
+      >
+        {label}
+      </span>
+    </span>
+  )
+}
+
+function StatusItem() {
+  const tip = 'Seeking PM/Project Management roles for Summer 2026'
+  return (
+    <>
+      <span
+        className="mx-1 h-3 w-px shrink-0 bg-neutral-400/35"
+        aria-hidden
+      />
+      <MenuTooltip label={tip}>
+        <span
+          role="status"
+          aria-label={`Hunting for COOP. ${tip}`}
+          className={`flex cursor-default items-center gap-1.5 ${STATIC_CLUSTER}`}
+        >
+          <span
+            className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500 animate-pulse"
+            aria-hidden
+          />
+          <span className="whitespace-nowrap text-[12px] font-medium leading-none tracking-tight text-neutral-800 sm:text-[13px]">
+            Hunting for COOP
+          </span>
+        </span>
+      </MenuTooltip>
+    </>
+  )
+}
+
 export default function TopStatusBar() {
   const [now, setNow] = useState(() => new Date())
 
@@ -71,6 +112,8 @@ export default function TopStatusBar() {
             <img src={icon} alt={label} className="h-[16px] w-[16px] block" draggable={false} />
           </a>
         ))}
+
+        <StatusItem />
 
         <span className="mx-1 h-3 w-px shrink-0 bg-neutral-400/50" aria-hidden />
 
