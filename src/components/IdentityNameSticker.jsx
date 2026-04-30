@@ -1,15 +1,20 @@
+import { motion } from 'framer-motion'
+
 const ACCENT = '#544EAE'
+
+const shadowXl =
+  '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)'
 
 /**
  * “Hello my name is” desk sticker — purple header, handwritten name on white.
  */
 export default function IdentityNameSticker() {
   return (
-    <div
+    <motion.div
       className="w-[min(280px,72vw)] select-none overflow-hidden rounded-2xl shadow-lg"
-      style={{ transform: 'rotate(3deg)' }}
-      role="img"
-      aria-label="Name tag: Hello, my name is Mayar Alquwayfili"
+      style={{ rotate: 3 }}
+      whileHover={{ y: -4, boxShadow: shadowXl }}
+      transition={{ type: 'spring', stiffness: 420, damping: 28 }}
     >
       <div
         className="px-4 pb-2.5 pt-3.5 text-center"
@@ -30,6 +35,6 @@ export default function IdentityNameSticker() {
           Mayar Alquwayfili
         </p>
       </div>
-    </div>
+    </motion.div>
   )
 }

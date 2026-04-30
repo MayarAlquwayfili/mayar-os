@@ -1791,10 +1791,24 @@ export default function App() {
           initialY={adminLayout.identitySticker.y}
           onPositionChange={handleIdentityStickerPos}
           onInteract={() => setSelectedDesktopItemId(null)}
-          className="z-[1] cursor-grab active:cursor-grabbing"
+          className="z-[1] cursor-pointer active:cursor-grabbing"
           draggingClassName="cursor-grabbing"
         >
-          <div onDoubleClick={(e) => e.stopPropagation()} role="presentation">
+          <div
+            role="button"
+            tabIndex={0}
+            aria-label="Name tag: Mayar Alquwayfili. Double-click to open About Me."
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                openOrFocusWindow('About Me')
+              }
+            }}
+            onDoubleClick={(e) => {
+              e.stopPropagation()
+              openOrFocusWindow('About Me')
+            }}
+          >
             <IdentityNameSticker />
           </div>
         </DraggableDesktopItem>
