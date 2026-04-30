@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import AdminFolderCursorTip from './AdminFolderCursorTip'
 
 const ACCENT = '#544EAE'
 
@@ -11,7 +12,10 @@ const shadowXl =
  */
 export default function IdentityNameSticker() {
   return (
-    <div className="group relative inline-block cursor-pointer">
+    <AdminFolderCursorTip
+      label="Mayar ID"
+      wrapperClassName="inline-block w-fit cursor-none select-none"
+    >
       <motion.div
         className="w-[min(280px,72vw)] select-none overflow-hidden rounded-2xl shadow-lg"
         style={{ rotate: 3 }}
@@ -38,12 +42,6 @@ export default function IdentityNameSticker() {
           </p>
         </div>
       </motion.div>
-      <span
-        className="pointer-events-none absolute left-1/2 top-full z-10 mt-1.5 -translate-x-1/2 whitespace-nowrap rounded-md border border-black/10 bg-white/95 px-2 py-1 text-[10px] font-medium tracking-wide text-neutral-600 opacity-0 shadow-sm transition-opacity duration-150 group-hover:opacity-100"
-        role="tooltip"
-      >
-        Mayar ID
-      </span>
-    </div>
+    </AdminFolderCursorTip>
   )
 }

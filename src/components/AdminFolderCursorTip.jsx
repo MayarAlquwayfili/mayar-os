@@ -5,8 +5,12 @@ const CURSOR_GAP_PX = 8
 
 /**
  * Text-only pill that follows the pointer; no arrow. Parent hit area uses cursor-none.
+ * Optional `wrapperClassName` overrides the default 132px folder frame (e.g. identity sticker).
  */
-export default function AdminFolderCursorTip({ label, children }) {
+const DEFAULT_WRAPPER =
+  'block w-[132px] cursor-none select-none'
+
+export default function AdminFolderCursorTip({ label, children, wrapperClassName }) {
   const [tip, setTip] = useState({ show: false, x: 0, y: 0 })
 
   const onMove = (e) => {
@@ -17,7 +21,7 @@ export default function AdminFolderCursorTip({ label, children }) {
   return (
     <>
       <div
-        className="block w-[132px] cursor-none select-none"
+        className={wrapperClassName ?? DEFAULT_WRAPPER}
         onMouseMove={onMove}
         onMouseLeave={onLeave}
       >
