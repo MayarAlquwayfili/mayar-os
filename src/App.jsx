@@ -29,6 +29,7 @@ import HowToWorkContent from './components/HowToWorkContent'
 import DraggableDesktopItem from './components/DraggableDesktopItem'
 import AdminFolderCursorTip from './components/AdminFolderCursorTip'
 import AdminNotifications from './components/AdminNotifications'
+import IdentityNameSticker from './components/IdentityNameSticker'
 import NotionFolderIcon from './assets/Admin/Notion_Folder.svg'
 import V60FolderIcon from './assets/Admin/V60_Folder.svg'
 import FigmaFolderIcon from './assets/Admin/Figma_Folder.svg'
@@ -1579,6 +1580,10 @@ function defaultAdminFigmaPos() {
   return { x: Math.max(16, w - 140), y: 384 }
 }
 
+function defaultIdentityStickerPos() {
+  return { x: 24, y: MENU_BAR_PX + 16 }
+}
+
 function getInitialFolderPositions() {
   const saved = loadLayout()
   const result = {}
@@ -1617,6 +1622,7 @@ function getInitialAdminLayout() {
     notion: saved?.['admin-notion'] ?? defaultAdminNotionPos(),
     v60: saved?.['admin-v60'] ?? defaultAdminV60Pos(),
     figma: saved?.['admin-figma'] ?? defaultAdminFigmaPos(),
+    identitySticker: saved?.['identity-sticker'] ?? defaultIdentityStickerPos(),
   }
 }
 
@@ -1764,6 +1770,14 @@ export default function App() {
     [persistLayoutPatch],
   )
 
+  const handleIdentityStickerPos = useCallback(
+    (pos) => {
+      setAdminLayout((a) => ({ ...a, identitySticker: pos }))
+      persistLayoutPatch({ 'identity-sticker': pos })
+    },
+    [persistLayoutPatch],
+  )
+
   return (
     <div className="fixed inset-0 min-h-0 w-full overflow-hidden bg-[#f8f6f0] font-sans antialiased">
       <TopStatusBar />
@@ -1772,6 +1786,19 @@ export default function App() {
         className="absolute inset-x-0 bottom-0 top-7 z-0 overflow-hidden"
         onClick={() => setSelectedDesktopItemId(null)}
       >
+        <DraggableDesktopItem
+          initialX={adminLayout.identitySticker.x}
+          initialY={adminLayout.identitySticker.y}
+          onPositionChange={handleIdentityStickerPos}
+          onInteract={() => setSelectedDesktopItemId(null)}
+          className="z-[1] cursor-grab active:cursor-grabbing"
+          draggingClassName="cursor-grabbing"
+        >
+          <div onDoubleClick={(e) => e.stopPropagation()} role="presentation">
+            <IdentityNameSticker />
+          </div>
+        </DraggableDesktopItem>
+
         {adminFlow === 'idle' && (
           <DraggableDesktopItem
             initialX={adminLayout.trigger.x}
