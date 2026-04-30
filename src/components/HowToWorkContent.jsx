@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 
-// Identical accent + checklist markup as `AboutMeContent` / `ABOUT_ACCENT` in App.jsx (#544EAE).
+// Purple accent aligns with identity sticker / admin chrome (#544EAE).
 const WORK_ACCENT = '#544EAE'
 
 const INITIAL_ITEMS = [

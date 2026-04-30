@@ -7,6 +7,7 @@ const shadowXl =
 
 /**
  * “Hello my name is” desk sticker — purple header, handwritten name on white.
+ * Parent wraps this for drag + double-click to start the admin / workspace flow.
  */
 export default function IdentityNameSticker() {
   return (

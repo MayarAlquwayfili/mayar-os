@@ -43,7 +43,7 @@ export default function TopStatusBar() {
         boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.5)',
       }}
     >
-      {/* ── Left cluster (sparkle — no About Me / Admin menu items) ── */}
+      {/* ── Left cluster (sparkle — menu anchor) ── */}
       <div className="flex min-w-0 flex-1 flex-nowrap items-center gap-0.5 text-[13px] font-medium leading-none text-neutral-900">
         <span className={`flex items-center justify-center ${STATIC_CLUSTER}`} aria-hidden>
           <img

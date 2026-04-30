@@ -550,115 +550,6 @@ function RECLABContent() {
   )
 }
 
-// ─── About Me — Apple Notes–style single pane ────────────────────────────────
-const ABOUT_ACCENT = '#544EAE'
-
-const ABOUT_ITEMS = [
-  {
-    id: 1,
-    text: 'Analyze the market like an Economist, but build the product like an Apple Developer.',
-    done: false,
-  },
-  {
-    id: 2,
-    text: 'Refuse to take a 30-minute break because breaking a deep focus state is simply illogical.',
-    done: false,
-  },
-  {
-    id: 3,
-    text: "Treat micro-details as a competitive sport (if it's 1 pixel off, it's not done).",
-    done: false,
-  },
-  {
-    id: 4,
-    text: 'Add "make coffee" to this list just to get the absolute satisfaction of checking it off.',
-    done: true,
-  },
-]
-
-function AboutMeContent() {
-  const [items, setItems] = useState(() => ABOUT_ITEMS.map((i) => ({ ...i })))
-
-  const toggle = (id) =>
-    setItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, done: !item.done } : item))
-    )
-
-  return (
-    <div className="flex h-full w-full flex-col items-start justify-start overflow-y-auto
-                    bg-white font-sans
-                    [&::-webkit-scrollbar]:w-1
-                    [&::-webkit-scrollbar-track]:bg-transparent
-                    [&::-webkit-scrollbar-thumb]:rounded-full
-                    [&::-webkit-scrollbar-thumb]:bg-gray-200">
-      <div className="w-full p-6">
-
-        {/* ── Title + subtitle ────────────────────────────────────── */}
-        <div className="mb-4">
-          <h1
-            className="text-[18px] font-bold leading-tight tracking-tight"
-            style={{ color: ABOUT_ACCENT }}
-          >
-            Get to know Mayar
-          </h1>
-          <p className="mt-0.5 text-[12px]" style={{ color: '#8e8e93' }}>
-            {items.filter((i) => !i.done).length === 0
-              ? 'All caught up! '
-              : `${items.filter((i) => !i.done).length} items`}
-          </p>
-        </div>
-
-        {/* ── Checklist ───────────────────────────────────────────── */}
-        <ul className="flex w-full flex-col items-start">
-          {items.map((item) => (
-            <li key={item.id} className="flex w-full items-start gap-3 py-2">
-
-              {/* Circle checkbox — 16 px, aligned to text cap-height */}
-              <button
-                type="button"
-                aria-label={item.done ? 'Mark as incomplete' : 'Mark as complete'}
-                onClick={() => toggle(item.id)}
-                className="mt-1 flex h-4 w-4 shrink-0 items-center justify-center
-                           rounded-full border-[1.5px] transition-all duration-150"
-                style={{
-                  borderColor: ABOUT_ACCENT,
-                  backgroundColor: item.done ? ABOUT_ACCENT : 'transparent',
-                }}
-              >
-                {item.done && (
-                  <svg width="8" height="6" viewBox="0 0 8 6" fill="none" aria-hidden>
-                    <path
-                      d="M1 3L3 5.5L7 1"
-                      stroke="white"
-                      strokeWidth="1.4"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                )}
-              </button>
-
-              {/* Item text — wraps naturally, never breaks layout */}
-              <p
-                className="min-w-0 flex-1 text-[13px] leading-[1.6] transition-all duration-150"
-                style={{
-                  color: item.done ? '#aeaeb2' : '#1c1c1e',
-                  textDecoration: item.done ? 'line-through' : 'none',
-                  textDecorationColor: '#aeaeb2',
-                  overflowWrap: 'break-word',
-                }}
-              >
-                {item.text}
-              </p>
-            </li>
-          ))}
-        </ul>
-
-      </div>
-    </div>
-  )
-}
-
 function QaffatekContent() {
   return (
     <div
@@ -1012,7 +903,6 @@ function CVEntry({ title, titleHref, meta, date, bullets }) {
 
 // Per-title window presets: { w, h, centered }
 const WINDOW_PRESETS = {
-  'About Me': { w: 420, h: 380, centered: true },
   'How to Work with Me': { w: 440, h: 560, centered: true },
   Lab: { w: 440, h: 400, centered: true },
   'cash-obsolete-research': { w: 1080, h: 800, centered: true },
@@ -1348,8 +1238,6 @@ function MacWindow({
           </>
         ) : title === 'How to Work with Me' ? (
           <HowToWorkContent />
-        ) : title === 'About Me' ? (
-          <AboutMeContent />
         ) : (
           <div className="p-6 text-sm text-gray-600">
             <p className="font-medium text-gray-800">{title}</p>
@@ -1559,12 +1447,6 @@ function loadLayout() {
   }
 }
 
-function defaultAdminTriggerPos() {
-  const w = typeof window !== 'undefined' ? window.innerWidth : 1200
-  const h = typeof window !== 'undefined' ? window.innerHeight : 800
-  return { x: Math.max(16, w - 420), y: Math.max(16, Math.round(h * 0.34)) }
-}
-
 function defaultAdminNotionPos() {
   const w = typeof window !== 'undefined' ? window.innerWidth : 1200
   return { x: Math.max(16, w - 140), y: 96 }
@@ -1618,7 +1500,6 @@ function getInitialFolderPositions() {
 function getInitialAdminLayout() {
   const saved = loadLayout()
   return {
-    trigger: saved?.['admin-trigger'] ?? defaultAdminTriggerPos(),
     notion: saved?.['admin-notion'] ?? defaultAdminNotionPos(),
     v60: saved?.['admin-v60'] ?? defaultAdminV60Pos(),
     figma: saved?.['admin-figma'] ?? defaultAdminFigmaPos(),
@@ -1658,47 +1539,16 @@ export default function App() {
     if (adminFlow !== 'triggering_notifications') return
 
     clearAdminTimers()
-    setAdminNotifs([])
-
-    const push = (notif) => {
-      setAdminNotifs((prev) => [
-        ...prev,
-        {
-          id: notif.id,
-          header: notif.header,
-          body: notif.body,
-          isActionable: !!notif.isActionable,
-        },
-      ])
-    }
-
-    push({
-      id: 'n1',
-      header: 'System',
-      body: 'Admin: Mayar logged in.',
-    })
-
-    timeoutsRef.current.push(
-      setTimeout(() => {
-        push({
-          id: 'n2',
-          header: 'System',
-          body: 'Welcome to my OS.',
-        })
-      }, 1000)
-    )
-
-    timeoutsRef.current.push(
-      setTimeout(() => {
-        push({
-          id: 'n3',
-          header: 'Screen Sharing',
-          body: 'Admin (Mayar) would like to share "Admin_Desktop" with you.',
-          isActionable: true,
-        })
-        setAdminFlow('waiting_accept')
-      }, 2500)
-    )
+    setAdminNotifs([
+      {
+        id: 'identity',
+        header: 'Identity Identified: Mayar',
+        body:
+          'Senior Economics student at PNU and Apple Developer Academy student. A multipotentialite exploring the intersection of data, design, and code. Open the workspace?',
+        isActionable: true,
+      },
+    ])
+    setAdminFlow('waiting_accept')
   }, [adminFlow, clearAdminTimers])
 
   useEffect(() => {
@@ -1734,14 +1584,6 @@ export default function App() {
     (id, pos) => {
       setFolderPositions((p) => ({ ...p, [id]: pos }))
       persistLayoutPatch({ [id]: pos })
-    },
-    [persistLayoutPatch],
-  )
-
-  const handleAdminTriggerPos = useCallback(
-    (pos) => {
-      setAdminLayout((a) => ({ ...a, trigger: pos }))
-      persistLayoutPatch({ 'admin-trigger': pos })
     },
     [persistLayoutPatch],
   )
@@ -1797,37 +1639,22 @@ export default function App() {
           <div
             role="button"
             tabIndex={0}
-            aria-label="Name tag: Mayar Alquwayfili. Double-click to open About Me."
+            aria-label="Name tag: Mayar Alquwayfili. Double-click to verify identity and open the workspace invitation."
             onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault()
-                openOrFocusWindow('About Me')
-              }
+              if (e.key !== 'Enter' && e.key !== ' ') return
+              e.preventDefault()
+              if (adminFlow !== 'idle') return
+              setAdminFlow('triggering_notifications')
             }}
             onDoubleClick={(e) => {
               e.stopPropagation()
-              openOrFocusWindow('About Me')
+              if (adminFlow !== 'idle') return
+              setAdminFlow('triggering_notifications')
             }}
           >
             <IdentityNameSticker />
           </div>
         </DraggableDesktopItem>
-
-        {adminFlow === 'idle' && (
-          <DraggableDesktopItem
-            initialX={adminLayout.trigger.x}
-            initialY={adminLayout.trigger.y}
-            onPositionChange={handleAdminTriggerPos}
-            onCleanClick={() => setAdminFlow('triggering_notifications')}
-            onInteract={() => setSelectedDesktopItemId(null)}
-            className="z-[1] cursor-grab active:cursor-grabbing"
-            draggingClassName="cursor-grabbing"
-          >
-            <div className="max-w-[min(560px,46vw)] text-left text-5xl font-bold leading-[1.05] tracking-tight text-[#6B3FA0] transition-colors hover:text-[#6B3FA0]/70 sm:text-6xl md:text-7xl">
-              {`Who\u2019s the Admin?`}
-            </div>
-          </DraggableDesktopItem>
-        )}
 
         {adminFlow === 'accepted' && (
           <>
