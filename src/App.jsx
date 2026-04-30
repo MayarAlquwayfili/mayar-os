@@ -31,6 +31,7 @@ import AdminFolderCursorTip from './components/AdminFolderCursorTip'
 import AdminNotifications from './components/AdminNotifications'
 import NotionFolderIcon from './assets/Admin/Notion_Folder.svg'
 import V60FolderIcon from './assets/Admin/V60_Folder.svg'
+import FigmaFolderIcon from './assets/Admin/Figma_Folder.svg'
 import { useWindowManager } from './hooks/useWindowManager'
 import { MOHEETIK_TOOLS, RECLAB_TOOLS, QAFFATEK_TOOLS, DESKTOP_FOLDERS } from './constants/projects'
 
@@ -1573,6 +1574,11 @@ function defaultAdminV60Pos() {
   return { x: Math.max(16, w - 140), y: 240 }
 }
 
+function defaultAdminFigmaPos() {
+  const w = typeof window !== 'undefined' ? window.innerWidth : 1200
+  return { x: Math.max(16, w - 140), y: 384 }
+}
+
 function getInitialFolderPositions() {
   const saved = loadLayout()
   const result = {}
@@ -1610,6 +1616,7 @@ function getInitialAdminLayout() {
     trigger: saved?.['admin-trigger'] ?? defaultAdminTriggerPos(),
     notion: saved?.['admin-notion'] ?? defaultAdminNotionPos(),
     v60: saved?.['admin-v60'] ?? defaultAdminV60Pos(),
+    figma: saved?.['admin-figma'] ?? defaultAdminFigmaPos(),
   }
 }
 
@@ -1749,6 +1756,14 @@ export default function App() {
     [persistLayoutPatch],
   )
 
+  const handleAdminFigmaPos = useCallback(
+    (pos) => {
+      setAdminLayout((a) => ({ ...a, figma: pos }))
+      persistLayoutPatch({ 'admin-figma': pos })
+    },
+    [persistLayoutPatch],
+  )
+
   return (
     <div className="fixed inset-0 min-h-0 w-full overflow-hidden bg-[#f8f6f0] font-sans antialiased">
       <TopStatusBar />
@@ -1829,6 +1844,36 @@ export default function App() {
                   <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
                     <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-gray-800">
                       Coffee
+                    </span>
+                  </div>
+                </div>
+              </AdminFolderCursorTip>
+            </DraggableDesktopItem>
+
+            <DraggableDesktopItem
+              initialX={adminLayout.figma.x}
+              initialY={adminLayout.figma.y}
+              onPositionChange={handleAdminFigmaPos}
+              className="z-[1] cursor-grab active:cursor-grabbing"
+              draggingClassName="cursor-grabbing"
+            >
+              <AdminFolderCursorTip label="[pixel-perfect.]">
+                <div
+                  className={`${DESKTOP_ITEM_FRAME_BASE} border-transparent bg-transparent`}
+                  role="presentation"
+                  onDoubleClick={(e) => e.stopPropagation()}
+                >
+                  <div className="box-border flex h-[72px] w-[72px] shrink-0 items-center justify-center p-1">
+                    <img
+                      src={FigmaFolderIcon}
+                      alt=""
+                      draggable={false}
+                      className="h-16 w-16 shrink-0 object-contain"
+                    />
+                  </div>
+                  <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
+                    <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-gray-800">
+                      Figma
                     </span>
                   </div>
                 </div>
