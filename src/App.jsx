@@ -1539,16 +1539,47 @@ export default function App() {
     if (adminFlow !== 'triggering_notifications') return
 
     clearAdminTimers()
-    setAdminNotifs([
-      {
-        id: 'identity',
-        header: 'Identity Identified: Mayar',
-        body:
-          'Senior Economics student at PNU and Apple Developer Academy student. A multipotentialite exploring the intersection of data, design, and code. Open the workspace?',
-        isActionable: true,
-      },
-    ])
-    setAdminFlow('waiting_accept')
+    setAdminNotifs([])
+
+    const push = (notif) => {
+      setAdminNotifs((prev) => [
+        ...prev,
+        {
+          id: notif.id,
+          header: notif.header,
+          body: notif.body,
+          isActionable: !!notif.isActionable,
+        },
+      ])
+    }
+
+    push({
+      id: 'n1',
+      header: 'System',
+      body: 'Admin: Mayar logged in.',
+    })
+
+    timeoutsRef.current.push(
+      setTimeout(() => {
+        push({
+          id: 'n2',
+          header: 'System',
+          body: 'Welcome to my OS.',
+        })
+      }, 1000)
+    )
+
+    timeoutsRef.current.push(
+      setTimeout(() => {
+        push({
+          id: 'n3',
+          header: 'Screen Sharing',
+          body: 'Admin (Mayar) would like to share "Admin_Desktop" with you.',
+          isActionable: true,
+        })
+        setAdminFlow('waiting_accept')
+      }, 2500)
+    )
   }, [adminFlow, clearAdminTimers])
 
   useEffect(() => {
@@ -1632,6 +1663,9 @@ export default function App() {
           initialX={adminLayout.identitySticker.x}
           initialY={adminLayout.identitySticker.y}
           onPositionChange={handleIdentityStickerPos}
+          onCleanClick={
+            adminFlow === 'idle' ? () => setAdminFlow('triggering_notifications') : undefined
+          }
           onInteract={() => setSelectedDesktopItemId(null)}
           className="z-[1] cursor-pointer active:cursor-grabbing"
           draggingClassName="cursor-grabbing"
@@ -1639,15 +1673,10 @@ export default function App() {
           <div
             role="button"
             tabIndex={0}
-            aria-label="Name tag: Mayar Alquwayfili. Double-click to verify identity and open the workspace invitation."
+            aria-label="Name tag: Mayar Alquwayfili. Click to verify identity and open the workspace invitation."
             onKeyDown={(e) => {
               if (e.key !== 'Enter' && e.key !== ' ') return
               e.preventDefault()
-              if (adminFlow !== 'idle') return
-              setAdminFlow('triggering_notifications')
-            }}
-            onDoubleClick={(e) => {
-              e.stopPropagation()
               if (adminFlow !== 'idle') return
               setAdminFlow('triggering_notifications')
             }}
