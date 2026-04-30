@@ -5,10 +5,61 @@ import { motion } from 'framer-motion'
 const WORK_ACCENT = '#544EAE'
 
 const INITIAL_ITEMS = [
-  { id: 1, text: 'Reach out for collaboration', done: false },
-  { id: 2, text: "Check the 'Side B' for the process", done: false },
-  { id: 3, text: 'Coffee is the primary fuel', done: false },
-  { id: 4, text: 'Respect the Multipotentialite flow', done: false },
+  {
+    id: 1,
+    title: 'Value-First Building',
+    caption: 'Prioritizing real value and meaningful impact over just adding features.',
+    done: false,
+  },
+  {
+    id: 2,
+    title: "The 'Why' Before the 'How'",
+    caption: 'Solving the right problem is more important than just building a solution.',
+    done: false,
+  },
+  {
+    id: 3,
+    title: 'Handoffs',
+    caption: 'Providing organized, buildable designs because I write code as well.',
+    done: false,
+  },
+  {
+    id: 4,
+    title: 'Feedback',
+    caption: 'I listen to everyone, but I prioritize feedback that is logical and adds clear value.',
+    done: false,
+  },
+  {
+    id: 5,
+    title: 'Execution Autonomy',
+    caption: 'Give me the goal and the deadline, then trust me to handle the details.',
+    done: false,
+  },
+  {
+    id: 6,
+    title: 'Powered by Challenges',
+    caption:
+      "I love turning 'impossible' into 'done'; the thrill of beating a challenge is what motivates me.",
+    done: false,
+  },
+  {
+    id: 7,
+    title: 'Obsessive Detail',
+    caption: 'From pixel-perfect UI to keeping every doc on Notion perfectly organized.',
+    done: false,
+  },
+  {
+    id: 8,
+    title: 'Curiosity-Driven',
+    caption: "I'm usually in the middle of learning something new just because I'm curious.",
+    done: false,
+  },
+  {
+    id: 9,
+    title: 'Celebrating Wins',
+    caption: 'I enjoy the process as much as the result.',
+    done: false,
+  },
 ]
 
 const LS_WORK_GUIDE_CHECKLIST = 'mayaros-work-guide-checklist'
@@ -97,7 +148,7 @@ export default function HowToWorkContent() {
             className="text-[18px] font-bold leading-tight tracking-tight"
             style={{ color: WORK_ACCENT }}
           >
-            How to work with Mayar?
+            How to Work with Me
           </h1>
           <p className="mt-0.5 text-[12px]" style={{ color: '#8e8e93' }}>
             {items.filter((i) => !i.done).length === 0
@@ -144,18 +195,30 @@ export default function HowToWorkContent() {
                 )}
               </button>
 
-              {/* Item text — wraps naturally, never breaks layout */}
-              <p
-                className="min-w-0 flex-1 text-[13px] leading-[1.6] transition-all duration-150"
-                style={{
-                  color: item.done ? '#aeaeb2' : '#1c1c1e',
-                  textDecoration: item.done ? 'line-through' : 'none',
-                  textDecorationColor: '#aeaeb2',
-                  overflowWrap: 'break-word',
-                }}
-              >
-                {item.text}
-              </p>
+              <div className="min-w-0 flex-1">
+                <p
+                  className="text-[13px] font-bold leading-snug transition-all duration-150"
+                  style={{
+                    color: item.done ? '#aeaeb2' : '#1c1c1e',
+                    textDecoration: item.done ? 'line-through' : 'none',
+                    textDecorationColor: '#aeaeb2',
+                    overflowWrap: 'break-word',
+                  }}
+                >
+                  {item.title}
+                </p>
+                <p
+                  className="mt-0.5 text-[12px] font-normal leading-relaxed transition-all duration-150"
+                  style={{
+                    color: item.done ? '#aeaeb2' : '#636366',
+                    textDecoration: item.done ? 'line-through' : 'none',
+                    textDecorationColor: '#aeaeb2',
+                    overflowWrap: 'break-word',
+                  }}
+                >
+                  {item.caption}
+                </p>
+              </div>
             </motion.li>
           ))}
         </motion.ul>

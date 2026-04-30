@@ -1014,7 +1014,7 @@ function CVEntry({ title, titleHref, meta, date, bullets }) {
 // Per-title window presets: { w, h, centered }
 const WINDOW_PRESETS = {
   'About Me': { w: 420, h: 380, centered: true },
-  'How to work with Mayar?': { w: 440, h: 400, centered: true },
+  'How to Work with Me': { w: 440, h: 560, centered: true },
   Lab: { w: 440, h: 400, centered: true },
   'cash-obsolete-research': { w: 1080, h: 800, centered: true },
   'Side B': { w: 960, h: 640, centered: true },
@@ -1344,7 +1344,7 @@ function MacWindow({
           <CVContent />
         ) : variant === 'notion-slider' ? (
           <NotionSliderContent />
-        ) : title === 'How to work with Mayar?' ? (
+        ) : title === 'How to Work with Me' ? (
           <HowToWorkContent />
         ) : title === 'About Me' ? (
           <AboutMeContent />
@@ -1751,7 +1751,7 @@ export default function App() {
 
   return (
     <div className="fixed inset-0 min-h-0 w-full overflow-hidden bg-[#f8f6f0] font-sans antialiased">
-      <TopStatusBar onAboutMe={() => openOrFocusWindow('About Me')} />
+      <TopStatusBar />
 
       <main
         className="absolute inset-x-0 bottom-0 top-7 z-0 overflow-hidden"
@@ -1783,7 +1783,7 @@ export default function App() {
               className="z-[1] cursor-grab active:cursor-grabbing"
               draggingClassName="cursor-grabbing"
             >
-              <AdminFolderCursorTip label="it\u2019s all documented.">
+              <AdminFolderCursorTip label="it is all documented.">
                 <div
                   className={`${DESKTOP_ITEM_FRAME_BASE} ${desktopItemSelectionClass(
                     selectedDesktopItemId === ADMIN_DESKTOP_NOTION_ID,
@@ -1909,9 +1909,9 @@ export default function App() {
           clearAdminTimers()
           const t = setTimeout(() => {
             setAdminFlow('accepted')
-            // After Accept SFX + loading beat: open Work Guide only for this explicit session completion (not on refresh).
+            // After Accept SFX + loading beat: open Manual only for this explicit session completion (not on refresh).
             requestAnimationFrame(() => {
-              openOrFocusWindow('How to work with Mayar?')
+              openOrFocusWindow('How to Work with Me')
             })
           }, 2000)
           timeoutsRef.current.push(t)
@@ -1925,8 +1925,8 @@ export default function App() {
           adminFlow === 'accepted'
             ? [
                 {
-                  id: 'How to work with Mayar?',
-                  label: 'Work Guide',
+                  id: 'How to Work with Me',
+                  label: 'Manual',
                   icon: FolderpdfIcon,
                 },
               ]

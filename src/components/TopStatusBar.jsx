@@ -11,10 +11,6 @@ const SOCIAL_LINKS = [
   { href: 'https://www.behance.net/mayaralquway',           icon: IcBehance,  label: 'Behance'  },
 ]
 
-/* Hover only on real controls — subtle gray pill */
-const INTERACTIVE_PILL =
-  'rounded-md px-1.5 py-0.5 transition-all duration-150 ease-out hover:bg-black/5 cursor-pointer select-none'
-
 const SOCIAL_HOVER =
   'flex shrink-0 items-center justify-center rounded-md p-1 transition-all duration-150 ease-out hover:bg-black/5'
 
@@ -30,7 +26,7 @@ function formatMenuBarClock(d) {
   return `${weekday} ${day} ${month} ${h}:${m}`
 }
 
-export default function TopStatusBar({ onAboutMe }) {
+export default function TopStatusBar() {
   const [now, setNow] = useState(() => new Date())
 
   useEffect(() => {
@@ -59,13 +55,6 @@ export default function TopStatusBar({ onAboutMe }) {
           />
         </span>
         <span className={`font-semibold ${STATIC_CLUSTER}`}>Mayar</span>
-        <button
-          type="button"
-          onClick={onAboutMe}
-          className={`font-normal ${INTERACTIVE_PILL}`}
-        >
-          About Me
-        </button>
       </div>
 
       {/* ── Right cluster ── */}
