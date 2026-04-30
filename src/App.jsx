@@ -1782,7 +1782,7 @@ export default function App() {
               className="z-[1] cursor-grab active:cursor-grabbing"
               draggingClassName="cursor-grabbing"
             >
-              <AdminFolderCursorTip label="it\u2019s all documented.">
+              <AdminFolderCursorTip label="it's all documented.">
                 <div
                   className={`${DESKTOP_ITEM_FRAME_BASE} border-transparent bg-transparent`}
                   role="presentation"
