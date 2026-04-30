@@ -6,9 +6,9 @@ import IcLinkedin from '../assets/Ic_linkedin.svg'
 import IcBehance from '../assets/Ic_Behance.svg'
 
 const SOCIAL_LINKS = [
-  { href: 'https://github.com/MayarAlquwayfili',          icon: IcGithub,   label: 'GitHub'   },
+  { href: 'https://github.com/MayarAlquwayfili', icon: IcGithub, label: 'GitHub' },
   { href: 'https://www.linkedin.com/in/mayar-alquwayfili/', icon: IcLinkedin, label: 'LinkedIn' },
-  { href: 'https://www.behance.net/mayaralquway',           icon: IcBehance,  label: 'Behance'  },
+  { href: 'https://www.behance.net/mayaralquway', icon: IcBehance, label: 'Behance' },
 ]
 
 const SOCIAL_HOVER =
@@ -43,7 +43,7 @@ export default function TopStatusBar() {
         boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.5)',
       }}
     >
-      {/* ── Left cluster (sparkle anchor — macOS Apple position) ── */}
+      {/* ── Left cluster (sparkle — no About Me / Admin menu items) ── */}
       <div className="flex min-w-0 flex-1 flex-nowrap items-center gap-0.5 text-[13px] font-medium leading-none text-neutral-900">
         <span className={`flex items-center justify-center ${STATIC_CLUSTER}`} aria-hidden>
           <img
@@ -59,8 +59,6 @@ export default function TopStatusBar() {
 
       {/* ── Right cluster ── */}
       <div className="flex shrink-0 flex-nowrap items-center gap-0.5 text-neutral-900">
-
-        {/* Social links */}
         {SOCIAL_LINKS.map(({ href, icon, label }) => (
           <a
             key={label}
@@ -74,16 +72,13 @@ export default function TopStatusBar() {
           </a>
         ))}
 
-        {/* Divider */}
         <span className="mx-1 h-3 w-px shrink-0 bg-neutral-400/50" aria-hidden />
 
-        {/* Wi-Fi */}
         <span className="sr-only">Wi-Fi</span>
         <span className={`flex items-center ${STATIC_CLUSTER}`}>
           <img src={IcWifi} alt="" aria-hidden className="h-[14px] w-[14px] block" draggable={false} />
         </span>
 
-        {/* Clock */}
         <time
           dateTime={now.toISOString()}
           className={`shrink-0 whitespace-nowrap text-[12px] font-medium tabular-nums leading-none tracking-tight text-neutral-900 sm:text-[13px] ${STATIC_CLUSTER}`}
