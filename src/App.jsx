@@ -26,7 +26,6 @@ import CashResearchContent from './components/CashResearchContent'
 import SideBAlbumContent from './components/SideBAlbumContent'
 import ImagePreviewContent from './components/ImagePreviewContent'
 import HowToWorkContent from './components/HowToWorkContent'
-import NotionSliderContent from './components/NotionSliderContent'
 import DraggableDesktopItem from './components/DraggableDesktopItem'
 import AdminFolderCursorTip from './components/AdminFolderCursorTip'
 import AdminNotifications from './components/AdminNotifications'
@@ -40,8 +39,6 @@ const MENU_BAR_PX = 28
 const DOCK_SAFE_PX = 96
 
 /** Post-admin-flow desktop items — share selection state with standard folders. */
-const ADMIN_DESKTOP_NOTION_ID = 'admin-notion'
-
 const DESKTOP_ITEM_FRAME_BASE =
   'box-border flex w-[132px] flex-col items-center gap-2 rounded-xl border p-3 text-center outline-none transition-colors'
 
@@ -1042,7 +1039,8 @@ function MacWindow({
       ? WINDOW_PRESETS.SIDE_B_ALBUM ?? {}
       : variant === 'image-preview'
         ? WINDOW_PRESETS.IMAGE_PREVIEW ?? {}
-        : variant === 'notion-slider'
+        : // TODO: REMOVE OR REUSE — notion-slider windows are disabled; keep branch for stale window records only.
+          variant === 'notion-slider'
           ? WINDOW_PRESETS.NOTION_SLIDER ?? {}
           : WINDOW_PRESETS[title] ?? {}
   const defaultW = preset.w ?? 700
@@ -1343,7 +1341,9 @@ function MacWindow({
         ) : title === 'Preview — Mayar_CV.pdf' ? (
           <CVContent />
         ) : variant === 'notion-slider' ? (
-          <NotionSliderContent />
+          <>
+            {/* TODO: REMOVE OR REUSE — was <NotionSliderContent />; Notion folder is static (no window). */}
+          </>
         ) : title === 'How to Work with Me' ? (
           <HowToWorkContent />
         ) : title === 'About Me' ? (
@@ -1779,34 +1779,14 @@ export default function App() {
               initialX={adminLayout.notion.x}
               initialY={adminLayout.notion.y}
               onPositionChange={handleAdminNotionPos}
-              onInteract={() => setSelectedDesktopItemId(ADMIN_DESKTOP_NOTION_ID)}
               className="z-[1] cursor-grab active:cursor-grabbing"
               draggingClassName="cursor-grabbing"
             >
-              <AdminFolderCursorTip label="it is all documented.">
+              <AdminFolderCursorTip label="it\u2019s all documented.">
                 <div
-                  className={`${DESKTOP_ITEM_FRAME_BASE} ${desktopItemSelectionClass(
-                    selectedDesktopItemId === ADMIN_DESKTOP_NOTION_ID,
-                  )}`}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key !== 'Enter' && e.key !== ' ') return
-                    e.preventDefault()
-                    openOrFocusWindow({
-                      id: 'admin-notion-slider',
-                      title: 'Notion',
-                      variant: 'notion-slider',
-                    })
-                  }}
-                  onDoubleClick={(e) => {
-                    e.stopPropagation()
-                    openOrFocusWindow({
-                      id: 'admin-notion-slider',
-                      title: 'Notion',
-                      variant: 'notion-slider',
-                    })
-                  }}
+                  className={`${DESKTOP_ITEM_FRAME_BASE} border-transparent bg-transparent`}
+                  role="presentation"
+                  onDoubleClick={(e) => e.stopPropagation()}
                 >
                   <div className="box-border flex h-[72px] w-[72px] shrink-0 items-center justify-center p-1">
                     <img
@@ -1817,13 +1797,7 @@ export default function App() {
                     />
                   </div>
                   <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
-                    <span
-                      className={`line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide ${
-                        selectedDesktopItemId === ADMIN_DESKTOP_NOTION_ID
-                          ? 'text-gray-900'
-                          : 'text-gray-800'
-                      }`}
-                    >
+                    <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-gray-800">
                       Notion
                     </span>
                   </div>
