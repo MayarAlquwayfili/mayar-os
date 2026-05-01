@@ -30,6 +30,7 @@ import DraggableDesktopItem from './components/DraggableDesktopItem'
 import AdminFolderCursorTip from './components/AdminFolderCursorTip'
 import AdminNotifications from './components/AdminNotifications'
 import IdentityNameSticker from './components/IdentityNameSticker'
+import WorkMoodWidget from './components/WorkMoodWidget'
 import NotionFolderIcon from './assets/Admin/Notion_Folder.svg'
 import V60FolderIcon from './assets/Admin/V60_Folder.svg'
 import FigmaFolderIcon from './assets/Admin/Figma_Folder.svg'
@@ -1466,6 +1467,10 @@ function defaultIdentityStickerPos() {
   return { x: 24, y: MENU_BAR_PX + 16 }
 }
 
+function defaultWorkMoodPos() {
+  return { x: 300, y: MENU_BAR_PX + 16 }
+}
+
 function getInitialFolderPositions() {
   const saved = loadLayout()
   const result = {}
@@ -1504,6 +1509,7 @@ function getInitialAdminLayout() {
     v60: saved?.['admin-v60'] ?? defaultAdminV60Pos(),
     figma: saved?.['admin-figma'] ?? defaultAdminFigmaPos(),
     identitySticker: saved?.['identity-sticker'] ?? defaultIdentityStickerPos(),
+    workMood: saved?.['work-mood'] ?? defaultWorkMoodPos(),
   }
 }
 
@@ -1651,6 +1657,14 @@ export default function App() {
     [persistLayoutPatch],
   )
 
+  const handleWorkMoodPos = useCallback(
+    (pos) => {
+      setAdminLayout((a) => ({ ...a, workMood: pos }))
+      persistLayoutPatch({ 'work-mood': pos })
+    },
+    [persistLayoutPatch],
+  )
+
   return (
     <div className="fixed inset-0 min-h-0 w-full overflow-hidden bg-[#f8f6f0] font-sans antialiased">
       <TopStatusBar />
@@ -1683,6 +1697,17 @@ export default function App() {
           >
             <IdentityNameSticker />
           </div>
+        </DraggableDesktopItem>
+
+        <DraggableDesktopItem
+          initialX={adminLayout.workMood.x}
+          initialY={adminLayout.workMood.y}
+          onPositionChange={handleWorkMoodPos}
+          onInteract={() => setSelectedDesktopItemId(null)}
+          className="z-[1] cursor-grab active:cursor-grabbing"
+          draggingClassName="cursor-grabbing"
+        >
+          <WorkMoodWidget />
         </DraggableDesktopItem>
 
         {adminFlow === 'accepted' && (
@@ -1754,7 +1779,7 @@ export default function App() {
               className="z-[1] cursor-grab active:cursor-grabbing"
               draggingClassName="cursor-grabbing"
             >
-              <AdminFolderCursorTip label="[pixel-perfect.]">
+              <AdminFolderCursorTip label="pixel-perfect.">
                 <div
                   className={`${DESKTOP_ITEM_FRAME_BASE} border-transparent bg-transparent`}
                   role="presentation"
