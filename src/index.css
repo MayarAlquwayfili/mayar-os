@@ -14,15 +14,15 @@ body,
   overflow: hidden;
 }
 
-/* Brand-aligned text selection (global) */
+/* Dark-theme highlight selection — butter yellow bg, dark text for contrast */
 ::selection {
-  background-color: rgba(123, 63, 242, 0.22);
-  color: #171717;
+  background-color: #fef0bc;
+  color: #23262d;
 }
 
 ::-moz-selection {
-  background-color: rgba(123, 63, 242, 0.22);
-  color: #171717;
+  background-color: #fef0bc;
+  color: #23262d;
 }
 
 /* Smooth ambient orb pulse */
@@ -48,5 +48,5 @@ body,
   font-size: 0.6875rem;
   font-weight: 600;
   letter-spacing: 0.04em;
-  color: #6b3fa0;
+  color: #fef0bc;
 }

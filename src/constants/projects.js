@@ -1,5 +1,7 @@
-import FolderIcon from '../assets/Folder.svg'
-import FolderpdfIcon from '../assets/Folderpdf.svg'
+import SideBFolderIcon from '../assets/SideBFolder.svg'
+import BrwchaFolderIcon from '../assets/BrwchaFolder.svg'
+import PayFolderIcon from '../assets/PayFolder.svg'
+import PdfFloderIcon from '../assets/PdfFloder.svg'
 
 // ─── Tool stacks ──────────────────────────────────────────────────────────────
 
@@ -79,28 +81,36 @@ export const DESKTOP_FOLDERS = [
     id: 'side-b',
     title: 'Side B',
     windowTitle: 'Side B',
-    icon: FolderIcon,
+    icon: SideBFolderIcon,
     subtitle: 'Behind the Scenes',
     x: 72,
     y: 100,
   },
   {
-    id: 'lab',
-    title: 'Lab',
-    windowTitle: 'Lab',
-    icon: FolderIcon,
-    subtitle: 'Folder',
-    contents: LAB_FOLDER_CONTENTS,
+    id: 'brewcha',
+    title: 'Brewcha',
+    windowTitle: 'Brewcha',
+    icon: BrwchaFolderIcon,
+    subtitle: 'Project',
     x: 240,
     y: 120,
+  },
+  {
+    id: 'cash-obsolete-research',
+    title: 'Will Cash Become Obsolete?',
+    windowTitle: 'cash-obsolete-research',
+    icon: PayFolderIcon,
+    subtitle: 'Research Project',
+    x: 400,
+    y: 140,
   },
   {
     id: 'cv',
     title: 'Mayar_CV.pdf',
     windowTitle: 'Preview — Mayar_CV.pdf',
-    icon: FolderpdfIcon,
+    icon: PdfFloderIcon,
     subtitle: 'PDF Document',
-    x: 400,
-    y: 140,
+    x: 560,
+    y: 160,
   },
 ]

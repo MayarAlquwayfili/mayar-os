@@ -47,8 +47,8 @@ const DESKTOP_ITEM_FRAME_BASE =
 
 function desktopItemSelectionClass(isSelected) {
   return isSelected
-    ? 'border-[#6B3FA0]/20 bg-[#6B3FA0]/10 hover:bg-[#6B3FA0]/12'
-    : 'border-transparent bg-transparent hover:border-transparent hover:bg-black/5'
+    ? 'border-[#FEF0BC]/45 bg-[#FEF0BC]/35 hover:bg-[#FEF0BC]/45'
+    : 'border-transparent bg-transparent hover:border-transparent hover:bg-[#FEF0BC]/12'
 }
 const EDGE_PX = 10
 const MIN_W = 380
@@ -1391,14 +1391,14 @@ function DraggableFolder({
       <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
         <span
           className={`line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide ${
-            isSelected ? 'text-gray-900' : 'text-gray-800'
+            isSelected ? 'text-[#23262D]' : 'text-[#F9F9F7]'
           }`}
         >
           {title}
         </span>
         <span
           className={`w-full break-words text-[11px] leading-snug ${
-            isSelected ? 'text-gray-700' : 'text-gray-600'
+            isSelected ? 'text-[#23262D]/80' : 'text-[#F9F9F7]/70'
           }`}
         >
           {subtitle ?? '2 items'}
@@ -1666,7 +1666,7 @@ export default function App() {
   )
 
   return (
-    <div className="fixed inset-0 min-h-0 w-full overflow-hidden bg-[#f8f6f0] font-sans antialiased">
+    <div className="fixed inset-0 min-h-0 w-full overflow-hidden bg-[#23262D] font-sans text-[#F9F9F7] antialiased">
       <TopStatusBar />
 
       <main
@@ -1734,7 +1734,7 @@ export default function App() {
                     />
                   </div>
                   <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
-                    <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-gray-800">
+                    <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-[#F9F9F7]">
                       Notion
                     </span>
                   </div>
@@ -1764,7 +1764,7 @@ export default function App() {
                     />
                   </div>
                   <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
-                    <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-gray-800">
+                    <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-[#F9F9F7]">
                       Coffee
                     </span>
                   </div>
@@ -1794,7 +1794,7 @@ export default function App() {
                     />
                   </div>
                   <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
-                    <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-gray-800">
+                    <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-[#F9F9F7]">
                       Figma
                     </span>
                   </div>

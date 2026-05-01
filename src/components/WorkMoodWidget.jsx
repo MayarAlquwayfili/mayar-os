@@ -61,21 +61,21 @@ export default function WorkMoodWidget() {
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           {running ? (
-            <h2 className="text-[15px] font-bold leading-tight tracking-wide text-gray-900">
+            <h2 className="text-[15px] font-bold leading-tight tracking-wide text-[#F9F9F7]">
               Work Mood: <span style={{ color: ACCENT }}>ON</span>
             </h2>
           ) : (
-            <h2 className="text-[15px] font-bold leading-tight tracking-wide text-gray-900">
+            <h2 className="text-[15px] font-bold leading-tight tracking-wide text-[#F9F9F7]">
               Work Mood
             </h2>
           )}
           <div className="mt-2 min-h-[28px]">
             {showTime ? (
-              <p className="text-[22px] font-semibold tabular-nums tracking-tight text-gray-900 font-mono">
+              <p className="text-[22px] font-semibold tabular-nums tracking-tight text-[#F9F9F7] font-mono">
                 {formatHMS(secondsDisplay)}
               </p>
             ) : (
-              <p className="text-[13px] font-medium leading-snug tracking-wide text-gray-800">
+              <p className="text-[13px] font-medium leading-snug tracking-wide text-[#F9F9F7]/90">
                 Time for a Coffee break? ☕️
               </p>
             )}
@@ -84,7 +84,7 @@ export default function WorkMoodWidget() {
         <motion.button
           type="button"
           aria-label={running ? 'Pause work mood timer' : 'Start work mood timer'}
-          className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-900/10 bg-white/30 text-gray-900 shadow-sm transition-colors hover:bg-white/45 disabled:pointer-events-none disabled:opacity-50"
+          className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/25 bg-white/20 text-[#F9F9F7] shadow-sm transition-colors hover:bg-[#FEF0BC]/25 hover:text-[#23262D] disabled:pointer-events-none disabled:opacity-50"
           whileTap={{ scale: 0.95 }}
           onPointerDown={(e) => e.stopPropagation()}
           onClick={handleToggle}

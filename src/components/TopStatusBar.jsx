@@ -12,7 +12,7 @@ const SOCIAL_LINKS = [
 ]
 
 const SOCIAL_HOVER =
-  'flex shrink-0 items-center justify-center rounded-md p-1 transition-all duration-150 ease-out hover:bg-black/5'
+  'flex shrink-0 items-center justify-center rounded-md p-1 transition-all duration-150 ease-out hover:bg-[#FEF0BC]/22'
 
 /* Static menu-bar chrome (no hover) */
 const STATIC_CLUSTER = 'px-1.5 py-0.5 select-none'
@@ -29,10 +29,7 @@ function formatMenuBarClock(d) {
 function StatusItem() {
   return (
     <>
-      <span
-        className="mx-1 h-3 w-px shrink-0 bg-neutral-400/35"
-        aria-hidden
-      />
+      <span className="mx-1 h-3 w-px shrink-0 bg-[#F9F9F7]/25" aria-hidden />
       <span
         role="status"
         aria-label="Hunting for COOP"
@@ -42,7 +39,7 @@ function StatusItem() {
           className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500 animate-pulse"
           aria-hidden
         />
-        <span className="whitespace-nowrap text-[12px] font-medium leading-none tracking-tight text-neutral-800 sm:text-[13px]">
+        <span className="whitespace-nowrap text-[12px] font-medium leading-none tracking-tight text-[#F9F9F7] sm:text-[13px]">
           Hunting for COOP
         </span>
       </span>
@@ -61,14 +58,13 @@ export default function TopStatusBar() {
   return (
     <header
       role="banner"
-      className="fixed inset-x-0 top-0 z-[9999] box-border flex h-[28px] min-h-[28px] max-h-[28px] flex-nowrap items-center justify-between border-b border-gray-200 px-2 font-sans sm:px-3"
+      className="fixed inset-x-0 top-0 z-[9999] box-border flex h-[28px] min-h-[28px] max-h-[28px] flex-nowrap items-center justify-between border-b border-white/10 px-2 font-sans sm:px-3 bg-[#2E3137] text-[#F9F9F7]"
       style={{
-        backgroundColor: 'rgba(235, 232, 226, 0.96)',
-        boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.5)',
+        boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.06)',
       }}
     >
       {/* ── Left cluster (sparkle — menu anchor) ── */}
-      <div className="flex min-w-0 flex-1 flex-nowrap items-center gap-0.5 text-[13px] font-medium leading-none text-neutral-900">
+      <div className="flex min-w-0 flex-1 flex-nowrap items-center gap-0.5 text-[13px] font-medium leading-none text-[#F9F9F7]">
         <span className={`flex items-center justify-center ${STATIC_CLUSTER}`} aria-hidden>
           <img
             src={SparkleIcon}
@@ -82,7 +78,7 @@ export default function TopStatusBar() {
       </div>
 
       {/* ── Right cluster ── */}
-      <div className="flex shrink-0 flex-nowrap items-center gap-0.5 text-neutral-900">
+      <div className="flex shrink-0 flex-nowrap items-center gap-0.5 text-[#F9F9F7]">
         {SOCIAL_LINKS.map(({ href, icon, label }) => (
           <a
             key={label}
@@ -92,13 +88,18 @@ export default function TopStatusBar() {
             aria-label={label}
             className={SOCIAL_HOVER}
           >
-            <img src={icon} alt={label} className="h-[16px] w-[16px] block" draggable={false} />
+            <img
+              src={icon}
+              alt={label}
+              className={`block ${label === 'Behance' ? 'h-5 w-5' : 'h-4 w-4'}`}
+              draggable={false}
+            />
           </a>
         ))}
 
         <StatusItem />
 
-        <span className="mx-1 h-3 w-px shrink-0 bg-neutral-400/50" aria-hidden />
+        <span className="mx-1 h-3 w-px shrink-0 bg-[#F9F9F7]/30" aria-hidden />
 
         <span className="sr-only">Wi-Fi</span>
         <span className={`flex items-center ${STATIC_CLUSTER}`}>
@@ -107,7 +108,7 @@ export default function TopStatusBar() {
 
         <time
           dateTime={now.toISOString()}
-          className={`shrink-0 whitespace-nowrap text-[12px] font-medium tabular-nums leading-none tracking-tight text-neutral-900 sm:text-[13px] ${STATIC_CLUSTER}`}
+          className={`shrink-0 whitespace-nowrap text-[12px] font-medium tabular-nums leading-none tracking-tight text-[#F9F9F7] sm:text-[13px] ${STATIC_CLUSTER}`}
         >
           {formatMenuBarClock(now)}
         </time>
