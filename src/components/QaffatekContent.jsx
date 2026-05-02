@@ -117,20 +117,26 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
     return eR.bottom > cR.top && eR.top < cR.bottom
   }, [])
 
+  /** Smooth 0→1 curve (Apple-like crossfade driver, independent of CSS transition). */
+  const smooth01 = (t) => {
+    const x = Math.min(1, Math.max(0, t))
+    return x * x * (3 - 2 * x)
+  }
+
   /**
-   * Linear 0→1: next screen is fully on when the section’s vertical center reaches the viewport center (eMid === vMid).
-   * Approaches over a short band above that point so crossfade isn’t a hard step.
+   * 0→1 as the section’s vertical center crosses `anchorFraction` of the scroll viewport (0 = top, 1 = bottom).
+   * 0.5 = legacy center snap; higher = completes while the block is still lower on screen (earlier in the read).
    */
-  const centerHandoff = useCallback((ref) => {
+  const handoffProgress = useCallback((ref, anchorFraction) => {
     const c = scrollRef.current
     const el = ref?.current
     if (!c || !el) return 0
     const cR = c.getBoundingClientRect()
     const eR = el.getBoundingClientRect()
-    const vMid = (cR.top + cR.bottom) / 2
+    const vAnchor = cR.top + cR.height * anchorFraction
     const eMid = (eR.top + eR.bottom) / 2
-    const band = Math.max(56, cR.height * 0.042)
-    const t = (vMid - eMid + band) / band
+    const band = Math.max(48, cR.height * 0.038)
+    const t = (vAnchor - eMid + band) / band
     return Math.min(1, Math.max(0, t))
   }, [])
 
@@ -143,15 +149,20 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
     const wVis = sectionVisible(weldRef)
     setWeldRP(wVis)
 
-    setSecretToWeldP(centerHandoff(weldRef))
-    setWeldToBintP(centerHandoff(bintRef))
-    setBintToAjouzP(centerHandoff(ajouzRef))
-    setAjouzToTimeP(centerHandoff(vibeRef))
+    // Weld: full by lower-third read (anchor 2/3); Bint/Ajouz: viewport center; Vibe→Time: earlier than center.
+    setSecretToWeldP(handoffProgress(weldRef, 2 / 3))
+    setWeldToBintP(handoffProgress(bintRef, 0.5))
+    setBintToAjouzP(handoffProgress(ajouzRef, 0.5))
+    setAjouzToTimeP(handoffProgress(vibeRef, 0.68))
 
-    // First phone screen: ease out while scrolling through 02 (Solution) before Weld handoff finishes.
+    // Secret: start fading as soon as 02 enters; graceful curve across ~40% of solution read-progress span.
     const solRP = readProgress(solutionRef)
-    const snf = 1 - Math.min(1, Math.max(0, (solRP - 0.36) / 0.4)) * 0.88
-    setSecretNarrativeFade(snf)
+    const solVis = sectionVisible(solutionRef)
+    const pace01 = Math.min(
+      1,
+      Math.max(0, (solRP * 0.95 + solVis * 0.22) / 0.4),
+    )
+    setSecretNarrativeFade(1 - smooth01(pace01))
 
     const impactVis = sectionVisible(impactRef)
     const pef = 1 - Math.min(1, Math.max(0, (impactVis - 0.05) / 0.4))
@@ -165,7 +176,7 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
     setIxImpact(isIntersecting(impactRef))
     setIxSolution(isIntersecting(solutionRef))
     setSolutionVisAmt(sectionVisible(solutionRef))
-  }, [readProgress, sectionVisible, isIntersecting, centerHandoff])
+  }, [readProgress, sectionVisible, isIntersecting, handoffProgress])
 
   useLayoutEffect(() => {
     handleScroll()
