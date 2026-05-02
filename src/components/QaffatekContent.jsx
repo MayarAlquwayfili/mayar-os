@@ -67,12 +67,12 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
   // ── Scroll-driven state ──────────────────────────────────────────────────
   const [visualRP,       setVisualRP]       = useState(0) // read-progress for 02.1 (logo + phone suppression)
   const [phoneInP,       setPhoneInP]       = useState(0) // starts fading in at 02 (Solution)
-  const [weldRP,         setWeldRP]         = useState(0)
   const [secretToWeldP,  setSecretToWeldP]  = useState(0)
   const [weldToBintP,    setWeldToBintP]    = useState(0)
   const [bintToAjouzP,   setBintToAjouzP]   = useState(0)
   const [ajouzToTimeP,   setAjouzToTimeP]   = useState(0)
   const [secretReadProgress, setSecretReadProgress] = useState(0)
+  const [weldReadProgress, setWeldReadProgress] = useState(0)
   const [phoneEndFade,   setPhoneEndFade]   = useState(1)
 
   /** Scroll-derived lane / intersection state — updated in handleScroll, not read from refs during render. */
@@ -145,11 +145,9 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
     // Phone starts at 02 (Solution). (01 is standalone above the stage.)
     setPhoneInP(Math.min(1, Math.max(0, sectionVisible(solutionRef)) * 1.25))
 
-    const wVis = sectionVisible(weldRef)
-    setWeldRP(wVis)
-
-    // Weld: full by lower-third read (anchor 2/3); Bint/Ajouz: viewport center; Vibe→Time: earlier than center.
+    // Secret→Weld handoff + delayed Weld narrative fade (weldReadProgress); Bint/Ajouz/Vibe unchanged.
     setSecretToWeldP(handoffProgress(weldRef, 2 / 3))
+    setWeldReadProgress(readProgress(weldRef))
     setWeldToBintP(handoffProgress(bintRef, 0.99))
     setBintToAjouzP(handoffProgress(ajouzRef, 0.99))
     setAjouzToTimeP(handoffProgress(vibeRef, 0.99))
@@ -176,9 +174,6 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
   const bell    = (p) => Math.pow(Math.sin(p * Math.PI), 6)
   const floatTY = (p) => (0.5 - p) * 72   // ±36 px cinematic drift
 
-  // Visual Identity section: logo follows a bell curve.
-  const visualIdentityMask = 1 - bell(visualRP)
-
   // Secret: hold full opacity until 50% solution read, then fade over the second half (no qsecretExitMask).
   const secretFadeWindow = Math.min(
     1,
@@ -186,12 +181,17 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
   )
   const secretNarrativeFade = 1 - smooth01(secretFadeWindow)
 
+  const weldFadeWindow = Math.min(
+    1,
+    Math.max(0, (weldReadProgress - 0.5) / 0.5),
+  )
+  const weldScreenFade = 1 - smooth01(weldFadeWindow)
+
   // ── Mockup opacities (cascading cross-fade) ──────────────────────────────
   const secretOpacity =
     (1 - secretToWeldP) * phoneInP * secretNarrativeFade * phoneEndFade
   const weldOpacity =
-    (secretToWeldP * (1 - weldToBintP)) * phoneInP * visualIdentityMask * phoneEndFade
-  const weldOpacityFinal = weldRP <= 0 ? 0 : weldOpacity
+    weldScreenFade * (1 - weldToBintP) * phoneInP * phoneEndFade
   const bintOpacity =
     (weldToBintP * (1 - bintToAjouzP)) * phoneInP * phoneEndFade
   const ajouzOpacity =
@@ -337,7 +337,7 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
                   'pointer-events-auto absolute inset-0 h-full w-full object-contain ' +
                   mockupOpacityClass
                 }
-                style={{ opacity: weldOpacityFinal }}
+                style={{ opacity: weldOpacity }}
               />
 
               <img
@@ -446,7 +446,7 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
           {/* ══ 04. The Weld — RIGHT ════════════════════════════════════════ */}
           <section
             ref={weldRef}
-            className="md:col-start-3 md:row-start-4 flex items-center py-24 min-h-[85vh] relative z-20"
+            className="md:col-start-3 md:row-start-4 flex items-center py-24 min-h-[130vh] relative z-20"
           >
             <div className="min-w-0">
               <p
