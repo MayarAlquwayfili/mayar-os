@@ -730,7 +730,7 @@ function CVContent({ uiTheme = 'light' }) {
         {/* ── Download button ── */}
         <div className="mt-10 flex justify-start border-t border-gray-100 pt-7">
           <a
-            href={import.meta.env.BASE_URL + 'MayarAlquwayfiliCv.pdf'}
+            href="./MayarAlquwayfiliCv.pdf"
             download="MayarAlquwayfiliCv.pdf"
             target="_blank"
             rel="noopener noreferrer"
