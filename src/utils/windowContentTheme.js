@@ -7,7 +7,7 @@
 const ACCENT_LIGHT = '#82ADB5'
 const ACCENT_DARK = '#ACDEE7'
 
-/** Tailwind class fragments for interactive accent UI (buttons, pulses; informational chips use contentTokens.pill). */
+/** Tailwind class fragments for interactive accent UI (buttons, pulses; informational chips use contentTokens.pill*). */
 export function accentTokens(uiTheme) {
   const dark = uiTheme === 'dark'
   return {
@@ -56,8 +56,18 @@ export function contentTokens(uiTheme) {
     textStrong: dark ? 'text-[#F9F9F7]' : 'text-[#23262D]',
     border: dark ? 'border-[#F9F9F7]/10' : 'border-[#23262D]/10',
     borderMuted: dark ? 'border-[#F9F9F7]/15' : 'border-[#23262D]/15',
-    /** Category / status / tool tags — translucent butter + charcoal (window content only; cursor tips stay solid in AdminFolderCursorTip) */
-    pill: 'border border-[#23262D]/10 bg-[#FEF0BC]/25 text-[#23262D]',
+    /** Status / success chips (MVP, completed badges) — soft green tint, charcoal label */
+    pillStatus: dark
+      ? 'border border-[#F9F9F7]/12 bg-emerald-400/18 text-[#23262D]'
+      : 'border border-[#23262D]/10 bg-emerald-500/12 text-[#23262D]',
+    /** Tools / tech tags — neutral tint */
+    pillTools: dark
+      ? 'border border-[#F9F9F7]/12 bg-[#F9F9F7]/10 text-[#23262D]'
+      : 'border border-[#23262D]/10 bg-[#23262D]/5 text-[#23262D]',
+    /** Role / prototype labels — muted tone */
+    pillRole: dark
+      ? 'border border-[#F9F9F7]/12 bg-[#F9F9F7]/10 text-[#23262D]'
+      : 'border border-[#23262D]/10 bg-[#4A4D55]/10 text-[#23262D]',
     scrollRoot:
       '[&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full ' +
       (dark

@@ -106,7 +106,7 @@ function MoheetikSplitContent({ uiTheme = 'light' }) {
             <div className="flex items-center gap-2">
               <h1 className="text-[20px] font-bold tracking-tight text-gray-900">Moheetik | محيطك</h1>
               <span
-                className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${T.pill}`}
+                className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${T.pillStatus}`}
               >
                 MVP
               </span>
@@ -137,7 +137,7 @@ function MoheetikSplitContent({ uiTheme = 'light' }) {
               {MOHEETIK_TOOLS.map((t) => (
                 <span
                   key={t}
-                  className={`inline-flex rounded-full px-2 py-0.5 text-[11px] font-medium ${T.pill}`}
+                  className={`inline-flex rounded-full px-2 py-0.5 text-[11px] font-medium ${T.pillTools}`}
                 >
                   {t}
                 </span>
@@ -315,7 +315,7 @@ function RECLABContent({ uiTheme = 'light' }) {
             <div className="flex items-center gap-2">
               <h1 className="text-[20px] font-bold tracking-tight text-gray-900">RECLAB</h1>
               <span
-                className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${T.pill}`}
+                className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${T.pillStatus}`}
               >
                 MVP
               </span>
@@ -342,7 +342,7 @@ function RECLABContent({ uiTheme = 'light' }) {
               {RECLAB_TOOLS.map((t) => (
                 <span
                   key={t}
-                  className={`inline-flex rounded-full px-2 py-0.5 text-[11px] font-medium ${T.pill}`}
+                  className={`inline-flex rounded-full px-2 py-0.5 text-[11px] font-medium ${T.pillTools}`}
                 >
                   {t}
                 </span>

@@ -48,7 +48,7 @@ export default function CashResearchContent({ uiTheme = 'light' }) {
               Will Cash Become Obsolete?
             </h1>
             <span
-              className={`inline-flex items-center rounded-full px-3 py-1 text-[12px] font-bold ${T.pill}`}
+              className={`inline-flex items-center rounded-full px-3 py-1 text-[12px] font-bold ${T.pillStatus}`}
             >
               Completed (Awarded A+)
             </span>
@@ -76,7 +76,7 @@ export default function CashResearchContent({ uiTheme = 'light' }) {
               {TOOL_PILLS.map((t) => (
                 <span
                   key={t}
-                  className={`inline-flex rounded-full px-3 py-1 text-[12px] font-medium ${T.pill}`}
+                  className={`inline-flex rounded-full px-3 py-1 text-[12px] font-medium ${T.pillTools}`}
                 >
                   {t}
                 </span>

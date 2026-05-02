@@ -48,7 +48,7 @@ export default function BrewchaContent({ uiTheme = 'light' }) {
               BrewCha
             </h1>
             <span
-              className={`inline-flex items-center rounded-full px-3 py-1 text-[12px] font-bold ${T.pill}`}
+              className={`inline-flex items-center rounded-full px-3 py-1 text-[12px] font-bold ${T.pillRole}`}
             >
               Live Prototype
             </span>
