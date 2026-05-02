@@ -50,14 +50,17 @@ function desktopItemSelectionClass(isSelected) {
 const EDGE_PX = 10
 const MIN_W = 500
 const MIN_H = 400
-/** Qaffatek + RECLAB only — larger layout floor so rich media grids don’t collapse. */
-const MIN_W_QAFFATEK_RECLAB = 900
-const MIN_H_QAFFATEK_RECLAB = 700
+/** Qaffatek — wide stage for sticky mockup + narrative columns. */
+const MIN_W_QAFFATEK = 1400
+const MIN_H_QAFFATEK = 750
+/** RECLAB — larger layout floor so rich media grids don’t collapse. */
+const MIN_W_RECLAB = 900
+const MIN_H_RECLAB = 700
 
 function minWindowSizeForTitle(title) {
-  return title === 'Qaffatek' || title === 'RECLAB'
-    ? { w: MIN_W_QAFFATEK_RECLAB, h: MIN_H_QAFFATEK_RECLAB }
-    : { w: MIN_W, h: MIN_H }
+  if (title === 'Qaffatek') return { w: MIN_W_QAFFATEK, h: MIN_H_QAFFATEK }
+  if (title === 'RECLAB') return { w: MIN_W_RECLAB, h: MIN_H_RECLAB }
+  return { w: MIN_W, h: MIN_H }
 }
 
 const RESIZE_CURSORS = {
@@ -806,7 +809,7 @@ function CVEntry({ title, titleHref, meta, date, bullets, bulletBeforeAccent }) 
 const WINDOW_PRESETS = {
   'How to Work with Me': { w: 440, h: 560, centered: true },
   Lab: { w: 440, h: 400, centered: true },
-  Qaffatek: { w: 900, h: 750, centered: true },
+  Qaffatek: { w: 1400, h: 750, centered: true },
   RECLAB: { w: 900, h: 750, centered: true },
   'cash-obsolete-research': { w: 1080, h: 800, centered: true },
   'Side B': { w: 960, h: 640, centered: true },

@@ -1,4 +1,5 @@
-import { useState, useRef, useCallback, useLayoutEffect } from 'react'
+import { useState, useRef, useCallback, useLayoutEffect, useMemo } from 'react'
+import { motion } from 'framer-motion'
 import AppIconQaffatek from '../assets/AppIconQaffatek.svg'
 import QaffatekLogo   from '../assets/Qaffatek/LOGO.svg'
 import MockupQsecret  from '../assets/Qaffatek/MockupQsecret.svg'
@@ -28,9 +29,44 @@ const TOOLS = [
   'TestFlight',
 ]
 
+function smoothstep(edge0, edge1, x) {
+  const t = Math.max(0, Math.min(1, (x - edge0) / (edge1 - edge0)))
+  return t * t * (3 - 2 * t)
+}
+
 export default function QaffatekContent({ uiTheme = 'light' }) {
   const T = contentTokens(uiTheme)
   const scrollRef = useRef(null)
+
+  const [reduceMotion, setReduceMotion] = useState(
+    () =>
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  )
+
+  useLayoutEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const apply = () => setReduceMotion(mq.matches)
+    apply()
+    mq.addEventListener('change', apply)
+    return () => mq.removeEventListener('change', apply)
+  }, [])
+
+  const mockupTransition = useMemo(
+    () =>
+      reduceMotion
+        ? { duration: 0.14, ease: [0.22, 1, 0.36, 1] }
+        : { type: 'spring', stiffness: 280, damping: 34, mass: 0.78 },
+    [reduceMotion],
+  )
+
+  const dockTransition = useMemo(
+    () =>
+      reduceMotion
+        ? { duration: 0.18, ease: [0.22, 1, 0.36, 1] }
+        : { type: 'spring', stiffness: 240, damping: 30, mass: 0.82 },
+    [reduceMotion],
+  )
 
   // ── Section refs (only sections that drive transitions / button need refs) ──
   const solutionRef = useRef(null) // 02. The Solution (starts sticky phone)
@@ -45,8 +81,7 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
   // ── Scroll-driven state ──────────────────────────────────────────────────
   const [visualRP,       setVisualRP]       = useState(0) // read-progress for 02.1 (logo + phone suppression)
   const [phoneInP,       setPhoneInP]       = useState(0) // starts fading in at 02 (Solution)
-  const [weldRP,         setWeldRP]         = useState(0) // read-progress for 04 (used for strict weld visibility)
-  const [secretToWeldP,  setSecretToWeldP]  = useState(0) // tightened: starts only at "The Weld" text
+  const [secretToWeldP,  setSecretToWeldP]  = useState(0) // handoff when Weld block centers in viewport
   const [weldToBintP,    setWeldToBintP]    = useState(0)
   const [bintToAjouzP,   setBintToAjouzP]   = useState(0)
   const [ajouzToTimeP,   setAjouzToTimeP]   = useState(0)
@@ -93,26 +128,30 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
     return eR.bottom > cR.top && eR.top < cR.bottom
   }, [])
 
+  /** 0 → 1 as the section’s vertical center crosses the scroll viewport center (smooth, symmetric). */
+  const sectionHandoffProgress = useCallback((ref) => {
+    const c = scrollRef.current
+    const el = ref?.current
+    if (!c || !el) return 0
+    const cR = c.getBoundingClientRect()
+    const eR = el.getBoundingClientRect()
+    const vMid = (cR.top + cR.bottom) / 2
+    const eMid = (eR.top + eR.bottom) / 2
+    const band = Math.max(150, cR.height * 0.19)
+    const raw = Math.min(1, Math.max(0, (vMid - eMid + band) / (2 * band)))
+    return smoothstep(0, 1, raw)
+  }, [])
+
   const handleScroll = useCallback(() => {
     setVisualRP(readProgress(visualIdRef))
 
     // Phone starts at 02 (Solution). (01 is standalone above the stage.)
-    // NOTE: we no longer use this for "flash" opacity; entry is handled by translateY.
     setPhoneInP(Math.min(1, Math.max(0, sectionVisible(solutionRef)) * 1.25))
 
-    // Blend helper: 0.3 dead-zone → ×4 speed (smoother, less flashy)
-    const blend = (ref, dead = 0.3) => Math.min(1, Math.max(0, sectionVisible(ref) - dead) * 4)
-
-    // Secret role duration (RECLAB stability):
-    // Secret should only start fading to Weld when the Weld text is clearly centered.
-    // readProgress: 0=entering, 0.5=centered, 1=exiting
-    const wVis = sectionVisible(weldRef) 
-    setWeldRP(wVis)
-    // Linear, directly proportional (no dead-zone).
-    setSecretToWeldP(Math.min(1, Math.max(0, wVis * 2.5)))
-    setWeldToBintP  (blend(bintRef))
-    setBintToAjouzP (blend(ajouzRef))
-    setAjouzToTimeP (blend(vibeRef))
+    setSecretToWeldP(sectionHandoffProgress(weldRef))
+    setWeldToBintP(sectionHandoffProgress(bintRef))
+    setBintToAjouzP(sectionHandoffProgress(ajouzRef))
+    setAjouzToTimeP(sectionHandoffProgress(vibeRef))
 
     setVisualEnterBlend(
       Math.min(1, Math.max(0, (sectionVisible(visualIdRef) - 0.02) * 1.25)),
@@ -122,7 +161,12 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
     setIxImpact(isIntersecting(impactRef))
     setIxSolution(isIntersecting(solutionRef))
     setSolutionVisAmt(sectionVisible(solutionRef))
-  }, [readProgress, sectionVisible, isIntersecting])
+  }, [
+    readProgress,
+    sectionVisible,
+    isIntersecting,
+    sectionHandoffProgress,
+  ])
 
   useLayoutEffect(() => {
     handleScroll()
@@ -141,7 +185,6 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
   // ── Mockup opacities (cascading cross-fade) ──────────────────────────────
   const secretOpacity = (1 - secretToWeldP) * phoneInP * qsecretExitMask
   const weldOpacity   = (secretToWeldP * (1 - weldToBintP)) * phoneInP * visualIdentityMask
-  const weldOpacityFinal = weldRP <= 0 ? 0 : weldOpacity
   const bintOpacity   = (weldToBintP    * (1 - bintToAjouzP)) * phoneInP
   const ajouzOpacity  = (bintToAjouzP   * (1 - ajouzToTimeP)) * phoneInP
   const timeOpacity   = ajouzToTimeP * phoneInP
@@ -253,59 +296,106 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
                        flex items-center justify-center h-screen"
             style={{ zIndex: 10 }}
           >
-            <div
+            <motion.div
               className={
                 'pointer-events-auto relative w-full max-w-[400px]' +
                 (phoneSuppressed ? ' !opacity-0 !invisible' : '') +
-                ' transition-transform duration-[1500ms] ease-in-out will-change-transform' +
-                (phoneDocked ? ' translate-y-0' : ' translate-y-full')
+                ' will-change-transform'
               }
+              initial={false}
+              animate={
+                phoneSuppressed
+                  ? { y: 0 }
+                  : { y: phoneDocked ? 0 : '100%' }
+              }
+              transition={dockTransition}
               style={phoneSuppressed ? { visibility: 'hidden' } : undefined}
             >
-              {/* MockupQsecret — starts at 02 (Solution) */}
-              <img
+              {/* MockupQsecret — starts at 02 (Solution); cross-fade + slide with next layers */}
+              <motion.img
                 src={MockupQsecret}
                 alt="Secret role assignment screen"
                 className={
                   'pointer-events-auto h-auto w-full object-contain' +
                   (inSolutionLane ? '' : ' !opacity-0 !invisible')
                 }
-                style={inSolutionLane ? { opacity: secretOpacity } : { opacity: 0, visibility: 'hidden' }}
+                initial={false}
+                animate={
+                  inSolutionLane
+                    ? {
+                        opacity: secretOpacity,
+                        y: (1 - secretOpacity) * -12,
+                      }
+                    : { opacity: 0, y: 0 }
+                }
+                transition={mockupTransition}
+                style={{
+                  visibility: inSolutionLane ? undefined : 'hidden',
+                  pointerEvents:
+                    !inSolutionLane || secretOpacity < 0.04 ? 'none' : 'auto',
+                }}
               />
 
-              {/* MockupWeld — base layer from 03 onwards */}
-              <img
+              <motion.img
                 src={MockupWeld}
                 alt="The Weld role screen"
                 className="pointer-events-auto absolute inset-0 h-full w-full object-contain"
-                style={{ opacity: weldOpacityFinal }}
+                initial={false}
+                animate={{
+                  opacity: weldOpacity,
+                  y: (1 - weldOpacity) * 14,
+                }}
+                transition={mockupTransition}
+                style={{
+                  pointerEvents: weldOpacity < 0.04 ? 'none' : 'auto',
+                }}
               />
 
-              {/* MockupBint — cross-fades in at S04 */}
-              <img
+              <motion.img
                 src={MockupBint}
                 alt="The Bint role screen"
                 className="pointer-events-auto absolute inset-0 h-full w-full object-contain"
-                style={{ opacity: bintOpacity }}
+                initial={false}
+                animate={{
+                  opacity: bintOpacity,
+                  y: (1 - bintOpacity) * 14,
+                }}
+                transition={mockupTransition}
+                style={{
+                  pointerEvents: bintOpacity < 0.04 ? 'none' : 'auto',
+                }}
               />
 
-              {/* MockupAjouz — cross-fades in at S05 */}
-              <img
+              <motion.img
                 src={MockupAjouz}
                 alt="The Ajouz role screen"
                 className="pointer-events-auto absolute inset-0 h-full w-full object-contain"
-                style={{ opacity: ajouzOpacity }}
+                initial={false}
+                animate={{
+                  opacity: ajouzOpacity,
+                  y: (1 - ajouzOpacity) * 14,
+                }}
+                transition={mockupTransition}
+                style={{
+                  pointerEvents: ajouzOpacity < 0.04 ? 'none' : 'auto',
+                }}
               />
 
-              {/* MockupTime — cross-fades in at S06, stays through S07 */}
-              <img
+              <motion.img
                 src={MockupTime}
                 alt="Time and vibe screen"
                 className="pointer-events-auto absolute inset-0 h-full w-full object-contain"
-                style={{ opacity: timeOpacity }}
+                initial={false}
+                animate={{
+                  opacity: timeOpacity,
+                  y: (1 - timeOpacity) * 14,
+                }}
+                transition={mockupTransition}
+                style={{
+                  pointerEvents: timeOpacity < 0.04 ? 'none' : 'auto',
+                }}
               />
-
-            </div>
+            </motion.div>
           </div>
 
           {/* ══ 02. Visual Identity (The Design) — logo + text (NO PHONE) ═════ */}
