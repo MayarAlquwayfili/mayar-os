@@ -31,6 +31,7 @@ import FigmaFolderIcon from './assets/Admin/Figma_Folder.svg'
 import { useWindowManager } from './hooks/useWindowManager'
 import { MOHEETIK_TOOLS, RECLAB_TOOLS, DESKTOP_FOLDERS } from './constants/projects'
 import { windowChrome, contentTokens } from './utils/windowContentTheme'
+import cvPdfUrl from './assets/MayarAlquwayfiliCv.pdf?url'
 
 const MENU_BAR_PX = 28
 // Dock: bottom-4 (16px) + py-2 (16px) + icon (54px) + dot gap + dot = ~96px clearance
@@ -730,7 +731,7 @@ function CVContent({ uiTheme = 'light' }) {
         {/* ── Download button ── */}
         <div className="mt-10 flex justify-start border-t border-gray-100 pt-7">
           <a
-            href="/MayarAlquwayfiliCv.pdf"
+            href={cvPdfUrl}
             download="MayarAlquwayfiliCv.pdf"
             target="_blank"
             rel="noopener noreferrer"
