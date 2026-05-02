@@ -8,7 +8,7 @@ const BODY = 'text-[15px] leading-[1.8] text-gray-600'
 const META_KEY =
   'text-[10px] font-medium uppercase tracking-[0.09em] text-gray-400 mb-1'
 const META_VAL = 'text-[13px] font-medium text-gray-900'
-const CAPTION = 'mt-2 text-center text-[13px] text-gray-400'
+const CAPTION = 'mt-2 text-left text-[13px] text-gray-400'
 
 const TOOL_PILLS = [
   'Multiple Linear Regression (MLR)',
@@ -39,9 +39,9 @@ export default function CashResearchContent({ uiTheme = 'light' }) {
   const T = contentTokens(uiTheme)
   return (
     <div
-      className={`h-full overflow-y-auto overflow-x-hidden font-sans antialiased ${T.surface} ${T.text} ${T.scrollRoot} ${T.contentProse}`}
+      className={`pointer-events-auto h-full overflow-y-auto overflow-x-hidden text-left font-sans antialiased ${T.surface} ${T.text} ${T.scrollRoot} ${T.contentProse}`}
     >
-      <div className="mx-auto w-full max-w-[1200px] px-6 pb-20 pt-8 text-left sm:px-8 md:px-10">
+      <div className="mx-auto w-full max-w-[1200px] px-6 pb-20 pt-8 sm:px-8 md:px-10">
         <header className="mb-6 border-b border-gray-100 pb-4">
           <div className="flex flex-wrap items-center gap-2">
             <h1 className="text-[36px] font-bold leading-tight tracking-tight text-gray-900">

@@ -91,7 +91,7 @@ function MoheetikSplitContent({ uiTheme = 'light' }) {
   const T = contentTokens(uiTheme)
   return (
     <div
-      className={`h-full overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRoot} ${T.contentProse}`}
+      className={`pointer-events-auto h-full overflow-y-auto text-left font-sans ${T.surface} ${T.text} ${T.scrollRoot} ${T.contentProse}`}
     >
       <div className="w-full max-w-[1200px] mx-auto px-6 py-8 sm:px-8 md:px-10">
 
@@ -304,7 +304,7 @@ function RECLABContent({ uiTheme = 'light' }) {
     <div
       ref={scrollRef}
       onScroll={handleScroll}
-      className={`h-full overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRoot} ${T.contentProse}`}
+      className={`pointer-events-auto h-full overflow-y-auto text-left font-sans ${T.surface} ${T.text} ${T.scrollRoot} ${T.contentProse}`}
     >
 
       {/* ── Header + Overview ─────────────────────────────────────────── */}
@@ -353,7 +353,7 @@ function RECLABContent({ uiTheme = 'light' }) {
       </div>
 
       {/* ── 01. The Challenge — full-width dramatic prologue ─────────── */}
-      <div className="w-full max-w-[820px] mx-auto px-6 sm:px-8 py-24 text-center">
+      <div className="w-full max-w-[820px] mx-auto px-6 sm:px-8 py-24 text-left">
         <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-400 mb-6">
           01 — The Challenge
         </p>
@@ -369,7 +369,7 @@ function RECLABContent({ uiTheme = 'light' }) {
           system to capture the journey, these experiments quickly vanish into a graveyard of
           abandoned hobbies.
         </p>
-        <div className="space-y-3 my-10 border-l-2 border-gray-200 pl-6 text-left max-w-[560px] mx-auto">
+        <div className="space-y-3 my-10 max-w-[560px] border-l-2 border-gray-200 pl-6 text-left">
           <p className="text-[15px] leading-[1.9] tracking-[0.01em] text-gray-500 italic">
             &ldquo;I joke that I only have one hobby, which is that I am a hobby collector.&rdquo;
           </p>

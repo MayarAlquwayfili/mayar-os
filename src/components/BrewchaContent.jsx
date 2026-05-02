@@ -21,7 +21,7 @@ const META = [
 const META_KEY = 'text-[10px] font-medium uppercase tracking-[0.12em] text-gray-400 mb-1'
 const META_VAL = 'text-[13px] font-medium text-gray-900'
 
-const BODY = 'text-[15px] leading-[1.8] tracking-[0.01em] text-gray-600 text-center'
+const BODY = 'text-[15px] leading-[1.8] tracking-[0.01em] text-gray-600 text-left'
 
 const CALLOUT_LAYOUT = [
   { top: '-12px', left: '-26px', size: 72, rotate: -10, opacity: 0.95 },
@@ -33,11 +33,9 @@ const CALLOUT_LAYOUT = [
 
 export default function BrewchaContent({ uiTheme = 'light' }) {
   const T = contentTokens(uiTheme)
-  const watermarkVia =
-    uiTheme === 'dark' ? 'via-[#ACDEE7]/[0.12]' : 'via-[#82ADB5]/[0.12]'
   return (
     <div
-      className={`h-full overflow-y-auto overflow-x-hidden font-sans antialiased ${T.surface} ${T.text} ${T.scrollRoot} ${T.contentProse}`}
+      className={`pointer-events-auto h-full overflow-y-auto overflow-x-hidden text-left font-sans antialiased ${T.surface} ${T.text} ${T.scrollRoot} ${T.contentProse}`}
     >
       {/* ── 1. Identity header + narrative ── */}
       <section className="px-6 pt-8 pb-24 sm:px-10">
@@ -70,10 +68,10 @@ export default function BrewchaContent({ uiTheme = 'light' }) {
 
           <div className="border-b border-gray-100 pt-8" />
 
-          {/* Narrative (centered) */}
+          {/* Narrative */}
           <div className="pt-10">
             <div className={`relative mx-auto max-w-[800px] space-y-6 ${BODY}`}>
-            {/* Subtle sticker callouts (no grid overlap) */}
+            {/* Decorative stickers — pointer-events-none so text/links stay clickable */}
             <div className="pointer-events-none absolute inset-0 overflow-visible" aria-hidden>
               {CALLOUT_LAYOUT.map((p, i) => {
                 const src = CALLOUT_STICKERS[i]
@@ -119,22 +117,9 @@ export default function BrewchaContent({ uiTheme = 'light' }) {
         </div>
       </section>
 
-      {/* ── 2. Compact portrait grid + watermark + margin stickers (gallery only) ── */}
+      {/* ── 2. Compact portrait grid (gallery only) ── */}
       <section className="relative overflow-x-visible py-16 px-4 sm:px-8">
         <div className="relative mx-auto max-w-3xl overflow-visible">
-          {/* Watermark */}
-          <div
-            className="pointer-events-none absolute left-1/2 top-1/2 z-0 -translate-x-1/2 -translate-y-1/2 select-none"
-            aria-hidden
-          >
-            <span
-              className={`block bg-gradient-to-br from-neutral-300/25 ${watermarkVia} to-neutral-300/20 bg-clip-text text-center text-[clamp(2.5rem,11vw,6.5rem)] font-black leading-none tracking-tight text-transparent`}
-            >
-              BREWCHA
-            </span>
-          </div>
-
-          {/* Fixed-height grid: pic01 full-height left; pic02 + pic03 stacked right */}
           <div
             className="relative z-10 grid h-[min(46vh,400px)] grid-cols-2 grid-rows-2 gap-2 sm:h-[min(150vh,600px)] sm:gap-3"
           >
