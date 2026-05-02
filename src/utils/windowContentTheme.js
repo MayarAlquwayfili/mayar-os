@@ -1,7 +1,30 @@
 /**
  * Shared classes for Mac windows and scrollable inner content (Light / Dark uiTheme).
- * Accent #ACDEE7 and highlight #FEF0BC stay consistent via components / globals.
+ * Theme-aware accent: Light #82ADB5 (readable on #F9F9F7), Dark #ACDEE7.
+ * Highlight #FEF0BC unchanged elsewhere via components / globals.
  */
+
+const ACCENT_LIGHT = '#82ADB5'
+const ACCENT_DARK = '#ACDEE7'
+
+/** Tailwind class fragments for interactive accent UI (pills, buttons, pulses). */
+export function accentTokens(uiTheme) {
+  const dark = uiTheme === 'dark'
+  return {
+    hex: dark ? ACCENT_DARK : ACCENT_LIGHT,
+    /** Labels on accent fills — dark charcoal reads on both aqua/teal surfaces */
+    textOnAccent: 'text-[#23262D]',
+    pillBg: dark ? 'bg-[#ACDEE7]' : 'bg-[#82ADB5]',
+    pillBorder: dark ? 'border-[#ACDEE7]/40' : 'border-[#82ADB5]/40',
+    btnSolid: dark ? 'bg-[#ACDEE7]' : 'bg-[#82ADB5]',
+    btnTint: dark ? 'bg-[#ACDEE7]/15' : 'bg-[#82ADB5]/15',
+    borderAccent: dark ? 'border-[#ACDEE7]/35' : 'border-[#82ADB5]/35',
+    borderAccentSoft: dark ? 'border-[#ACDEE7]/25' : 'border-[#82ADB5]/25',
+    ringAccentTop: dark ? 'border-t-2 border-t-[#ACDEE7]' : 'border-t-2 border-t-[#82ADB5]',
+    spinnerRingAccent: dark ? 'border-t-[#ACDEE7]' : 'border-t-[#82ADB5]',
+    pulseDot: dark ? 'bg-[#ACDEE7]' : 'bg-[#82ADB5]',
+  }
+}
 
 export function windowChrome(uiTheme) {
   const dark = uiTheme === 'dark'

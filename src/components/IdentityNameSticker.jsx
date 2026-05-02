@@ -14,6 +14,7 @@ export default function IdentityNameSticker({ uiTheme = 'light' }) {
   return (
     <AdminFolderCursorTip
       label="Mayar ID"
+      uiTheme={uiTheme}
       wrapperClassName="inline-block w-fit cursor-none select-none"
     >
       <motion.div

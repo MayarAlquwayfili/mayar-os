@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { playNotificationSfx, getNotificationSfx } from '../utils/notificationSfx'
+import { accentTokens } from '../utils/windowContentTheme'
 
 export default function AdminNotifications({
   uiTheme = 'light',
@@ -11,12 +12,14 @@ export default function AdminNotifications({
 }) {
   const seenIdsRef = useRef(new Set())
   const dark = uiTheme === 'dark'
+  const A = accentTokens(uiTheme)
 
   const cardClassName = [
     'pointer-events-auto w-80 rounded-2xl border px-5 py-5',
     dark
       ? 'border-white/10 bg-[#2E3137] shadow-[0_24px_64px_-16px_rgba(0,0,0,0.55)]'
       : 'border-black/[0.08] bg-[#F9F9F7] shadow-lg shadow-black/[0.08]',
+    A.ringAccentTop,
   ].join(' ')
 
   const headerMuted = dark ? 'text-[#F9F9F7]/55' : 'text-gray-500'
@@ -72,10 +75,10 @@ export default function AdminNotifications({
                   aria-label={adminFlow === 'loading' ? 'Loading' : 'Accept'}
                   className={`inline-flex min-h-[40px] items-center rounded-lg py-2.5 text-sm font-medium transition-opacity ${
                     adminFlow === 'loading'
-                      ? `w-full cursor-default justify-start bg-[#ACDEE7]/15 pl-0 pr-5 ${
+                      ? `w-full cursor-default justify-start pl-0 pr-5 ${A.btnTint} ${
                           dark ? 'text-[#F9F9F7]' : 'text-[#23262D]'
                         }`
-                      : 'min-w-[6.5rem] justify-center bg-[#ACDEE7] px-5 text-[#23262D] hover:opacity-90 active:opacity-100'
+                      : `min-w-[6.5rem] justify-center px-5 ${A.btnSolid} ${A.textOnAccent} hover:opacity-90 active:opacity-100`
                   }`}
                   onClick={() => {
                     playNotificationSfx()
@@ -85,10 +88,8 @@ export default function AdminNotifications({
                   {adminFlow === 'loading' ? (
                     <span
                       className={`h-5 w-5 shrink-0 animate-spin rounded-full border-2 ${
-                        dark
-                          ? 'border-[#F9F9F7]/35 border-t-[#F9F9F7]'
-                          : 'border-[#23262D]/35 border-t-[#23262D]'
-                      }`}
+                        dark ? 'border-[#F9F9F7]/35' : 'border-[#23262D]/35'
+                      } ${A.spinnerRingAccent}`}
                       aria-hidden
                     />
                   ) : (

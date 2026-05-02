@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Moon, Sun } from 'lucide-react'
+import { accentTokens } from '../utils/windowContentTheme'
 import SparkleIcon from '../assets/sparkle.svg'
 import IcWifi from '../assets/Ic_wifi.svg'
 import IcGithub from '../assets/Ic_Github.svg'
@@ -27,6 +28,7 @@ function formatMenuBarClock(d) {
 
 function StatusItem({ theme }) {
   const isDark = theme === 'dark'
+  const A = accentTokens(theme)
   const dividerCls = isDark ? 'bg-[#F9F9F7]/25' : 'bg-[#23262D]/20'
   const textCls = isDark ? 'text-[#F9F9F7]' : 'text-[#23262D]'
   return (
@@ -38,7 +40,7 @@ function StatusItem({ theme }) {
         className={`flex cursor-default items-center gap-1.5 ${STATIC_CLUSTER}`}
       >
         <span
-          className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#ACDEE7] animate-pulse"
+          className={`h-1.5 w-1.5 shrink-0 rounded-full animate-pulse ${A.pulseDot}`}
           aria-hidden
         />
         <span

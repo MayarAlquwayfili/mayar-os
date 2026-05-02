@@ -1,11 +1,19 @@
 import { forwardRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { accentTokens } from '../utils/windowContentTheme'
 
 const CURSOR_GAP_PX = 8
 
-/** Shared pill styles for cursor-follow tips (desktop folders + identity sticker). */
-export const CURSOR_TIP_LABEL_CLASS =
-  'inline-flex max-w-[min(280px,calc(100vw-48px))] items-center rounded-full border border-[#ACDEE7]/40 bg-[#ACDEE7] px-4 py-1.5 text-left text-[11px] font-medium leading-snug text-[#23262D]'
+/** Cursor-follow tooltip pill classes for the active uiTheme (accent differs Light/Dark). */
+export function cursorTipPillClass(uiTheme = 'light') {
+  const A = accentTokens(uiTheme)
+  return [
+    'inline-flex max-w-[min(280px,calc(100vw-48px))] items-center rounded-full border px-4 py-1.5 text-left text-[11px] font-medium leading-snug',
+    A.pillBorder,
+    A.pillBg,
+    A.textOnAccent,
+  ].join(' ')
+}
 
 /**
  * Text-only pill that follows the pointer; no arrow. Parent hit area uses cursor-none.
@@ -14,7 +22,16 @@ export const CURSOR_TIP_LABEL_CLASS =
 const DEFAULT_WRAPPER = 'block w-[132px] cursor-none select-none'
 
 const AdminFolderCursorTip = forwardRef(function AdminFolderCursorTip(
-  { label, children, wrapperClassName, style, onMouseMove: onMouseMoveProp, onMouseLeave: onMouseLeaveProp, ...rest },
+  {
+    label,
+    children,
+    wrapperClassName,
+    uiTheme = 'light',
+    style,
+    onMouseMove: onMouseMoveProp,
+    onMouseLeave: onMouseLeaveProp,
+    ...rest
+  },
   ref,
 ) {
   const [tip, setTip] = useState({ show: false, x: 0, y: 0 })
@@ -52,7 +69,7 @@ const AdminFolderCursorTip = forwardRef(function AdminFolderCursorTip(
               transform: 'translateY(-50%)',
             }}
           >
-            <span className={CURSOR_TIP_LABEL_CLASS}>{label}</span>
+            <span className={cursorTipPillClass(uiTheme)}>{label}</span>
           </div>,
           document.body,
         )}

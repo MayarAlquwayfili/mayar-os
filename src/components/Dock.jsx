@@ -1,7 +1,9 @@
 import AppIconMoheetik from '../assets/Moheetik/AppIconMoheetik.svg'
 import AppIconQaffatek from '../assets/AppIconQaffatek.svg'
 import AppIconRECLAB from '../assets/RECLAB/AppIconRECLAB.svg'
-import ManualFolderIcon from '../assets/ManuaFloder.svg'
+import ManualFolderIconLight from '../assets/ManuaFloder.svg'
+import ManualFolderIconDark from '../assets/ManuaFloderDark.svg'
+import { accentTokens } from '../utils/windowContentTheme'
 
 const DOCK_APPS = [
   { id: 'Moheetik', label: 'Moheetik', icon: AppIconMoheetik, iconFit: 'cover' },
@@ -10,7 +12,7 @@ const DOCK_APPS = [
   {
     id: 'How to Work with Me',
     label: 'Manual',
-    icon: ManualFolderIcon,
+    icon: ManualFolderIconLight,
     iconFit: 'contain',
   },
 ]
@@ -21,6 +23,14 @@ function isWindowOpenOnDesktop(openWindows, id) {
 }
 
 function DockTile({ id, label, icon, openWindows, onOpen, iconFit = 'cover', uiTheme = 'light' }) {
+  const A = accentTokens(uiTheme)
+  const resolvedIcon =
+    id === 'How to Work with Me'
+      ? uiTheme === 'dark'
+        ? ManualFolderIconDark
+        : ManualFolderIconLight
+      : icon
+
   return (
     <div className="group relative flex flex-col items-center">
       <div className="pointer-events-none absolute -top-11 left-1/2 -translate-x-1/2 select-none opacity-0 transition-opacity duration-150 group-hover:opacity-100">
@@ -48,7 +58,7 @@ function DockTile({ id, label, icon, openWindows, onOpen, iconFit = 'cover', uiT
         onClick={() => onOpen?.(id)}
       >
         <img
-          src={icon}
+          src={resolvedIcon}
           alt={label}
           draggable={false}
           className={`h-full w-full rounded-[12px] ${iconFit === 'contain' ? 'object-contain' : 'object-cover'}`}
@@ -57,11 +67,7 @@ function DockTile({ id, label, icon, openWindows, onOpen, iconFit = 'cover', uiT
 
       <span
         className={`mt-1.5 h-1 w-1 rounded-full transition-all duration-500 group-hover:scale-125 ${
-          isWindowOpenOnDesktop(openWindows, id)
-            ? uiTheme === 'dark'
-              ? 'bg-[#F9F9F7] opacity-100'
-              : 'bg-[#23262D] opacity-100'
-            : 'opacity-0'
+          isWindowOpenOnDesktop(openWindows, id) ? `${A.pulseDot} opacity-100` : 'opacity-0'
         }`}
         style={{ transitionTimingFunction: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}
       />

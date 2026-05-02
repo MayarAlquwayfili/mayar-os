@@ -1266,6 +1266,7 @@ function DraggableFolder({
     <AdminFolderCursorTip
       ref={rootRef}
       label={cursorTipLabel}
+      uiTheme={uiTheme}
       aria-label={`Folder ${id}: ${title}`}
       wrapperClassName={`absolute ${DESKTOP_ITEM_FRAME_BASE} cursor-grab select-none active:cursor-grabbing ${desktopItemSelectionClass(
         isSelected,
@@ -1617,7 +1618,7 @@ export default function App() {
               className="z-[1] cursor-grab active:cursor-grabbing"
               draggingClassName="cursor-grabbing"
             >
-              <AdminFolderCursorTip label="it's all documented.">
+              <AdminFolderCursorTip label="it's all documented." uiTheme={uiTheme}>
                 <div
                   className={`${DESKTOP_ITEM_FRAME_BASE} border-transparent bg-transparent`}
                   role="presentation"
@@ -1651,7 +1652,7 @@ export default function App() {
               className="z-[1] cursor-grab active:cursor-grabbing"
               draggingClassName="cursor-grabbing"
             >
-              <AdminFolderCursorTip label="trust the process.">
+              <AdminFolderCursorTip label="trust the process." uiTheme={uiTheme}>
                 <div
                   className={`${DESKTOP_ITEM_FRAME_BASE} border-transparent bg-transparent`}
                   role="presentation"
@@ -1685,7 +1686,7 @@ export default function App() {
               className="z-[1] cursor-grab active:cursor-grabbing"
               draggingClassName="cursor-grabbing"
             >
-              <AdminFolderCursorTip label="pixel-perfect.">
+              <AdminFolderCursorTip label="pixel-perfect." uiTheme={uiTheme}>
                 <div
                   className={`${DESKTOP_ITEM_FRAME_BASE} border-transparent bg-transparent`}
                   role="presentation"
