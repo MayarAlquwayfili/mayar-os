@@ -54,10 +54,10 @@ export function contentTokens(uiTheme) {
     textStrong: dark ? 'text-[#F9F9F7]' : 'text-[#23262D]',
     border: dark ? 'border-[#F9F9F7]/10' : 'border-[#23262D]/10',
     borderMuted: dark ? 'border-[#F9F9F7]/15' : 'border-[#23262D]/15',
-    /** Status labels (MVP, Completed, Awards, Live on Store) — translucent accent tint */
+    /** Status labels (MVP, Completed, Awards, Live on Store) — stronger accent tint + swapped text for contrast */
     pillStatus: dark
-      ? 'border border-[#ACDEE7]/25 bg-[#ACDEE7]/15 text-[#F9F9F7]'
-      : 'border border-[#82ADB5]/20 bg-[#82ADB5]/15 text-[#23262D]',
+      ? 'border border-[#ACDEE7]/40 bg-[#ACDEE7]/70 text-[#23262D]'
+      : 'border border-[#82ADB5]/30 bg-[#82ADB5]/70 text-[#F9F9F7]',
     /** Tools, roles, tech tags — neutral translucent gray */
     pillDefault: dark
       ? 'border border-[#F9F9F7]/10 bg-[#F9F9F7]/5 text-[#F9F9F7]'

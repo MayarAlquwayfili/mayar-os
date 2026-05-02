@@ -175,7 +175,9 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
                 className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-[12px] font-bold transition-all duration-200 hover:scale-105 hover:opacity-95 active:scale-[0.99] select-none ${T.pillStatus}`}
               >
                 <span
-                  className="h-2 w-2 shrink-0 animate-pulse rounded-full bg-current opacity-70"
+                  className={`h-2 w-2 shrink-0 animate-pulse rounded-full ${
+                    uiTheme === 'dark' ? 'bg-[#ACDEE7]' : 'bg-[#82ADB5]'
+                  }`}
                   aria-hidden
                 />
                 Live on App Store

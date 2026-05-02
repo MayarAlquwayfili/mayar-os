@@ -85,7 +85,7 @@ function ThemeToggle({ theme, onToggleTheme }) {
             exit={{ opacity: 0, rotate: -56 }}
             transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
           >
-            <Sun className="h-4 w-4 text-[#ACDEE7]" strokeWidth={2} aria-hidden />
+            <Sun className="h-4 w-4 text-[#FEF0BC]" strokeWidth={2} aria-hidden />
           </motion.span>
         )}
       </AnimatePresence>
