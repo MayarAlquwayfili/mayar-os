@@ -106,7 +106,9 @@ function MoheetikSplitContent({ uiTheme = 'light' }) {
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-[20px] font-bold tracking-tight text-gray-900">Moheetik | محيطك</h1>
-              <span className="bg-gray-100 text-gray-600 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+              <span
+                className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${T.pill}`}
+              >
                 MVP
               </span>
             </div>
@@ -136,7 +138,7 @@ function MoheetikSplitContent({ uiTheme = 'light' }) {
               {MOHEETIK_TOOLS.map((t) => (
                 <span
                   key={t}
-                  className="inline-flex rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-medium text-gray-600"
+                  className={`inline-flex rounded-full px-2 py-0.5 text-[11px] font-medium ${T.pill}`}
                 >
                   {t}
                 </span>
@@ -323,7 +325,9 @@ function RECLABContent({ uiTheme = 'light' }) {
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-[20px] font-bold tracking-tight text-gray-900">RECLAB</h1>
-              <span className="bg-gray-100 text-gray-600 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+              <span
+                className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${T.pill}`}
+              >
                 MVP
               </span>
             </div>
@@ -347,7 +351,10 @@ function RECLABContent({ uiTheme = 'light' }) {
             <p className={META_KEY_CLS}>Tools</p>
             <div className="mt-1.5 flex flex-wrap gap-1">
               {RECLAB_TOOLS.map((t) => (
-                <span key={t} className="inline-flex rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-medium text-gray-600">
+                <span
+                  key={t}
+                  className={`inline-flex rounded-full px-2 py-0.5 text-[11px] font-medium ${T.pill}`}
+                >
                   {t}
                 </span>
               ))}

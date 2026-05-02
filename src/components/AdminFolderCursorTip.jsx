@@ -1,17 +1,13 @@
 import { forwardRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { accentTokens } from '../utils/windowContentTheme'
 
 const CURSOR_GAP_PX = 8
 
-/** Cursor-follow tooltip pill classes for the active uiTheme (accent differs Light/Dark). */
-export function cursorTipPillClass(uiTheme = 'light') {
-  const A = accentTokens(uiTheme)
+/** Desktop folder cursor tooltip — always highlight yellow + charcoal (same in Light/Dark). */
+export function cursorTipPillClass() {
   return [
-    'inline-flex max-w-[min(280px,calc(100vw-48px))] items-center rounded-full border px-4 py-1.5 text-left text-[11px] font-medium leading-snug',
-    A.pillBorder,
-    A.pillBg,
-    A.textOnAccent,
+    'inline-flex max-w-[min(280px,calc(100vw-48px))] items-center rounded-full',
+    'border border-[#23262D]/12 bg-[#FEF0BC] px-4 py-1.5 text-left text-[11px] font-medium leading-snug text-[#23262D]',
   ].join(' ')
 }
 
@@ -26,7 +22,7 @@ const AdminFolderCursorTip = forwardRef(function AdminFolderCursorTip(
     label,
     children,
     wrapperClassName,
-    uiTheme = 'light',
+    uiTheme: _uiTheme = 'light',
     style,
     onMouseMove: onMouseMoveProp,
     onMouseLeave: onMouseLeaveProp,
@@ -69,7 +65,7 @@ const AdminFolderCursorTip = forwardRef(function AdminFolderCursorTip(
               transform: 'translateY(-50%)',
             }}
           >
-            <span className={cursorTipPillClass(uiTheme)}>{label}</span>
+            <span className={cursorTipPillClass()}>{label}</span>
           </div>,
           document.body,
         )}

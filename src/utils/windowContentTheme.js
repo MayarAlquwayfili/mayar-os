@@ -7,7 +7,7 @@
 const ACCENT_LIGHT = '#82ADB5'
 const ACCENT_DARK = '#ACDEE7'
 
-/** Tailwind class fragments for interactive accent UI (pills, buttons, pulses). */
+/** Tailwind class fragments for interactive accent UI (buttons, pulses; informational chips use contentTokens.pill). */
 export function accentTokens(uiTheme) {
   const dark = uiTheme === 'dark'
   return {
@@ -56,9 +56,8 @@ export function contentTokens(uiTheme) {
     textStrong: dark ? 'text-[#F9F9F7]' : 'text-[#23262D]',
     border: dark ? 'border-[#F9F9F7]/10' : 'border-[#23262D]/10',
     borderMuted: dark ? 'border-[#F9F9F7]/15' : 'border-[#23262D]/15',
-    pill: dark
-      ? 'bg-white/12 text-[#F9F9F7]/90'
-      : 'bg-[rgb(35_38_45/0.08)] text-[#23262D]/80',
+    /** Category / status / tool tags — highlight butter + charcoal (not theme body text) */
+    pill: 'border border-[#23262D]/10 bg-[#FEF0BC] text-[#23262D]',
     scrollRoot:
       '[&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full ' +
       (dark
