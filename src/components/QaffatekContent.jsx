@@ -169,10 +169,10 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
             <div className="flex items-center gap-3 flex-wrap">
               <h1 className="text-[20px] font-bold tracking-tight text-gray-900">Qaffatek | قفطتك </h1>
               <a
-                href="https://itunes.apple.com/app/قفطتك"
+                href="https://apps.apple.com/sa/app/%D9%82%D9%81%D8%B7%D8%AA%D9%83/id6757811186"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-[12px] font-bold transition-all duration-200 hover:scale-105 hover:opacity-95 active:scale-[0.99] select-none ${T.pillStatus}`}
+                className={`inline-flex cursor-pointer items-center gap-2 rounded-full px-3 py-1 text-[12px] font-bold transition-all duration-200 hover:scale-105 hover:opacity-95 active:scale-[0.99] select-none ${T.pillStatus}`}
               >
                 <span
                   className={`h-2 w-2 shrink-0 animate-pulse rounded-full ${
@@ -199,7 +199,7 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
             </div>
             <div>
               <p className={META_KEY}>Project Type</p>
-              <p className={META_VAL}>iOS App (Apple Developer Academy)</p>
+              <p className={META_VAL}>iOS App (PNU · Apple Developer Academy)</p>
             </div>
             <div>
               <p className={META_KEY}>Tools</p>
@@ -255,7 +255,7 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
           >
             <div
               className={
-                'relative w-full max-w-[400px]' +
+                'pointer-events-auto relative w-full max-w-[400px]' +
                 (phoneSuppressed ? ' !opacity-0 !invisible' : '') +
                 ' transition-transform duration-[1500ms] ease-in-out will-change-transform' +
                 (phoneDocked ? ' translate-y-0' : ' translate-y-full')
@@ -266,7 +266,10 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
               <img
                 src={MockupQsecret}
                 alt="Secret role assignment screen"
-                className={'w-full h-auto object-contain' + (inSolutionLane ? '' : ' !opacity-0 !invisible')}
+                className={
+                  'pointer-events-auto h-auto w-full object-contain' +
+                  (inSolutionLane ? '' : ' !opacity-0 !invisible')
+                }
                 style={inSolutionLane ? { opacity: secretOpacity } : { opacity: 0, visibility: 'hidden' }}
               />
 
@@ -274,7 +277,7 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
               <img
                 src={MockupWeld}
                 alt="The Weld role screen"
-                className="absolute inset-0 w-full h-full object-contain"
+                className="pointer-events-auto absolute inset-0 h-full w-full object-contain"
                 style={{ opacity: weldOpacityFinal }}
               />
 
@@ -282,7 +285,7 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
               <img
                 src={MockupBint}
                 alt="The Bint role screen"
-                className="absolute inset-0 w-full h-full object-contain"
+                className="pointer-events-auto absolute inset-0 h-full w-full object-contain"
                 style={{ opacity: bintOpacity }}
               />
 
@@ -290,7 +293,7 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
               <img
                 src={MockupAjouz}
                 alt="The Ajouz role screen"
-                className="absolute inset-0 w-full h-full object-contain"
+                className="pointer-events-auto absolute inset-0 h-full w-full object-contain"
                 style={{ opacity: ajouzOpacity }}
               />
 
@@ -298,7 +301,7 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
               <img
                 src={MockupTime}
                 alt="Time and vibe screen"
-                className="absolute inset-0 w-full h-full object-contain"
+                className="pointer-events-auto absolute inset-0 h-full w-full object-contain"
                 style={{ opacity: timeOpacity }}
               />
 
@@ -328,11 +331,11 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
           </section>
 
           <div className="md:col-start-3 md:row-start-2 flex items-center justify-center py-24 min-h-[85vh] relative z-20">
-            <div className="w-full flex items-center justify-center">
+            <div className="pointer-events-auto flex w-full items-center justify-center">
               <img
                 src={QaffatekLogo}
                 alt="Qaffatek brand mark"
-                className="w-[150%] max-w-[500px] h-auto select-none"
+                className="pointer-events-auto h-auto w-[150%] max-w-[500px] select-none"
                 style={{
                   opacity: brandOpacity,
                   transform: `translateY(${brandTY}px)`,
@@ -466,7 +469,7 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
       {/* ══ 08. The Impact — centered block (NO PHONE) ═══════════════════════ */}
       <section
         ref={impactRef}
-        className="w-full max-w-[800px] mx-auto px-6 sm:px-8 md:px-10 py-24 text-center relative z-20"
+        className="relative z-20 mx-auto w-full max-w-[800px] px-6 py-24 text-left sm:px-8 md:px-10"
       >
         <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-400 mb-5">
           03. The Impact
