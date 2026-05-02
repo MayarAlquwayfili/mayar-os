@@ -48,8 +48,8 @@ function desktopItemSelectionClass(isSelected) {
     : 'border-transparent bg-transparent hover:border-transparent hover:bg-[#FEF0BC]/40'
 }
 const EDGE_PX = 10
-const MIN_W = 380
-const MIN_H = 320
+const MIN_W = 500
+const MIN_H = 400
 
 const RESIZE_CURSORS = {
   n: 'ns-resize',
@@ -832,17 +832,19 @@ function MacWindow({
           : WINDOW_PRESETS[title] ?? {}
   const defaultW = preset.w ?? 700
   const defaultH = preset.h ?? 500
+  const initialW = Math.max(MIN_W, defaultW)
+  const initialH = Math.max(MIN_H, defaultH)
 
   const [position, setPosition] = useState(() => {
     if (preset.centered) {
       return {
-        x: Math.max(0, Math.round((window.innerWidth  - defaultW) / 2)),
-        y: Math.max(28, Math.round((window.innerHeight - defaultH) / 2)),
+        x: Math.max(0, Math.round((window.innerWidth  - initialW) / 2)),
+        y: Math.max(28, Math.round((window.innerHeight - initialH) / 2)),
       }
     }
     return { x: initialX ?? 60, y: initialY ?? 48 }
   })
-  const [size, setSize] = useState({ w: defaultW, h: defaultH })
+  const [size, setSize] = useState({ w: initialW, h: initialH })
   const [isDragging, setIsDragging] = useState(false)
   const [isResizing, setIsResizing] = useState(false)
   const [isMaximized, setIsMaximized] = useState(false)
@@ -850,7 +852,7 @@ function MacWindow({
 
   const restoredRef = useRef({
     position: { x: 0, y: 0 },
-    size: { w: defaultW, h: defaultH },
+    size: { w: initialW, h: initialH },
   })
   const dragOffsetRef = useRef({ x: 0, y: 0 })
   const resizeRef = useRef(null)
@@ -1145,12 +1147,12 @@ function MacWindow({
         )}
       </div>
 
-      {/* SE corner resize handle — sits above scrollbar layer */}
+      {/* SE corner resize handle — above in-window content (e.g. z-20 media) so it always receives pointer events */}
       {!isMaximized && (
         <div
           aria-hidden
-          className="absolute bottom-0 right-0 w-4 h-4 cursor-se-resize"
-          style={{ zIndex: 10 }}
+          className="pointer-events-auto absolute bottom-0 right-0 h-4 w-4 cursor-se-resize"
+          style={{ zIndex: 30 }}
           onMouseDown={(e) => {
             onFocus?.()
             if (e.button !== 0) return
