@@ -39,7 +39,7 @@ export default function CashResearchContent({ uiTheme = 'light' }) {
   const T = contentTokens(uiTheme)
   return (
     <div
-      className={`h-full overflow-y-auto overflow-x-hidden font-sans antialiased ${T.surface} ${T.text} ${T.scrollRoot} ${T.darkProse}`}
+      className={`h-full overflow-y-auto overflow-x-hidden font-sans antialiased ${T.surface} ${T.text} ${T.scrollRoot} ${T.contentProse}`}
     >
       <div className="mx-auto w-full max-w-[1200px] px-6 pb-20 pt-8 text-left sm:px-8 md:px-10">
         <header className="mb-6 border-b border-gray-100 pb-4">

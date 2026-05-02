@@ -92,7 +92,7 @@ function MoheetikSplitContent({ uiTheme = 'light' }) {
   const T = contentTokens(uiTheme)
   return (
     <div
-      className={`h-full overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRoot} ${T.darkProse}`}
+      className={`h-full overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRoot} ${T.contentProse}`}
     >
       <div className="w-full max-w-[1200px] mx-auto px-6 py-8 sm:px-8 md:px-10">
 
@@ -313,7 +313,7 @@ function RECLABContent({ uiTheme = 'light' }) {
     <div
       ref={scrollRef}
       onScroll={handleScroll}
-      className={`h-full overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRoot} ${T.darkProse}`}
+      className={`h-full overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRoot} ${T.contentProse}`}
     >
 
       {/* ── Header + Overview ─────────────────────────────────────────── */}
@@ -547,7 +547,7 @@ function CVContent({ uiTheme = 'light' }) {
   const T = contentTokens(uiTheme)
   return (
     <div
-      className={`h-full overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRootThin} ${T.darkProse}`}
+      className={`h-full overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRootThin} ${T.contentProse}`}
     >
       {/* Centered content column — expands with the window, overflow-safe */}
       <div className="mx-auto w-full max-w-[820px] min-w-0 overflow-x-hidden break-words px-8 pb-12 pt-10 sm:px-10 md:px-14 lg:px-16">

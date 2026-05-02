@@ -94,7 +94,7 @@ export default function SideBFolderContent({ uiTheme = 'light' }) {
   const T = contentTokens(uiTheme)
   return (
     <div
-      className={`h-full overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRootThin} ${T.darkProse}`}
+      className={`h-full overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRootThin} ${T.contentProse}`}
     >
       <div className="px-2 py-2 sm:px-3 sm:py-3">
         <div className="columns-2 gap-2 sm:columns-3 lg:columns-4">

@@ -41,12 +41,54 @@ body,
 }
 
 /*
- * Dark-mode scroll areas inside Mac windows: remap Tailwind gray/neutral utilities
- * when `.window-content-dark` wraps portfolio content (accent colors unchanged).
+ * Mac window body typography: remap Tailwind gray/neutral utilities to palette
+ * Primary Light #23262D / Dark #F9F9F7; muted via opacity or #4A4D55 / #A3A6AD.
  */
+
+/* ─── Light (window shell surface #F9F9F7) ─── */
+.window-content-light .text-black {
+  color: #23262d !important;
+}
+
+.window-content-light .text-gray-900,
+.window-content-light .text-neutral-900 {
+  color: #23262d !important;
+}
+
+.window-content-light .text-gray-800 {
+  color: rgb(35 38 45 / 0.92) !important;
+}
+
+.window-content-light .text-gray-700,
+.window-content-light .text-gray-600 {
+  color: rgb(35 38 45 / 0.7) !important;
+}
+
+.window-content-light .text-gray-500 {
+  color: #4a4d55 !important;
+}
+
+.window-content-light .text-gray-400 {
+  color: rgb(35 38 45 / 0.55) !important;
+}
+
+.window-content-light .border-gray-100,
+.window-content-light .border-gray-200 {
+  border-color: rgb(35 38 45 / 0.1) !important;
+}
+
+.window-content-light .border-gray-300 {
+  border-color: rgb(35 38 45 / 0.15) !important;
+}
+
+/* ─── Dark (window surface #2E3137) ─── */
+.window-content-dark .text-black {
+  color: #f9f9f7 !important;
+}
+
 .window-content-dark .text-gray-900,
 .window-content-dark .text-neutral-900 {
-  color: rgb(249 249 247 / 0.96) !important;
+  color: #f9f9f7 !important;
 }
 
 .window-content-dark .text-gray-800 {
@@ -55,32 +97,32 @@ body,
 
 .window-content-dark .text-gray-700,
 .window-content-dark .text-gray-600 {
-  color: rgb(249 249 247 / 0.78) !important;
+  color: rgb(249 249 247 / 0.7) !important;
 }
 
 .window-content-dark .text-gray-500 {
-  color: rgb(249 249 247 / 0.62) !important;
+  color: #a3a6ad !important;
 }
 
 .window-content-dark .text-gray-400 {
-  color: rgb(249 249 247 / 0.48) !important;
+  color: rgb(249 249 247 / 0.55) !important;
 }
 
 .window-content-dark .border-gray-100,
 .window-content-dark .border-gray-200 {
-  border-color: rgb(255 255 255 / 0.1) !important;
+  border-color: rgb(249 249 247 / 0.1) !important;
 }
 
 .window-content-dark .bg-gray-100 {
-  background-color: rgb(255 255 255 / 0.1) !important;
+  background-color: rgb(249 249 247 / 0.1) !important;
 }
 
 .window-content-dark .bg-white {
-  background-color: rgb(255 255 255 / 0.06) !important;
+  background-color: rgb(249 249 247 / 0.06) !important;
 }
 
 .window-content-dark .hover\:bg-gray-50:hover {
-  background-color: rgb(255 255 255 / 0.08) !important;
+  background-color: rgb(249 249 247 / 0.08) !important;
 }
 
 .window-content-dark .bg-emerald-50 {
@@ -92,11 +134,11 @@ body,
 }
 
 .window-content-dark .bg-gray-50 {
-  background-color: rgb(255 255 255 / 0.06) !important;
+  background-color: rgb(249 249 247 / 0.06) !important;
 }
 
 .window-content-dark .border-gray-300 {
-  border-color: rgb(255 255 255 / 0.14) !important;
+  border-color: rgb(249 249 247 / 0.15) !important;
 }
 
 /* Admin desktop folder — ::after caption (data-admin-tip) */

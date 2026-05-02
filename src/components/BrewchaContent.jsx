@@ -35,7 +35,7 @@ export default function BrewchaContent({ uiTheme = 'light' }) {
   const T = contentTokens(uiTheme)
   return (
     <div
-      className={`h-full overflow-y-auto overflow-x-hidden font-sans antialiased ${T.surface} ${T.text} ${T.scrollRoot} ${T.darkProse}`}
+      className={`h-full overflow-y-auto overflow-x-hidden font-sans antialiased ${T.surface} ${T.text} ${T.scrollRoot} ${T.contentProse}`}
     >
       {/* ── 1. Identity header + narrative ── */}
       <section className="px-6 pt-8 pb-24 sm:px-10">

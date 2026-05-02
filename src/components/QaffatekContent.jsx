@@ -144,7 +144,7 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
     <div
       ref={scrollRef}
       onScroll={handleScroll}
-      className={`h-full overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRoot} ${T.darkProse}`}
+      className={`h-full overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRoot} ${T.contentProse}`}
     >
 
       {/* ── Identity header + overview grid ───────────────────────────────── */}

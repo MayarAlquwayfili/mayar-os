@@ -46,22 +46,30 @@ export function contentTokens(uiTheme) {
   return {
     surface: dark ? 'bg-[#2E3137]' : 'bg-[#F9F9F7]',
     surfaceAlt: dark ? 'bg-[#363b44]' : 'bg-white',
+    /** Primary body / headings */
     text: dark ? 'text-[#F9F9F7]' : 'text-[#23262D]',
-    textMuted: dark ? 'text-[#F9F9F7]/75' : 'text-gray-600',
-    textSubtle: dark ? 'text-[#F9F9F7]/50' : 'text-gray-400',
-    textStrong: dark ? 'text-[#F9F9F7]' : 'text-gray-900',
-    border: dark ? 'border-white/10' : 'border-gray-100',
-    borderMuted: dark ? 'border-white/15' : 'border-gray-200',
-    pill: dark ? 'bg-white/12 text-[#F9F9F7]/90' : 'bg-gray-100 text-gray-600',
+    /** Secondary labels, dates, supporting lines */
+    textMuted: dark ? 'text-[#F9F9F7]/70' : 'text-[#23262D]/70',
+    /** Meta / tertiary (explicit hex on light for stable contrast) */
+    textSubtle: dark ? 'text-[#A3A6AD]' : 'text-[#4A4D55]',
+    /** Emphasis titles — same as primary, never pure black */
+    textStrong: dark ? 'text-[#F9F9F7]' : 'text-[#23262D]',
+    border: dark ? 'border-[#F9F9F7]/10' : 'border-[#23262D]/10',
+    borderMuted: dark ? 'border-[#F9F9F7]/15' : 'border-[#23262D]/15',
+    pill: dark
+      ? 'bg-white/12 text-[#F9F9F7]/90'
+      : 'bg-[rgb(35_38_45/0.08)] text-[#23262D]/80',
     scrollRoot:
       '[&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full ' +
       (dark
-        ? '[&::-webkit-scrollbar-thumb]:bg-white/20'
-        : '[&::-webkit-scrollbar-thumb]:bg-gray-300'),
+        ? '[&::-webkit-scrollbar-thumb]:bg-[#F9F9F7]/22'
+        : '[&::-webkit-scrollbar-thumb]:bg-[#23262D]/22'),
     scrollRootThin:
       '[&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full ' +
-      (dark ? '[&::-webkit-scrollbar-thumb]:bg-white/18' : '[&::-webkit-scrollbar-thumb]:bg-gray-200'),
-    /** Apply on scroll roots in dark mode together with `surface` for gray-* overrides */
-    darkProse: dark ? 'window-content-dark' : '',
+      (dark
+        ? '[&::-webkit-scrollbar-thumb]:bg-[#F9F9F7]/20'
+        : '[&::-webkit-scrollbar-thumb]:bg-[#23262D]/20'),
+    /** Remap Tailwind gray utilities inside Mac window bodies (Light + Dark) */
+    contentProse: dark ? 'window-content-dark' : 'window-content-light',
   }
 }

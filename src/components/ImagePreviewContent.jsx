@@ -14,7 +14,9 @@ export default function ImagePreviewContent({
   const T = contentTokens(uiTheme)
   return (
     <div className={`flex h-full min-h-0 flex-col ${chrome.bodyImagePreview}`}>
-      <div className="flex min-h-0 flex-1 items-center justify-center overflow-auto p-6 sm:p-10">
+      <div
+        className={`flex min-h-0 flex-1 items-center justify-center overflow-auto p-6 sm:p-10 ${T.contentProse}`}
+      >
         {src ? (
           <img
             src={src}

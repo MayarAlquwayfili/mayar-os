@@ -28,7 +28,7 @@ export default function SideBAlbumContent({
   return (
     <div
       ref={rootRef}
-      className={`h-full overflow-auto ${T.surface} ${T.text} ${T.darkProse}`}
+      className={`h-full overflow-auto ${T.surface} ${T.text} ${T.contentProse}`}
     >
       <div className="grid grid-cols-3 gap-4 p-6 sm:grid-cols-4">
         {items.map((item) => {

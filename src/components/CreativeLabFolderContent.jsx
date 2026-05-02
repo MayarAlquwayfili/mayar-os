@@ -26,7 +26,7 @@ export default function CreativeLabFolderContent({ onOpenProject, uiTheme = 'lig
   return (
     <div
       ref={rootRef}
-      className={`h-full overflow-auto ${T.surface} ${T.text} ${T.darkProse}`}
+      className={`h-full overflow-auto ${T.surface} ${T.text} ${T.contentProse}`}
     >
       <div className="flex flex-wrap content-start gap-x-10 gap-y-8 p-6">
         {LAB_FOLDER_CONTENTS.map((item) => {

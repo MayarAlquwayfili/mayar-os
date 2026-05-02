@@ -136,7 +136,7 @@ export default function HowToWorkContent({ uiTheme = 'light' }) {
 
   return (
     <div
-      className={`flex h-full w-full flex-col items-start justify-start overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRootThin} ${T.darkProse}`}
+      className={`flex h-full w-full flex-col items-start justify-start overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRootThin} ${T.contentProse}`}
     >
       <div className="w-full p-6">
 
