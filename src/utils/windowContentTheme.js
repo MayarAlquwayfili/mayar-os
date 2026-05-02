@@ -56,8 +56,8 @@ export function contentTokens(uiTheme) {
     textStrong: dark ? 'text-[#F9F9F7]' : 'text-[#23262D]',
     border: dark ? 'border-[#F9F9F7]/10' : 'border-[#23262D]/10',
     borderMuted: dark ? 'border-[#F9F9F7]/15' : 'border-[#23262D]/15',
-    /** Category / status / tool tags — highlight butter + charcoal (not theme body text) */
-    pill: 'border border-[#23262D]/10 bg-[#FEF0BC] text-[#23262D]',
+    /** Category / status / tool tags — translucent butter + charcoal (window content only; cursor tips stay solid in AdminFolderCursorTip) */
+    pill: 'border border-[#23262D]/10 bg-[#FEF0BC]/25 text-[#23262D]',
     scrollRoot:
       '[&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full ' +
       (dark
