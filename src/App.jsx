@@ -50,6 +50,15 @@ function desktopItemSelectionClass(isSelected) {
 const EDGE_PX = 10
 const MIN_W = 500
 const MIN_H = 400
+/** Qaffatek + RECLAB only — larger layout floor so rich media grids don’t collapse. */
+const MIN_W_QAFFATEK_RECLAB = 900
+const MIN_H_QAFFATEK_RECLAB = 700
+
+function minWindowSizeForTitle(title) {
+  return title === 'Qaffatek' || title === 'RECLAB'
+    ? { w: MIN_W_QAFFATEK_RECLAB, h: MIN_H_QAFFATEK_RECLAB }
+    : { w: MIN_W, h: MIN_H }
+}
 
 const RESIZE_CURSORS = {
   n: 'ns-resize',
@@ -797,6 +806,8 @@ function CVEntry({ title, titleHref, meta, date, bullets, bulletBeforeAccent }) 
 const WINDOW_PRESETS = {
   'How to Work with Me': { w: 440, h: 560, centered: true },
   Lab: { w: 440, h: 400, centered: true },
+  Qaffatek: { w: 900, h: 750, centered: true },
+  RECLAB: { w: 900, h: 750, centered: true },
   'cash-obsolete-research': { w: 1080, h: 800, centered: true },
   'Side B': { w: 960, h: 640, centered: true },
   SIDE_B_ALBUM: { w: 720, h: 520, centered: true },
@@ -830,10 +841,11 @@ function MacWindow({
           variant === 'notion-slider'
           ? WINDOW_PRESETS.NOTION_SLIDER ?? {}
           : WINDOW_PRESETS[title] ?? {}
+  const { w: minW, h: minH } = minWindowSizeForTitle(title)
   const defaultW = preset.w ?? 700
   const defaultH = preset.h ?? 500
-  const initialW = Math.max(MIN_W, defaultW)
-  const initialH = Math.max(MIN_H, defaultH)
+  const initialW = Math.max(minW, defaultW)
+  const initialH = Math.max(minH, defaultH)
 
   const [position, setPosition] = useState(() => {
     if (preset.centered) {
@@ -907,15 +919,15 @@ function MacWindow({
       let newL = startLeft
       let newT = startTop
 
-      if (zone.includes('e')) newW = Math.max(MIN_W, startW + dx)
-      if (zone.includes('s')) newH = Math.max(MIN_H, startH + dy)
+      if (zone.includes('e')) newW = Math.max(minW, startW + dx)
+      if (zone.includes('s')) newH = Math.max(minH, startH + dy)
       if (zone.includes('w')) {
-        const propW = Math.max(MIN_W, startW - dx)
+        const propW = Math.max(minW, startW - dx)
         newL = startLeft + (startW - propW)
         newW = propW
       }
       if (zone.includes('n')) {
-        const propH = Math.max(MIN_H, startH - dy)
+        const propH = Math.max(minH, startH - dy)
         newT = startTop + (startH - propH)
         newH = propH
       }
@@ -930,8 +942,8 @@ function MacWindow({
       if (newL + newW > window.innerWidth) newW = window.innerWidth - newL
       if (newT + newH > window.innerHeight - DOCK_SAFE_PX) newH = window.innerHeight - DOCK_SAFE_PX - newT
 
-      newW = Math.max(MIN_W, newW)
-      newH = Math.max(MIN_H, newH)
+      newW = Math.max(minW, newW)
+      newH = Math.max(minH, newH)
 
       setPosition({ x: newL, y: newT })
       setSize({ w: newW, h: newH })
@@ -949,7 +961,7 @@ function MacWindow({
       window.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('mouseup', onMouseUp)
     }
-  }, [isResizing])
+  }, [isResizing, minW, minH])
 
   const onTitleBarMouseDown = (e) => {
     onFocus?.()
@@ -993,7 +1005,7 @@ function MacWindow({
     if (isMaximized) {
       const { position: p, size: s } = restoredRef.current
       setPosition(p)
-      setSize(s)
+      setSize({ w: Math.max(minW, s.w), h: Math.max(minH, s.h) })
       setIsMaximized(false)
     } else {
       restoredRef.current = {
