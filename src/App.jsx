@@ -542,6 +542,13 @@ function RECLABContent({ uiTheme = 'light' }) {
 function CVContent({ uiTheme = 'light' }) {
   const T = contentTokens(uiTheme)
   const bulletDot = T.contentAccentBulletBefore
+  const cvPdfHref =
+    typeof window !== 'undefined'
+      ? new URL(
+          'MayarAlquwayfili.pdf',
+          `${window.location.origin}${import.meta.env.BASE_URL}`
+        ).href
+      : `${import.meta.env.BASE_URL}MayarAlquwayfili.pdf`
   return (
     <div
       className={`h-full overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRootThin} ${T.contentProse}`}
@@ -701,7 +708,7 @@ function CVContent({ uiTheme = 'light' }) {
         {/* ── Download button ── */}
         <div className="mt-10 flex justify-start border-t border-gray-100 pt-7">
           <a
-            href="/MayarAlquwayfili.pdf"
+            href={cvPdfHref}
             download="MayarAlquwayfili.pdf"
             className="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-6 py-2.5 text-[13px] font-medium text-white transition-colors hover:bg-gray-700"
           >
