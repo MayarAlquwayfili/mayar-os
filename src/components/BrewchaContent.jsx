@@ -7,6 +7,7 @@ import S02 from '../assets/Brewcha/Stickers/Brewcha_02.svg'
 import S03 from '../assets/Brewcha/Stickers/Brewcha_03.svg'
 import S05 from '../assets/Brewcha/Stickers/Brewcha_05.svg'
 import S11 from '../assets/Brewcha/Stickers/Brewcha_11.svg'
+import { contentTokens } from '../utils/windowContentTheme'
 
 const CALLOUT_STICKERS = [S01, S02, S03, S05, S11, BrewchaFav]
 
@@ -30,9 +31,12 @@ const CALLOUT_LAYOUT = [
   { bottom: '-18px', left: '18%', size: 74, rotate: 11, opacity: 0.92 },
 ]
 
-export default function BrewchaContent() {
+export default function BrewchaContent({ uiTheme = 'light' }) {
+  const T = contentTokens(uiTheme)
   return (
-    <div className="h-full overflow-y-auto overflow-x-hidden bg-white font-sans text-neutral-900 antialiased">
+    <div
+      className={`h-full overflow-y-auto overflow-x-hidden font-sans antialiased ${T.surface} ${T.text} ${T.scrollRoot} ${T.darkProse}`}
+    >
       {/* ── 1. Identity header + narrative ── */}
       <section className="px-6 pt-8 pb-24 sm:px-10">
         <div className="mx-auto max-w-[1200px]">

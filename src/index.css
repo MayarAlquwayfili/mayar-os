@@ -40,6 +40,65 @@ body,
   font-variant-numeric: tabular-nums;
 }
 
+/*
+ * Dark-mode scroll areas inside Mac windows: remap Tailwind gray/neutral utilities
+ * when `.window-content-dark` wraps portfolio content (accent colors unchanged).
+ */
+.window-content-dark .text-gray-900,
+.window-content-dark .text-neutral-900 {
+  color: rgb(249 249 247 / 0.96) !important;
+}
+
+.window-content-dark .text-gray-800 {
+  color: rgb(249 249 247 / 0.92) !important;
+}
+
+.window-content-dark .text-gray-700,
+.window-content-dark .text-gray-600 {
+  color: rgb(249 249 247 / 0.78) !important;
+}
+
+.window-content-dark .text-gray-500 {
+  color: rgb(249 249 247 / 0.62) !important;
+}
+
+.window-content-dark .text-gray-400 {
+  color: rgb(249 249 247 / 0.48) !important;
+}
+
+.window-content-dark .border-gray-100,
+.window-content-dark .border-gray-200 {
+  border-color: rgb(255 255 255 / 0.1) !important;
+}
+
+.window-content-dark .bg-gray-100 {
+  background-color: rgb(255 255 255 / 0.1) !important;
+}
+
+.window-content-dark .bg-white {
+  background-color: rgb(255 255 255 / 0.06) !important;
+}
+
+.window-content-dark .hover\:bg-gray-50:hover {
+  background-color: rgb(255 255 255 / 0.08) !important;
+}
+
+.window-content-dark .bg-emerald-50 {
+  background-color: rgb(16 185 129 / 0.14) !important;
+}
+
+.window-content-dark .text-emerald-700 {
+  color: rgb(167 243 208) !important;
+}
+
+.window-content-dark .bg-gray-50 {
+  background-color: rgb(255 255 255 / 0.06) !important;
+}
+
+.window-content-dark .border-gray-300 {
+  border-color: rgb(255 255 255 / 0.14) !important;
+}
+
 /* Admin desktop folder — ::after caption (data-admin-tip) */
 .admin-desktop-folder-tip-inner[data-admin-tip]::after {
   content: attr(data-admin-tip);

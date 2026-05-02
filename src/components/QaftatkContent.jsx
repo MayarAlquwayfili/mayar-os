@@ -7,6 +7,8 @@ import MockupBint     from '../assets/Qaffatek/MockupBint.svg'
 import MockupAjouz    from '../assets/Qaffatek/MockupAjouz.svg'
 import MockupTime     from '../assets/Qaffatek/MockupTime.svg'
 
+import { contentTokens } from '../utils/windowContentTheme'
+
 const Q_PURPLE = '#7B3FF2'
 const Q_ORANGE = '#FF6B2B'
 const Q_GREEN  = '#10B981'
@@ -26,7 +28,8 @@ const TOOLS = [
   'TestFlight',
 ]
 
-export default function QaftatkContent() {
+export default function QaftatkContent({ uiTheme = 'light' }) {
+  const T = contentTokens(uiTheme)
   const scrollRef = useRef(null)
 
   // ── Section refs (only sections that drive transitions / button need refs) ──
@@ -141,11 +144,7 @@ export default function QaftatkContent() {
     <div
       ref={scrollRef}
       onScroll={handleScroll}
-      className="h-full overflow-y-auto bg-white font-sans
-                 [&::-webkit-scrollbar]:w-1.5
-                 [&::-webkit-scrollbar-track]:bg-transparent
-                 [&::-webkit-scrollbar-thumb]:rounded-full
-                 [&::-webkit-scrollbar-thumb]:bg-gray-300"
+      className={`h-full overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRoot} ${T.darkProse}`}
     >
 
       {/* ── Identity header + overview grid ───────────────────────────────── */}

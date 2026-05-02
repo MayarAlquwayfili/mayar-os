@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import Figure1 from '../assets/Cash/Figure1.png'
 import Table1 from '../assets/Cash/Table1.png'
 import Figure3 from '../assets/Cash/Figure3.png'
+import { contentTokens } from '../utils/windowContentTheme'
 
 const BODY = 'text-[15px] leading-[1.8] text-gray-600'
 const META_KEY =
@@ -34,16 +35,25 @@ function FadeBlock({ className = '', children }) {
   )
 }
 
-export default function CashResearchContent() {
+export default function CashResearchContent({ uiTheme = 'light' }) {
+  const T = contentTokens(uiTheme)
   return (
-    <div className="h-full overflow-y-auto overflow-x-hidden bg-white font-sans antialiased">
+    <div
+      className={`h-full overflow-y-auto overflow-x-hidden font-sans antialiased ${T.surface} ${T.text} ${T.scrollRoot} ${T.darkProse}`}
+    >
       <div className="mx-auto w-full max-w-[1200px] px-6 pb-20 pt-8 text-left sm:px-8 md:px-10">
         <header className="mb-6 border-b border-gray-100 pb-4">
           <div className="flex flex-wrap items-center gap-2">
             <h1 className="text-[36px] font-bold leading-tight tracking-tight text-gray-900">
               Will Cash Become Obsolete?
             </h1>
-            <span className="inline-flex items-center rounded-full bg-emerald-100/50 px-3 py-1 text-[12px] font-bold text-emerald-800">
+            <span
+              className={`inline-flex items-center rounded-full px-3 py-1 text-[12px] font-bold ${
+                uiTheme === 'dark'
+                  ? 'bg-emerald-500/15 text-emerald-200'
+                  : 'bg-emerald-100/50 text-emerald-800'
+              }`}
+            >
               Completed (Awarded A+)
             </span>
           </div>

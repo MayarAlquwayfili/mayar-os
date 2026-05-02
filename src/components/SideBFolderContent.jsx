@@ -31,6 +31,8 @@ import Random_B_04 from '../assets/SideB/Random_B_04.jpg'
 import Random_B_05 from '../assets/SideB/Random_B_05.jpg'
 import Random_B_07 from '../assets/SideB/Random_B_07.heic?url'
 
+import { contentTokens } from '../utils/windowContentTheme'
+
 const SECTIONS = [
   {
     id: 'moheetik',
@@ -88,14 +90,11 @@ const SECTIONS = [
 
 const FLAT_GALLERY = SECTIONS.flatMap((s) => s.images)
 
-export default function SideBFolderContent() {
+export default function SideBFolderContent({ uiTheme = 'light' }) {
+  const T = contentTokens(uiTheme)
   return (
     <div
-      className="h-full overflow-y-auto bg-white font-sans
-                 [&::-webkit-scrollbar]:w-1
-                 [&::-webkit-scrollbar-track]:bg-transparent
-                 [&::-webkit-scrollbar-thumb]:rounded-full
-                 [&::-webkit-scrollbar-thumb]:bg-gray-200"
+      className={`h-full overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRootThin} ${T.darkProse}`}
     >
       <div className="px-2 py-2 sm:px-3 sm:py-3">
         <div className="columns-2 gap-2 sm:columns-3 lg:columns-4">

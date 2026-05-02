@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { contentTokens } from '../utils/windowContentTheme'
 
 // Aqua accent — admin / brand chrome (#ACDEE7).
 const WORK_ACCENT = '#ACDEE7'
@@ -108,7 +109,12 @@ const listItem = {
   },
 }
 
-export default function HowToWorkContent() {
+export default function HowToWorkContent({ uiTheme = 'light' }) {
+  const T = contentTokens(uiTheme)
+  const titleActive = uiTheme === 'dark' ? '#F9F9F7' : '#1c1c1e'
+  const captionActive = uiTheme === 'dark' ? 'rgba(249,249,247,0.72)' : '#636366'
+  const mutedDone = uiTheme === 'dark' ? 'rgba(249,249,247,0.42)' : '#aeaeb2'
+  const subtitleMuted = uiTheme === 'dark' ? 'rgba(249,249,247,0.55)' : '#8e8e93'
   // TODO: UNCOMMENT FOR PRODUCTION
   // const [items, setItems] = useState(() => loadSavedChecklist() ?? INITIAL_ITEMS.map((i) => ({ ...i })))
   const [items, setItems] = useState(() => INITIAL_ITEMS.map((i) => ({ ...i })))
@@ -129,12 +135,9 @@ export default function HowToWorkContent() {
     })
 
   return (
-    <div className="flex h-full w-full flex-col items-start justify-start overflow-y-auto
-                    bg-white font-sans
-                    [&::-webkit-scrollbar]:w-1
-                    [&::-webkit-scrollbar-track]:bg-transparent
-                    [&::-webkit-scrollbar-thumb]:rounded-full
-                    [&::-webkit-scrollbar-thumb]:bg-gray-200">
+    <div
+      className={`flex h-full w-full flex-col items-start justify-start overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRootThin} ${T.darkProse}`}
+    >
       <div className="w-full p-6">
 
         {/* ── Title + subtitle ────────────────────────────────────── */}
@@ -150,7 +153,7 @@ export default function HowToWorkContent() {
           >
             How to Work with Me
           </h1>
-          <p className="mt-0.5 text-[12px]" style={{ color: '#8e8e93' }}>
+          <p className="mt-0.5 text-[12px]" style={{ color: subtitleMuted }}>
             {items.filter((i) => !i.done).length === 0
               ? 'All caught up! '
               : `${items.filter((i) => !i.done).length} items`}
@@ -199,9 +202,9 @@ export default function HowToWorkContent() {
                 <p
                   className="text-[13px] font-bold leading-snug transition-all duration-150"
                   style={{
-                    color: item.done ? '#aeaeb2' : '#1c1c1e',
+                    color: item.done ? mutedDone : titleActive,
                     textDecoration: item.done ? 'line-through' : 'none',
-                    textDecorationColor: '#aeaeb2',
+                    textDecorationColor: mutedDone,
                     overflowWrap: 'break-word',
                   }}
                 >
@@ -210,9 +213,9 @@ export default function HowToWorkContent() {
                 <p
                   className="mt-0.5 text-[12px] font-normal leading-relaxed transition-all duration-150"
                   style={{
-                    color: item.done ? '#aeaeb2' : '#636366',
+                    color: item.done ? mutedDone : captionActive,
                     textDecoration: item.done ? 'line-through' : 'none',
-                    textDecorationColor: '#aeaeb2',
+                    textDecorationColor: mutedDone,
                     overflowWrap: 'break-word',
                   }}
                 >

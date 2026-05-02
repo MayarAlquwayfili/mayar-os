@@ -17,7 +17,6 @@ import MockupMoheetik02 from './assets/Moheetik/MockupMoheetik02.svg'
 import MockupMoheetik03 from './assets/Moheetik/MockupMoheetik03.svg'
 import Dock from './components/Dock'
 import TopStatusBar from './components/TopStatusBar'
-import QaftatkContent from './components/QaftatkContent'
 import BrewchaContent from './components/BrewchaContent'
 import CreativeLabFolderContent from './components/CreativeLabFolderContent'
 import SideBFolderContent from './components/SideBFolderContent'
@@ -35,6 +34,7 @@ import V60FolderIcon from './assets/Admin/V60_Folder.svg'
 import FigmaFolderIcon from './assets/Admin/Figma_Folder.svg'
 import { useWindowManager } from './hooks/useWindowManager'
 import { MOHEETIK_TOOLS, RECLAB_TOOLS, QAFFATEK_TOOLS, DESKTOP_FOLDERS } from './constants/projects'
+import { windowChrome, contentTokens } from './utils/windowContentTheme'
 
 const MENU_BAR_PX = 28
 // Dock: bottom-4 (16px) + py-2 (16px) + icon (54px) + dot gap + dot = ~96px clearance
@@ -90,14 +90,11 @@ const META_KEY_CLS = 'text-[10px] font-medium uppercase tracking-[0.09em] text-g
 const META_VAL_CLS = 'text-[13px] font-medium text-gray-900'
 const SECTION_H2   = 'mb-4 text-[15px] font-semibold tracking-tight text-gray-900'
 
-function MoheetikSplitContent() {
+function MoheetikSplitContent({ uiTheme = 'light' }) {
+  const T = contentTokens(uiTheme)
   return (
     <div
-      className="h-full overflow-y-auto bg-white font-sans
-                 [&::-webkit-scrollbar]:w-1.5
-                 [&::-webkit-scrollbar-track]:bg-transparent
-                 [&::-webkit-scrollbar-thumb]:rounded-full
-                 [&::-webkit-scrollbar-thumb]:bg-gray-300"
+      className={`h-full overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRoot} ${T.darkProse}`}
     >
       <div className="w-full max-w-[1200px] mx-auto px-6 py-8 sm:px-8 md:px-10">
 
@@ -242,7 +239,7 @@ function MoheetikSplitContent() {
   )
 }
 
-function RECLABContent() {
+function RECLABContent({ uiTheme = 'light' }) {
   const scrollRef = useRef(null)
   const sec2Ref   = useRef(null)  // S02 text (right) — BUTTON bell
   const sec3Ref   = useRef(null)  // S03 text (left)  — POPUP bell
@@ -312,15 +309,13 @@ function RECLABContent() {
   const popOpacity = bell(sec3RP)
   const popTY      = floatTY(sec3RP)
 
+  const T = contentTokens(uiTheme)
+
   return (
     <div
       ref={scrollRef}
       onScroll={handleScroll}
-      className="h-full overflow-y-auto bg-white font-sans
-                 [&::-webkit-scrollbar]:w-1.5
-                 [&::-webkit-scrollbar-track]:bg-transparent
-                 [&::-webkit-scrollbar-thumb]:rounded-full
-                 [&::-webkit-scrollbar-thumb]:bg-gray-300"
+      className={`h-full overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRoot} ${T.darkProse}`}
     >
 
       {/* ── Header + Overview ─────────────────────────────────────────── */}
@@ -550,14 +545,11 @@ function RECLABContent() {
   )
 }
 
-function QaffatekContent() {
+function QaffatekContent({ uiTheme = 'light' }) {
+  const T = contentTokens(uiTheme)
   return (
     <div
-      className="h-full overflow-y-auto bg-white font-sans
-                 [&::-webkit-scrollbar]:w-1.5
-                 [&::-webkit-scrollbar-track]:bg-transparent
-                 [&::-webkit-scrollbar-thumb]:rounded-full
-                 [&::-webkit-scrollbar-thumb]:bg-gray-300"
+      className={`h-full overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRoot} ${T.darkProse}`}
     >
       <div className="w-full max-w-[1200px] mx-auto px-6 py-8 sm:px-8 md:px-10">
 
@@ -661,15 +653,11 @@ function QaffatekContent() {
   )
 }
 
-function CVContent() {
+function CVContent({ uiTheme = 'light' }) {
+  const T = contentTokens(uiTheme)
   return (
-    /* Outer: fills the window, white bg, scrollable, thin custom scrollbar */
     <div
-      className="h-full overflow-y-auto bg-white font-sans
-                 [&::-webkit-scrollbar]:w-1.5
-                 [&::-webkit-scrollbar-track]:bg-transparent
-                 [&::-webkit-scrollbar-thumb]:rounded-full
-                 [&::-webkit-scrollbar-thumb]:bg-gray-200"
+      className={`h-full overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRootThin} ${T.darkProse}`}
     >
       {/* Centered content column — expands with the window, overflow-safe */}
       <div className="mx-auto w-full max-w-[820px] min-w-0 overflow-x-hidden break-words px-8 pb-12 pt-10 sm:px-10 md:px-14 lg:px-16">
@@ -925,7 +913,10 @@ function MacWindow({
   variant = 'default',
   sideBAlbumKey,
   imagePreview,
+  uiTheme = 'light',
 }) {
+  const chrome = windowChrome(uiTheme)
+
   const preset =
     variant === 'side-b-album'
       ? WINDOW_PRESETS.SIDE_B_ALBUM ?? {}
@@ -1138,7 +1129,7 @@ function MacWindow({
   return (
     <div
       ref={windowRef}
-      className={`fixed flex flex-col overflow-hidden border border-black/10 bg-white font-sans shadow-2xl ${
+      className={`fixed flex flex-col overflow-hidden font-sans ${chrome.shell} ${
         isMaximized ? 'rounded-none border-t-0' : 'rounded-xl'
       }`}
       style={windowStyle}
@@ -1151,7 +1142,7 @@ function MacWindow({
     >
       <div
         data-titlebar
-        className={`relative flex h-11 shrink-0 select-none items-center border-b border-black/[0.06] bg-white px-4 ${
+        className={`relative flex h-11 shrink-0 select-none items-center px-4 ${chrome.titleBar} ${
           isMaximized
             ? 'cursor-default'
             : isDragging
@@ -1194,13 +1185,14 @@ function MacWindow({
 
       <div
         className={`min-h-0 flex-1 overflow-hidden ${
-          variant === 'image-preview' ? 'bg-[#fafafa]' : 'bg-white'
+          variant === 'image-preview' ? chrome.bodyImagePreview : chrome.body
         }`}
       >
         {variant === 'image-preview' && imagePreview ? (
-          <ImagePreviewContent {...imagePreview} />
+          <ImagePreviewContent {...imagePreview} uiTheme={uiTheme} />
         ) : variant === 'side-b-album' && sideBAlbumKey ? (
           <SideBAlbumContent
+            uiTheme={uiTheme}
             projectKey={sideBAlbumKey}
             onOpenPreview={(item) =>
               openOrFocusWindow({
@@ -1217,30 +1209,34 @@ function MacWindow({
             }
           />
         ) : title === 'Moheetik' ? (
-          <MoheetikSplitContent />
+          <MoheetikSplitContent uiTheme={uiTheme} />
         ) : title === 'RECLAB' ? (
-          <RECLABContent />
+          <RECLABContent uiTheme={uiTheme} />
         ) : title === 'Qaffatek' ? (
-          <QaftatkContent />
+          <QaffatekContent uiTheme={uiTheme} />
         ) : title === 'Lab' ? (
-          <CreativeLabFolderContent onOpenProject={openOrFocusWindow} />
+          <CreativeLabFolderContent uiTheme={uiTheme} onOpenProject={openOrFocusWindow} />
         ) : title === 'cash-obsolete-research' ? (
-          <CashResearchContent />
+          <CashResearchContent uiTheme={uiTheme} />
         ) : title === 'Side B' ? (
-          <SideBFolderContent />
+          <SideBFolderContent uiTheme={uiTheme} />
         ) : title === 'Brewcha' ? (
-          <BrewchaContent />
+          <BrewchaContent uiTheme={uiTheme} />
         ) : title === 'Preview — Mayar_CV.pdf' ? (
-          <CVContent />
+          <CVContent uiTheme={uiTheme} />
         ) : variant === 'notion-slider' ? (
           <>
             {/* TODO: REMOVE OR REUSE — was <NotionSliderContent />; Notion folder is static (no window). */}
           </>
         ) : title === 'How to Work with Me' ? (
-          <HowToWorkContent />
+          <HowToWorkContent uiTheme={uiTheme} />
         ) : (
-          <div className="p-6 text-sm text-gray-600">
-            <p className="font-medium text-gray-800">{title}</p>
+          <div
+            className={`p-6 text-sm ${uiTheme === 'dark' ? 'text-[#F9F9F7]/75' : 'text-gray-600'}`}
+          >
+            <p className={`font-medium ${uiTheme === 'dark' ? 'text-[#F9F9F7]' : 'text-gray-800'}`}>
+              {title}
+            </p>
           </div>
         )}
       </div>
@@ -1882,6 +1878,7 @@ export default function App() {
               variant={win.variant}
               sideBAlbumKey={win.sideBAlbumKey}
               imagePreview={win.imagePreview}
+              uiTheme={uiTheme}
               onClose={() => closeWindow(win.id)}
               onMinimize={() => minimizeWindow(win.id)}
               onFocus={() => bringToFront(win.id)}

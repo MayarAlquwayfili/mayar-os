@@ -2,11 +2,12 @@ import { useEffect, useRef, useState } from 'react'
 import BrewchaLauncherIcon from '../assets/Brewcha/Stickers/Brewcha_03.svg'
 import FolderIcon from '../assets/Folder.svg'
 import { LAB_FOLDER_CONTENTS } from '../constants/projects'
+import { contentTokens } from '../utils/windowContentTheme'
 
 /**
  * Lab folder — nested project launchers (Brewcha, research, …).
  */
-export default function CreativeLabFolderContent({ onOpenProject }) {
+export default function CreativeLabFolderContent({ onOpenProject, uiTheme = 'light' }) {
   const rootRef = useRef(null)
   const [selectedId, setSelectedId] = useState(null)
 
@@ -20,8 +21,13 @@ export default function CreativeLabFolderContent({ onOpenProject }) {
     return () => window.removeEventListener('mousedown', onDown)
   }, [])
 
+  const T = contentTokens(uiTheme)
+
   return (
-    <div ref={rootRef} className="h-full overflow-auto bg-white">
+    <div
+      ref={rootRef}
+      className={`h-full overflow-auto ${T.surface} ${T.text} ${T.darkProse}`}
+    >
       <div className="flex flex-wrap content-start gap-x-10 gap-y-8 p-6">
         {LAB_FOLDER_CONTENTS.map((item) => {
           const isSelected = selectedId === item.id
@@ -35,7 +41,9 @@ export default function CreativeLabFolderContent({ onOpenProject }) {
               className={`group flex w-[128px] cursor-default flex-col items-center gap-1.5 rounded-xl border p-2 text-center outline-none transition-colors ${
                 isSelected
                   ? 'bg-[#ACDEE7]/12 border-[#ACDEE7]/25'
-                  : 'bg-transparent border-transparent hover:bg-black/5'
+                  : uiTheme === 'dark'
+                    ? 'bg-transparent border-transparent hover:bg-white/5'
+                    : 'bg-transparent border-transparent hover:bg-black/5'
               } focus-visible:ring-2 focus-visible:ring-[#10B981]/40 focus-visible:ring-offset-2`}
               onClick={(e) => {
                 e.stopPropagation()

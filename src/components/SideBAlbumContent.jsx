@@ -1,10 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
 import { SIDE_B_ALBUM_IMAGES } from '../constants/projects'
+import { contentTokens } from '../utils/windowContentTheme'
 
 /**
  * Side B — album grid for one project; thumbnails select on click, preview on double-click.
  */
-export default function SideBAlbumContent({ projectKey, onOpenPreview }) {
+export default function SideBAlbumContent({
+  projectKey,
+  onOpenPreview,
+  uiTheme = 'light',
+}) {
+  const T = contentTokens(uiTheme)
   const items = SIDE_B_ALBUM_IMAGES[projectKey] ?? []
   const rootRef = useRef(null)
   const [selectedId, setSelectedId] = useState(null)
@@ -20,7 +26,10 @@ export default function SideBAlbumContent({ projectKey, onOpenPreview }) {
   }, [])
 
   return (
-    <div ref={rootRef} className="h-full overflow-auto bg-white">
+    <div
+      ref={rootRef}
+      className={`h-full overflow-auto ${T.surface} ${T.text} ${T.darkProse}`}
+    >
       <div className="grid grid-cols-3 gap-4 p-6 sm:grid-cols-4">
         {items.map((item) => {
           const isSelected = selectedId === item.id
@@ -33,7 +42,9 @@ export default function SideBAlbumContent({ projectKey, onOpenPreview }) {
               className={`group w-full cursor-default rounded-xl border p-1.5 outline-none transition-colors ${
                 isSelected
                   ? 'border-[#ACDEE7]/25 bg-[#ACDEE7]/12'
-                  : 'border-transparent hover:bg-black/5'
+                  : uiTheme === 'dark'
+                    ? 'border-transparent hover:bg-white/5'
+                    : 'border-transparent hover:bg-black/5'
               } focus-visible:ring-2 focus-visible:ring-[#10B981]/40 focus-visible:ring-offset-2`}
               onClick={(e) => {
                 e.stopPropagation()
