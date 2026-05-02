@@ -727,6 +727,24 @@ function CVContent({ uiTheme = 'light' }) {
           </div>
         </Section>
 
+        {/* ── Download button ── */}
+        <div className="mt-10 flex justify-start border-t border-gray-100 pt-7">
+          <a
+            href={`${import.meta.env.BASE_URL}MayarAlquwayfiliCv.pdf`}
+            download="MayarAlquwayfiliCv.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-6 py-2.5 text-[13px] font-medium text-white transition-colors hover:bg-gray-700"
+          >
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            Download PDF
+          </a>
+        </div>
+
       </div>
     </div>
   )
