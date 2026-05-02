@@ -43,12 +43,12 @@ const DOCK_SAFE_PX = 96
 
 /** Post-admin-flow desktop items — share selection state with standard folders. */
 const DESKTOP_ITEM_FRAME_BASE =
-  'box-border flex w-[132px] flex-col items-center gap-2 rounded-xl border p-3 text-center outline-none transition-colors'
+  'box-border flex w-[132px] flex-col items-center gap-2 rounded-xl border p-3 text-center outline-none transition-all duration-200'
 
 function desktopItemSelectionClass(isSelected) {
   return isSelected
-    ? 'border-[#FEF0BC]/45 bg-[#FEF0BC]/35 hover:bg-[#FEF0BC]/45'
-    : 'border-transparent bg-transparent hover:border-transparent hover:bg-[#FEF0BC]/12'
+    ? 'border-[#FEF0BC]/45 bg-[#FEF0BC]/35 hover:bg-[#FEF0BC]/40'
+    : 'border-transparent bg-transparent hover:border-transparent hover:bg-[#FEF0BC]/40'
 }
 const EDGE_PX = 10
 const MIN_W = 380
@@ -1280,6 +1280,7 @@ function DraggableFolder({
   title,
   icon,
   subtitle,
+  cursorTipLabel,
   initialX,
   initialY,
   isSelected,
@@ -1368,10 +1369,11 @@ function DraggableFolder({
   }
 
   return (
-    <div
+    <AdminFolderCursorTip
       ref={rootRef}
+      label={cursorTipLabel}
       aria-label={`Folder ${id}: ${title}`}
-      className={`absolute ${DESKTOP_ITEM_FRAME_BASE} cursor-grab select-none active:cursor-grabbing ${desktopItemSelectionClass(
+      wrapperClassName={`absolute ${DESKTOP_ITEM_FRAME_BASE} cursor-grab select-none active:cursor-grabbing ${desktopItemSelectionClass(
         isSelected,
       )}`}
       style={{ left: position.x, top: position.y }}
@@ -1388,21 +1390,21 @@ function DraggableFolder({
         />
       </div>
 
-      <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
-        <span
-          className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-[#23262D]"
-        >
+      <div className="flex min-h-0 w-full flex-col items-center justify-center px-0.5 text-center">
+        <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-[#23262D]">
           {title}
         </span>
-        <span
-          className={`w-full break-words text-[11px] leading-snug ${
-            isSelected ? 'text-[#23262D]/80' : 'text-[#23262D]/70'
-          }`}
-        >
-          {subtitle ?? '2 items'}
-        </span>
+        {subtitle ? (
+          <span
+            className={`mt-0.5 w-full break-words text-[11px] leading-snug ${
+              isSelected ? 'text-[#23262D]/80' : 'text-[#23262D]/70'
+            }`}
+          >
+            {subtitle}
+          </span>
+        ) : null}
       </div>
-    </div>
+    </AdminFolderCursorTip>
   )
 }
 
@@ -1809,6 +1811,7 @@ export default function App() {
             title={folder.title}
             icon={folder.icon}
             subtitle={folder.subtitle}
+            cursorTipLabel={folder.cursorTipLabel}
             initialX={folderPositions[folder.id]?.x ?? folder.x}
             initialY={folderPositions[folder.id]?.y ?? folder.y}
             isSelected={selectedDesktopItemId === folder.id}

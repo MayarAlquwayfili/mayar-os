@@ -1,29 +1,43 @@
-import { useState } from 'react'
+import { forwardRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 const CURSOR_GAP_PX = 8
+
+/** Shared pill styles for cursor-follow tips (desktop folders + identity sticker). */
+export const CURSOR_TIP_LABEL_CLASS =
+  'inline-flex max-w-[min(280px,calc(100vw-48px))] items-center rounded-full border border-[#ACDEE7]/40 bg-[#ACDEE7] px-4 py-1.5 text-left text-[11px] font-medium leading-snug text-[#23262D]'
 
 /**
  * Text-only pill that follows the pointer; no arrow. Parent hit area uses cursor-none.
  * Optional `wrapperClassName` overrides the default 132px folder frame (e.g. identity sticker).
  */
-const DEFAULT_WRAPPER =
-  'block w-[132px] cursor-none select-none'
+const DEFAULT_WRAPPER = 'block w-[132px] cursor-none select-none'
 
-export default function AdminFolderCursorTip({ label, children, wrapperClassName }) {
+const AdminFolderCursorTip = forwardRef(function AdminFolderCursorTip(
+  { label, children, wrapperClassName, style, onMouseMove: onMouseMoveProp, onMouseLeave: onMouseLeaveProp, ...rest },
+  ref,
+) {
   const [tip, setTip] = useState({ show: false, x: 0, y: 0 })
 
   const onMove = (e) => {
     setTip({ show: true, x: e.clientX, y: e.clientY })
+    onMouseMoveProp?.(e)
   }
-  const onLeave = () => setTip((t) => ({ ...t, show: false }))
+
+  const onLeave = (e) => {
+    setTip((t) => ({ ...t, show: false }))
+    onMouseLeaveProp?.(e)
+  }
 
   return (
     <>
       <div
+        ref={ref}
         className={wrapperClassName ?? DEFAULT_WRAPPER}
+        style={style}
         onMouseMove={onMove}
         onMouseLeave={onLeave}
+        {...rest}
       >
         {children}
       </div>
@@ -38,12 +52,14 @@ export default function AdminFolderCursorTip({ label, children, wrapperClassName
               transform: 'translateY(-50%)',
             }}
           >
-            <span className="inline-flex max-w-[min(280px,calc(100vw-48px))] items-center rounded-full border border-[#ACDEE7]/40 bg-[#ACDEE7] px-4 py-1.5 text-left text-[11px] font-medium leading-snug text-[#23262D]">
-              {label}
-            </span>
+            <span className={CURSOR_TIP_LABEL_CLASS}>{label}</span>
           </div>,
           document.body,
         )}
     </>
   )
-}
+})
+
+AdminFolderCursorTip.displayName = 'AdminFolderCursorTip'
+
+export default AdminFolderCursorTip
