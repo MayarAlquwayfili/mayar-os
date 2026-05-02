@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import FolderIcon from './assets/Folder.svg'
 import AppIconMoheetik from './assets/Moheetik/AppIconMoheetik.svg'
-import AppIconQaffatek from './assets/AppIconQaffatek.svg'
 import AppIconRECLAB from './assets/RECLAB/AppIconRECLAB.svg'
 import MockupRECLABHome from './assets/RECLAB/MockupHome.svg'
 import MockupRECLABLab from './assets/RECLAB/MockupLab.svg'
@@ -11,7 +10,6 @@ import RECLABPopup from './assets/RECLAB/RECLAB_POPUP.svg'
 // RECLAB_POPUP02.svg — drop this file into src/assets/RECLAB/ to activate the second popup
 import RECLABPopup02 from './assets/RECLAB/RECLAB_POPUP.svg'
 import RECLABButton from './assets/RECLAB/RECLAB_BUTTON.svg'
-import IcAppleLogo from './assets/Ic_apple.logo.svg'
 import MockupMoheetik01 from './assets/Moheetik/MockupMoheetik01.svg'
 import MockupMoheetik02 from './assets/Moheetik/MockupMoheetik02.svg'
 import MockupMoheetik03 from './assets/Moheetik/MockupMoheetik03.svg'
@@ -24,6 +22,7 @@ import CashResearchContent from './components/CashResearchContent'
 import SideBAlbumContent from './components/SideBAlbumContent'
 import ImagePreviewContent from './components/ImagePreviewContent'
 import HowToWorkContent from './components/HowToWorkContent'
+import QaffatekContent from './components/QaffatekContent'
 import DraggableDesktopItem from './components/DraggableDesktopItem'
 import AdminFolderCursorTip from './components/AdminFolderCursorTip'
 import AdminNotifications from './components/AdminNotifications'
@@ -32,7 +31,7 @@ import NotionFolderIcon from './assets/Admin/Notion_Folder.svg'
 import V60FolderIcon from './assets/Admin/V60_Folder.svg'
 import FigmaFolderIcon from './assets/Admin/Figma_Folder.svg'
 import { useWindowManager } from './hooks/useWindowManager'
-import { MOHEETIK_TOOLS, RECLAB_TOOLS, QAFFATEK_TOOLS, DESKTOP_FOLDERS } from './constants/projects'
+import { MOHEETIK_TOOLS, RECLAB_TOOLS, DESKTOP_FOLDERS } from './constants/projects'
 import { windowChrome, contentTokens } from './utils/windowContentTheme'
 
 const MENU_BAR_PX = 28
@@ -539,114 +538,6 @@ function RECLABContent({ uiTheme = 'light' }) {
           </section>
 
         </div>
-      </div>
-    </div>
-  )
-}
-
-function QaffatekContent({ uiTheme = 'light' }) {
-  const T = contentTokens(uiTheme)
-  return (
-    <div
-      className={`h-full overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRoot} ${T.darkProse}`}
-    >
-      <div className="w-full max-w-[1200px] mx-auto px-6 py-8 sm:px-8 md:px-10">
-
-        {/* ── Identity ───────────────────────────────────────── */}
-        <header className="flex items-center gap-5 pb-6 mb-8 border-b border-gray-100">
-          <img
-            src={AppIconQaffatek}
-            alt="Qaffatek app icon"
-            className="h-16 w-16 rounded-[14px] shadow-sm"
-          />
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-[20px] font-bold tracking-tight text-gray-900">Qaffatek</h1>
-              <span className="flex items-center gap-1 bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
-                Live
-              </span>
-            </div>
-            <p className="mt-0.5 text-[13px] font-medium text-gray-500">
-              Family Game
-            </p>
-          </div>
-        </header>
-
-        {/* ── Overview Grid ──────────────────────────────────── */}
-        <div className="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-4 pb-8 mb-10 border-b border-gray-100">
-          <div>
-            <p className={META_KEY_CLS}>Timeline</p>
-            <p className={META_VAL_CLS}>Sep 2025 – Mar 2026</p>
-          </div>
-          <div>
-            <p className={META_KEY_CLS}>My Role</p>
-            <p className={META_VAL_CLS}>iOS Developer &amp; Product Designer</p>
-          </div>
-          <div>
-            <p className={META_KEY_CLS}>Project Type</p>
-            <p className={META_VAL_CLS}>iOS App (Apple Dev Academy)</p>
-          </div>
-          <div>
-            <p className={META_KEY_CLS}>Tools</p>
-            <div className="mt-1.5 flex flex-wrap gap-1">
-              {QAFFATEK_TOOLS.map((t) => (
-                <span
-                  key={t}
-                  className="inline-flex rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-medium text-gray-600"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* ── Description ────────────────────────────────────── */}
-        <section className="py-10">
-          <p className={META_KEY_CLS + ' mb-3'}>About the Project</p>
-          <h2 className="text-[24px] font-bold leading-tight tracking-tight text-gray-900 mb-4">
-            A traditional Saudi game,<br />
-            <span className="text-gray-400">reimagined for the iPhone.</span>
-          </h2>
-          <p className={BODY_CLS}>
-            Qaffatek is a digital revival of{' '}
-            <strong className="font-semibold text-gray-900">Gamzah</strong>, the
-            classic Saudi social game built on quick reflexes and shared laughter.
-            The original game is deceptively simple — players react to a trigger
-            and the slowest hand loses — but the real magic is in the energy it
-            creates around a table. Our goal was to capture that same electric
-            social tension and translate it faithfully to a native iOS experience.
-            Designed for families and friend groups, Qaffatek brings the{' '}
-            <strong className="font-semibold text-gray-900">speed, the stakes, and the chaos</strong>{' '}
-            of the original while making it accessible anywhere, any time.
-          </p>
-
-          {/* ── App Store Button ─────────────────────────────── */}
-          <a
-            href="https://apps.apple.com/sa/app/%D9%82%D9%81%D8%B7%D8%AA%D9%83/id6757811186"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 mt-8 bg-black text-white px-5 py-3 rounded-xl transition-all duration-200 hover:scale-105 select-none"
-            style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.18)' }}
-          >
-            <img
-              src={IcAppleLogo}
-              alt=""
-              aria-hidden
-              className="w-[18px] h-auto invert"
-            />
-            <div className="flex flex-col leading-none">
-              <span className="text-[10px] font-normal text-white/80 tracking-wide">
-                Download on the
-              </span>
-              <span className="text-[17px] font-semibold tracking-tight mt-0.5">
-                App Store
-              </span>
-            </div>
-          </a>
-        </section>
-
       </div>
     </div>
   )

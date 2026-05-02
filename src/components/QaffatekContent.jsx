@@ -28,7 +28,7 @@ const TOOLS = [
   'TestFlight',
 ]
 
-export default function QaftatkContent({ uiTheme = 'light' }) {
+export default function QaffatekContent({ uiTheme = 'light' }) {
   const T = contentTokens(uiTheme)
   const scrollRef = useRef(null)
 
@@ -203,6 +203,21 @@ export default function QaftatkContent({ uiTheme = 'light' }) {
             </div>
           </div>
         </div>
+
+        <section
+          className={`mb-10 rounded-2xl border px-5 py-5 ${T.borderMuted} ${
+            uiTheme === 'dark' ? 'bg-white/[0.06]' : 'bg-gray-50'
+          }`}
+          aria-label="Project origins"
+        >
+          <p className={`text-[15px] leading-[1.75] ${T.text}`}>
+            <strong className="font-semibold">Mayar created and originated Qaffatek</strong>, an iOS-based mobile
+            game started in <strong className="font-semibold">October 2025</strong>, successfully digitizing a
+            traditional regional paper game for iPhone. She led the UI design process in{' '}
+            <strong className="font-semibold">Figma</strong>, then implemented the game logic and gameplay in{' '}
+            <strong className="font-semibold">Swift</strong> (SwiftUI).
+          </p>
+        </section>
       </div>
 
       {/* ══ 01. The Challenge — centered block (NO PHONE) ═══════════════════ */}

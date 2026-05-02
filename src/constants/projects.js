@@ -2,6 +2,7 @@ import SideBFolderIcon from '../assets/SideBFolder.svg'
 import BrwchaFolderIcon from '../assets/BrwchaFolder.svg'
 import PayFolderIcon from '../assets/PayFolder.svg'
 import PdfFloderIcon from '../assets/PdfFloder.svg'
+import FolderIcon from '../assets/Folder.svg'
 
 // ─── Tool stacks ──────────────────────────────────────────────────────────────
 
@@ -103,6 +104,15 @@ export const DESKTOP_FOLDERS = [
     cursorTipLabel: 'Economics Research',
     x: 400,
     y: 140,
+  },
+  {
+    id: 'qaffatek',
+    title: 'Qaffatek',
+    windowTitle: 'Qaffatek',
+    icon: FolderIcon,
+    cursorTipLabel: 'iOS Game',
+    x: 520,
+    y: 120,
   },
   {
     id: 'cv',
