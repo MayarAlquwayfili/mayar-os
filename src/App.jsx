@@ -31,7 +31,6 @@ import FigmaFolderIcon from './assets/Admin/Figma_Folder.svg'
 import { useWindowManager } from './hooks/useWindowManager'
 import { MOHEETIK_TOOLS, RECLAB_TOOLS, DESKTOP_FOLDERS } from './constants/projects'
 import { windowChrome, contentTokens } from './utils/windowContentTheme'
-import cvPdf from './assets/MayarAlquwayfiliCv.pdf'
 
 const MENU_BAR_PX = 28
 // Dock: bottom-4 (16px) + py-2 (16px) + icon (54px) + dot gap + dot = ~96px clearance
@@ -727,24 +726,6 @@ function CVContent({ uiTheme = 'light' }) {
             ))}
           </div>
         </Section>
-
-        {/* ── Download button ── */}
-        <div className="mt-10 flex justify-start border-t border-gray-100 pt-7">
-          <a
-            href={cvPdf}
-            download="MayarAlquwayfiliCv.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-6 py-2.5 text-[13px] font-medium text-white transition-colors hover:bg-gray-700"
-          >
-            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-            Download PDF
-          </a>
-        </div>
 
       </div>
     </div>
