@@ -1,14 +1,16 @@
 import { forwardRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { contentTokens } from '../utils/windowContentTheme'
 
 const CURSOR_GAP_PX = 8
 
-/** Desktop folder cursor tooltip — always highlight yellow + charcoal (same in Light/Dark). */
+/** Desktop folder cursor tooltip — translucent neutral pill (matches contentTokens.pillDefault). */
 // eslint-disable-next-line react-refresh/only-export-components -- helper shares pill classes with folder chrome
-export function cursorTipPillClass() {
+export function cursorTipPillClass(uiTheme = 'light') {
+  const T = contentTokens(uiTheme)
   return [
-    'inline-flex max-w-[min(280px,calc(100vw-48px))] items-center rounded-full',
-    'border border-[#23262D]/12 bg-[#FEF0BC] px-4 py-1.5 text-left text-[11px] font-medium leading-snug text-[#23262D]',
+    'inline-flex max-w-[min(280px,calc(100vw-48px))] items-center rounded-full px-4 py-1.5 text-left text-[11px] font-medium leading-snug',
+    T.pillDefault,
   ].join(' ')
 }
 
@@ -23,7 +25,7 @@ const AdminFolderCursorTip = forwardRef(function AdminFolderCursorTip(
     label,
     children,
     wrapperClassName,
-    uiTheme: _uiTheme = 'light',
+    uiTheme = 'light',
     style,
     onMouseMove: onMouseMoveProp,
     onMouseLeave: onMouseLeaveProp,
@@ -66,7 +68,7 @@ const AdminFolderCursorTip = forwardRef(function AdminFolderCursorTip(
               transform: 'translateY(-50%)',
             }}
           >
-            <span className={cursorTipPillClass()}>{label}</span>
+            <span className={cursorTipPillClass(uiTheme)}>{label}</span>
           </div>,
           document.body,
         )}

@@ -1,7 +1,7 @@
 /**
  * Shared classes for Mac windows and scrollable inner content (Light / Dark uiTheme).
  * Theme-aware accent: Light #82ADB5 (readable on #F9F9F7), Dark #ACDEE7.
- * Highlight #FEF0BC unchanged elsewhere via components / globals.
+ * Content pills use translucent blue/gray (pillStatus, pillDefault) — no solid pill fills.
  */
 
 const ACCENT_LIGHT = '#82ADB5'
@@ -14,8 +14,6 @@ export function accentTokens(uiTheme) {
     hex: dark ? ACCENT_DARK : ACCENT_LIGHT,
     /** Labels on accent fills — dark charcoal reads on both aqua/teal surfaces */
     textOnAccent: 'text-[#23262D]',
-    pillBg: dark ? 'bg-[#ACDEE7]' : 'bg-[#82ADB5]',
-    pillBorder: dark ? 'border-[#ACDEE7]/40' : 'border-[#82ADB5]/40',
     btnSolid: dark ? 'bg-[#ACDEE7]' : 'bg-[#82ADB5]',
     btnTint: dark ? 'bg-[#ACDEE7]/15' : 'bg-[#82ADB5]/15',
     borderAccent: dark ? 'border-[#ACDEE7]/35' : 'border-[#82ADB5]/35',
@@ -56,18 +54,14 @@ export function contentTokens(uiTheme) {
     textStrong: dark ? 'text-[#F9F9F7]' : 'text-[#23262D]',
     border: dark ? 'border-[#F9F9F7]/10' : 'border-[#23262D]/10',
     borderMuted: dark ? 'border-[#F9F9F7]/15' : 'border-[#23262D]/15',
-    /** Status / success chips (MVP, completed badges) — soft green tint, charcoal label */
+    /** Status labels (MVP, Completed, Awards, Live on Store) — translucent accent tint */
     pillStatus: dark
-      ? 'border border-[#F9F9F7]/12 bg-emerald-400/18 text-[#23262D]'
-      : 'border border-[#23262D]/10 bg-emerald-500/12 text-[#23262D]',
-    /** Tools / tech tags — neutral tint */
-    pillTools: dark
-      ? 'border border-[#F9F9F7]/12 bg-[#F9F9F7]/10 text-[#23262D]'
+      ? 'border border-[#ACDEE7]/25 bg-[#ACDEE7]/15 text-[#F9F9F7]'
+      : 'border border-[#82ADB5]/20 bg-[#82ADB5]/15 text-[#23262D]',
+    /** Tools, roles, tech tags — neutral translucent gray */
+    pillDefault: dark
+      ? 'border border-[#F9F9F7]/10 bg-[#F9F9F7]/5 text-[#F9F9F7]'
       : 'border border-[#23262D]/10 bg-[#23262D]/5 text-[#23262D]',
-    /** Role / prototype labels — muted tone */
-    pillRole: dark
-      ? 'border border-[#F9F9F7]/12 bg-[#F9F9F7]/10 text-[#23262D]'
-      : 'border border-[#23262D]/10 bg-[#4A4D55]/10 text-[#23262D]',
     scrollRoot:
       '[&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full ' +
       (dark

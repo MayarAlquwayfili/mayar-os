@@ -172,11 +172,11 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
                 href="https://itunes.apple.com/app/قفطتك"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-[#23262D]/12 bg-[#FEF0BC] px-3 py-1 text-[12px] font-bold text-[#23262D]
-                           transition-all duration-200 hover:scale-105 hover:opacity-95 active:scale-[0.99] select-none"
+                className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-[12px] font-bold transition-all duration-200 hover:scale-105 hover:opacity-95 active:scale-[0.99] select-none ${T.pillStatus}`}
               >
                 <span
-                  className="h-2 w-2 shrink-0 animate-pulse rounded-full bg-[#23262D]/70"
+                  className="h-2 w-2 shrink-0 animate-pulse rounded-full bg-current opacity-70"
+                  aria-hidden
                 />
                 Live on App Store
               </a>
@@ -205,7 +205,7 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
                 {TOOLS.map((t) => (
                   <span
                     key={t}
-                    className={`inline-flex rounded-full px-2 py-0.5 text-[11px] font-medium ${T.pillTools}`}
+                    className={`inline-flex rounded-full px-2 py-0.5 text-[11px] font-medium ${T.pillDefault}`}
                   >
                     {t}
                   </span>

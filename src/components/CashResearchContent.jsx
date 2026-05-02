@@ -76,7 +76,7 @@ export default function CashResearchContent({ uiTheme = 'light' }) {
               {TOOL_PILLS.map((t) => (
                 <span
                   key={t}
-                  className={`inline-flex rounded-full px-3 py-1 text-[12px] font-medium ${T.pillTools}`}
+                  className={`inline-flex rounded-full px-3 py-1 text-[12px] font-medium ${T.pillDefault}`}
                 >
                   {t}
                 </span>
