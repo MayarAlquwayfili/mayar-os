@@ -13,7 +13,7 @@ const CALLOUT_STICKERS = [S01, S02, S03, S05, S11, BrewchaFav]
 
 const META = [
   { label: 'Timeline', value: '09/2025 – 11/2025' },
-  { label: 'Project Type', value: 'Entrepreneurship Project (Academic)' },
+  { label: 'Project Type', value: 'Entrepreneurship Project (PNU)' },
   { label: 'Category', value: 'Interactive Beverage Workshop' },
   { label: 'Role', value: 'Product Manager & Designer' },
 ]
@@ -142,7 +142,7 @@ export default function BrewchaContent({ uiTheme = 'light' }) {
               <div className="h-full min-h-0 overflow-hidden rounded-2xl border border-gray-100 shadow-md">
                 <img
                   src={Pic02}
-                  alt="BrewCha workshop — portrait"
+                  alt=""
                   className="h-full w-full object-cover object-center"
                   draggable={false}
                 />
@@ -151,7 +151,7 @@ export default function BrewchaContent({ uiTheme = 'light' }) {
             <div className="col-start-2 row-start-1 min-h-0 overflow-hidden rounded-2xl border border-gray-100 shadow-md">
               <img
                 src={Pic03}
-                alt="BrewCha workshop — detail"
+                alt=""
                 className="h-full w-full object-cover"
                 draggable={false}
               />
@@ -159,7 +159,7 @@ export default function BrewchaContent({ uiTheme = 'light' }) {
             <div className="col-start-2 row-start-2 min-h-0 overflow-hidden rounded-2xl border border-gray-100 shadow-md">
               <img
                 src={Pic01}
-                alt="BrewCha workshop — detail"
+                alt=""
                 className="h-full w-full object-cover"
                 draggable={false}
               />

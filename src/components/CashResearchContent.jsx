@@ -57,7 +57,7 @@ export default function CashResearchContent({ uiTheme = 'light' }) {
             The Rise of Digital Payments and Their Impact on Korean SMEs
           </p>
           <p className="mt-1 text-[13px] font-medium text-gray-500">
-            Economics Research
+            Economics Research (PNU)
           </p>
         </header>
 

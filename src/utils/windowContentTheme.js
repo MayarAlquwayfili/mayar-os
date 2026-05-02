@@ -63,15 +63,15 @@ export function contentTokens(uiTheme) {
       ? 'border border-[#F9F9F7]/10 bg-[#F9F9F7]/5 text-[#F9F9F7]'
       : 'border border-[#23262D]/10 bg-[#23262D]/5 text-[#23262D]',
     scrollRoot:
-      '[&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full ' +
+      '[scrollbar-width:thin] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full ' +
       (dark
-        ? '[&::-webkit-scrollbar-thumb]:bg-[#F9F9F7]/22'
-        : '[&::-webkit-scrollbar-thumb]:bg-[#23262D]/22'),
+        ? '[scrollbar-color:rgba(172,222,231,0.55)_rgba(249,249,247,0.08)] [&::-webkit-scrollbar-track]:bg-[#F9F9F7]/[0.08] [&::-webkit-scrollbar-thumb]:bg-[#ACDEE7]/55'
+        : '[scrollbar-color:rgba(130,173,181,0.5)_rgba(35,38,45,0.08)] [&::-webkit-scrollbar-track]:bg-[#23262D]/[0.08] [&::-webkit-scrollbar-thumb]:bg-[#82ADB5]/50'),
     scrollRootThin:
-      '[&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full ' +
+      '[scrollbar-width:thin] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full ' +
       (dark
-        ? '[&::-webkit-scrollbar-thumb]:bg-[#F9F9F7]/20'
-        : '[&::-webkit-scrollbar-thumb]:bg-[#23262D]/20'),
+        ? '[scrollbar-color:rgba(172,222,231,0.5)_rgba(249,249,247,0.06)] [&::-webkit-scrollbar-track]:bg-[#F9F9F7]/[0.06] [&::-webkit-scrollbar-thumb]:bg-[#ACDEE7]/50'
+        : '[scrollbar-color:rgba(130,173,181,0.45)_rgba(35,38,45,0.06)] [&::-webkit-scrollbar-track]:bg-[#23262D]/[0.06] [&::-webkit-scrollbar-thumb]:bg-[#82ADB5]/45'),
     /** Remap Tailwind gray utilities inside Mac window bodies (Light + Dark) */
     contentProse: dark ? 'window-content-dark' : 'window-content-light',
 
