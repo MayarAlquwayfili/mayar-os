@@ -254,11 +254,11 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
             </div>
             <div>
               <p className={META_KEY}>My Role</p>
-              <p className={META_VAL}>iOS Developer &amp; Product Designer</p>
+              <p className={META_VAL}>Apple Developer Academy | iOS Developer &amp; Product Designer</p>
             </div>
             <div>
               <p className={META_KEY}>Project Type</p>
-              <p className={META_VAL}>iOS App (Apple Developer Academy)</p>
+              <p className={META_VAL}>iOS App (PNU · Apple Developer Academy)</p>
             </div>
             <div>
               <p className={META_KEY}>Tools</p>
