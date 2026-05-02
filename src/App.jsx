@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect, useRef, useCallback, useMemo } from 'react'
+import { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react'
 import FolderIcon from './assets/Folder.svg'
 import AppIconMoheetik from './assets/Moheetik/AppIconMoheetik.svg'
 import AppIconRECLAB from './assets/RECLAB/AppIconRECLAB.svg'
@@ -150,11 +150,11 @@ function MoheetikSplitContent({ uiTheme = 'light' }) {
         <div className="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-4 pb-8 mb-10 border-b border-gray-100">
           <div>
             <p className={META_KEY_CLS}>Timeline</p>
-            <p className={META_VAL_CLS}>11.2025 - 12.2025</p>
+            <p className={META_VAL_CLS}>11/2025 - 12/2025</p>
           </div>
           <div>
             <p className={META_KEY_CLS}>My Role</p>
-            <p className={META_VAL_CLS}>Lead iOS Developer &amp; UI/UX Designer</p>
+            <p className={META_VAL_CLS}>Apple Developer Academy | Lead iOS Developer &amp; Product Designer</p>
           </div>
           <div>
             <p className={META_KEY_CLS}>Project Type</p>
@@ -359,7 +359,7 @@ function RECLABContent({ uiTheme = 'light' }) {
           </div>
           <div>
             <p className={META_KEY_CLS}>My Role</p>
-            <p className={META_VAL_CLS}>iOS Developer &amp; UI/UX Designer</p>
+            <p className={META_VAL_CLS}>Personal Project | iOS Developer &amp; Product Designer</p>
           </div>
           <div>
             <p className={META_KEY_CLS}>Project Type</p>
@@ -571,10 +571,7 @@ function RECLABContent({ uiTheme = 'light' }) {
 function CVContent({ uiTheme = 'light' }) {
   const T = contentTokens(uiTheme)
   const bulletDot = T.contentAccentBulletBefore
-  const cvPdfHref = useMemo(
-    () => `${import.meta.env.BASE_URL}assets/MayarAlquwayfili.pdf?v=${Date.now()}`,
-    [],
-  )
+  const cvPdfHref = `${import.meta.env.BASE_URL}MayarAlquwayfiliCv.pdf`
   return (
     <div
       className={`h-full overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRootThin} ${T.contentProse}`}
@@ -655,7 +652,7 @@ function CVContent({ uiTheme = 'light' }) {
           <CVEntry
             bulletBeforeAccent={bulletDot}
             title="Moheetik App — Apple Developer Academy"
-            meta="Lead iOS Developer & UI/UX Designer"
+            meta="Lead iOS Developer & Product Designer"
             date="Nov 2025 – Jan 2026"
             bullets={[
               'Developed an assistive app for visually impaired users using real-time Arabic audio and haptic feedback.',
@@ -735,7 +732,7 @@ function CVContent({ uiTheme = 'light' }) {
         <div className="mt-10 flex justify-start border-t border-gray-100 pt-7">
           <a
             href={cvPdfHref}
-            download="MayarAlquwayfili.pdf"
+            download="MayarAlquwayfiliCv.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-6 py-2.5 text-[13px] font-medium text-white transition-colors hover:bg-gray-700"
