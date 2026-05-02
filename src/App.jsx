@@ -575,14 +575,18 @@ function CVContent({ uiTheme = 'light' }) {
           </p>
         </Section>
 
-        {/* ── Education ── */}
-        <Section title="Education">
+        {/* ── Apple Developer Academy (separate from university education) ── */}
+        <Section title="Apple Developer Academy">
           <CVEntry
             bulletBeforeAccent={bulletDot}
             title="Apple Developer Academy at TUWAIQ"
             meta="Education Scholarship"
             date="2025 – Present"
           />
+        </Section>
+
+        {/* ── Education ── */}
+        <Section title="Education">
           <CVEntry
             bulletBeforeAccent={bulletDot}
             title="Princess Nourah Bint Abdulrahman University"
@@ -697,8 +701,8 @@ function CVContent({ uiTheme = 'light' }) {
         {/* ── Download button ── */}
         <div className="mt-10 flex justify-start border-t border-gray-100 pt-7">
           <a
-            href="/Mayar_Alquwayfili.pdf"
-            download="Mayar_Alquwayfili.pdf"
+            href="/MayarAlquwayfili.pdf"
+            download="MayarAlquwayfili.pdf"
             className="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-6 py-2.5 text-[13px] font-medium text-white transition-colors hover:bg-gray-700"
           >
             <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
