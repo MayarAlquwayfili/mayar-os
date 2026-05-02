@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useLayoutEffect, useRef, useCallback, useMemo } from 'react'
 import FolderIcon from './assets/Folder.svg'
 import AppIconMoheetik from './assets/Moheetik/AppIconMoheetik.svg'
 import AppIconRECLAB from './assets/RECLAB/AppIconRECLAB.svg'
@@ -42,10 +42,16 @@ const DESKTOP_ITEM_FRAME_BASE =
 /** Applied only while idle — omit during drag so left/top are not transition-animated. */
 const DESKTOP_ITEM_FRAME_IDLE_TRANSITION = 'transition-all duration-200'
 
-function desktopItemSelectionClass(isSelected) {
-  return isSelected
-    ? 'border-[#FEF0BC]/45 bg-[#FEF0BC]/35 hover:bg-[#FEF0BC]/40'
-    : 'border-transparent bg-transparent hover:border-transparent hover:bg-[#FEF0BC]/40'
+function desktopItemSelectionClass(isSelected, uiTheme = 'light') {
+  const dark = uiTheme === 'dark'
+  if (isSelected) {
+    return dark
+      ? 'border-[#ACDEE7]/35 bg-[#ACDEE7]/15 hover:bg-[#ACDEE7]/22'
+      : 'border-[#82ADB5]/35 bg-[#82ADB5]/15 hover:bg-[#82ADB5]/22'
+  }
+  return dark
+    ? 'border-transparent bg-transparent hover:border-transparent hover:bg-[#ACDEE7]/12'
+    : 'border-transparent bg-transparent hover:border-transparent hover:bg-[#82ADB5]/18'
 }
 const EDGE_PX = 10
 const MIN_W = 380
@@ -542,22 +548,10 @@ function RECLABContent({ uiTheme = 'light' }) {
 function CVContent({ uiTheme = 'light' }) {
   const T = contentTokens(uiTheme)
   const bulletDot = T.contentAccentBulletBefore
-  const handleCvDownload = useCallback((e) => {
-    e.preventDefault()
-    setTimeout(() => {
-      const url = new URL(
-        './MayarAlquwayfili.pdf',
-        `${window.location.origin}${import.meta.env.BASE_URL}`
-      ).href
-      const a = document.createElement('a')
-      a.href = url
-      a.setAttribute('download', 'MayarAlquwayfili.pdf')
-      a.rel = 'noopener'
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-    }, 0)
-  }, [])
+  const cvPdfHref = useMemo(
+    () => `${import.meta.env.BASE_URL}assets/MayarAlquwayfili.pdf?v=${Date.now()}`,
+    [],
+  )
   return (
     <div
       className={`h-full overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRootThin} ${T.contentProse}`}
@@ -717,9 +711,10 @@ function CVContent({ uiTheme = 'light' }) {
         {/* ── Download button ── */}
         <div className="mt-10 flex justify-start border-t border-gray-100 pt-7">
           <a
-            href="./MayarAlquwayfili.pdf"
+            href={cvPdfHref}
             download="MayarAlquwayfili.pdf"
-            onClick={handleCvDownload}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-6 py-2.5 text-[13px] font-medium text-white transition-colors hover:bg-gray-700"
           >
             <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -1301,6 +1296,7 @@ function DraggableFolder({
         !isDragging ? DESKTOP_ITEM_FRAME_IDLE_TRANSITION : ''
       } cursor-grab select-none active:cursor-grabbing ${desktopItemSelectionClass(
         isSelected,
+        uiTheme,
       )}`}
       style={{ left: position.x, top: position.y }}
       onMouseDown={onMouseDown}

@@ -14,14 +14,14 @@ body,
   overflow: hidden;
 }
 
-/* Highlight selection — butter yellow bg, dark text for contrast */
+/* Text selection — translucent accent (aligned with pill / chrome accent) */
 ::selection {
-  background-color: #fef0bc;
+  background-color: rgba(130, 173, 181, 0.35);
   color: #23262d;
 }
 
 ::-moz-selection {
-  background-color: #fef0bc;
+  background-color: rgba(130, 173, 181, 0.35);
   color: #23262d;
 }
 
