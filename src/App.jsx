@@ -48,6 +48,12 @@ function desktopItemSelectionClass(isSelected) {
     : 'border-transparent bg-transparent hover:border-transparent hover:bg-[#FEF0BC]/40'
 }
 const EDGE_PX = 10
+/** Wider horizontal hit for NW/NE and north rail; keep ≤ title bar left padding so traffic lights stay clear. */
+const N_HIT_X_PX = 12
+/** Top strip of the window where north resize wins over title-bar drag (traffic lights use stopPropagation). */
+const N_WINDOW_TOP_PRIORITY_PX = 6
+/** North rail thickness just below the title bar (easier to grab than EDGE_PX alone). */
+const N_CONTENT_RAIL_PX = 12
 /** Matches MacWindow title bar `h-11` (2.75rem) — used for resize hit geometry. */
 const MAC_WINDOW_TITLEBAR_PX = 44
 const MIN_W = 500
@@ -84,16 +90,19 @@ function getResizeZone(clientX, clientY, rect, titleBarPx = MAC_WINDOW_TITLEBAR_
   const onS = y > h - EDGE_PX
   const onW = x < EDGE_PX
   const onE = x > w - EDGE_PX
-  /** Thin strip at the very top of the window (mostly under traffic lights) — corners only to avoid fighting title-bar drag. */
-  const onNWindowTop = y < EDGE_PX
-  /** Usable north edge on the first row of content below the title bar. */
-  const onNContent = y >= titleBarPx && y < titleBarPx + EDGE_PX
+  const onWN = x < N_HIT_X_PX
+  const onEN = x > w - N_HIT_X_PX
+  /** Very top of the window — full width can be `n` (corners nw/ne use wider X hit). */
+  const onNWindowTop = y < N_WINDOW_TOP_PRIORITY_PX
+  /** North edge in the first band below the title bar (wider than EDGE_PX for easier grabs). */
+  const onNContent = y >= titleBarPx && y < titleBarPx + N_CONTENT_RAIL_PX
 
-  if (onNWindowTop && onW) return 'nw'
-  if (onNWindowTop && onE) return 'ne'
-  if (onNContent && onW) return 'nw'
-  if (onNContent && onE) return 'ne'
-  if (onNContent && !onW && !onE) return 'n'
+  if (onNWindowTop && onWN) return 'nw'
+  if (onNWindowTop && onEN) return 'ne'
+  if (onNWindowTop) return 'n'
+  if (onNContent && onWN) return 'nw'
+  if (onNContent && onEN) return 'ne'
+  if (onNContent && !onWN && !onEN) return 'n'
   if (onS && onW) return 'sw'
   if (onS && onE) return 'se'
   if (onS) return 's'
@@ -892,6 +901,27 @@ function MacWindow({
     setHoverZone(z)
   }, [isMaximized, isDragging, isResizing])
 
+  const startResize = useCallback((e, zoneOverride) => {
+    const el = windowRef.current
+    if (!el || e.button !== 0) return false
+    const rect = el.getBoundingClientRect()
+    const zone = zoneOverride ?? getResizeZone(e.clientX, e.clientY, rect)
+    if (!zone) return false
+    e.preventDefault()
+    e.stopPropagation()
+    resizeRef.current = {
+      zone,
+      startX: e.clientX,
+      startY: e.clientY,
+      startW: rect.width,
+      startH: rect.height,
+      startLeft: rect.left,
+      startTop: rect.top,
+    }
+    setIsResizing(true)
+    return true
+  }, [])
+
   useEffect(() => {
     if (!isDragging) return
     const onMouseMove = (e) => {
@@ -1004,11 +1034,17 @@ function MacWindow({
   const onTitleBarMouseDown = (e) => {
     onFocus?.()
     if (e.button !== 0 || isMaximized) return
-    e.preventDefault()
-    e.stopPropagation()
     const el = windowRef.current
     if (!el) return
     const rect = el.getBoundingClientRect()
+    const zone = getResizeZone(e.clientX, e.clientY, rect)
+    // North / top corners: must resize, not drag — cursor already shows ns / diagonal handles.
+    if (zone === 'n' || zone === 'nw' || zone === 'ne') {
+      startResize(e, zone)
+      return
+    }
+    e.preventDefault()
+    e.stopPropagation()
     dragOffsetRef.current = {
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
@@ -1020,23 +1056,7 @@ function MacWindow({
     onFocus?.()
     if (e.button !== 0 || isMaximized) return
     if (e.target.closest('[data-titlebar]')) return
-    const el = windowRef.current
-    if (!el) return
-    const rect = el.getBoundingClientRect()
-    const zone = getResizeZone(e.clientX, e.clientY, rect)
-    if (!zone) return
-    e.preventDefault()
-    e.stopPropagation()
-    resizeRef.current = {
-      zone,
-      startX: e.clientX,
-      startY: e.clientY,
-      startW: rect.width,
-      startH: rect.height,
-      startLeft: rect.left,
-      startTop: rect.top,
-    }
-    setIsResizing(true)
+    startResize(e)
   }
 
   const toggleMaximize = () => {
@@ -1200,6 +1220,27 @@ function MacWindow({
       {/* Perimeter hit rails — sit above scroll content so 8-way resize works; SE thumb remains on top at the corner. */}
       {!isMaximized && (
         <>
+          {/* Widen NW/NE grab beyond EDGE_PX without widening the full-height west/east rails. */}
+          <div
+            aria-hidden
+            className="pointer-events-auto absolute z-[26] touch-none"
+            style={{
+              top: 0,
+              left: 0,
+              width: N_HIT_X_PX,
+              height: MAC_WINDOW_TITLEBAR_PX + N_CONTENT_RAIL_PX,
+            }}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-auto absolute z-[26] touch-none"
+            style={{
+              top: 0,
+              right: 0,
+              width: N_HIT_X_PX,
+              height: MAC_WINDOW_TITLEBAR_PX + N_CONTENT_RAIL_PX,
+            }}
+          />
           <div
             aria-hidden
             className="pointer-events-auto absolute z-[25] touch-none"
@@ -1207,7 +1248,7 @@ function MacWindow({
               top: MAC_WINDOW_TITLEBAR_PX,
               left: EDGE_PX,
               right: EDGE_PX,
-              height: EDGE_PX,
+              height: N_CONTENT_RAIL_PX,
             }}
           />
           <div
@@ -1246,20 +1287,7 @@ function MacWindow({
           style={{ zIndex: 30 }}
           onMouseDown={(e) => {
             onFocus?.()
-            if (e.button !== 0) return
-            e.preventDefault()
-            e.stopPropagation()
-            const rect = windowRef.current.getBoundingClientRect()
-            resizeRef.current = {
-              zone: 'se',
-              startX: e.clientX,
-              startY: e.clientY,
-              startW: rect.width,
-              startH: rect.height,
-              startLeft: rect.left,
-              startTop: rect.top,
-            }
-            setIsResizing(true)
+            startResize(e, 'se')
           }}
         />
       )}
