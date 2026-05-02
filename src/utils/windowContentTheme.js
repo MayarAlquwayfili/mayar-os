@@ -54,7 +54,7 @@ export function contentTokens(uiTheme) {
     textStrong: dark ? 'text-[#F9F9F7]' : 'text-[#23262D]',
     border: dark ? 'border-[#F9F9F7]/10' : 'border-[#23262D]/10',
     borderMuted: dark ? 'border-[#F9F9F7]/15' : 'border-[#23262D]/15',
-    /** Status labels inside project windows only — 50% accent fill (MVP, Completed, Live on Store) */
+    /** Status labels — 0.5 opacity accent (Tailwind /50); Brewcha/Moheetik/RECLAB/Qaffatek/Cash research */
     pillStatus: dark
       ? 'border border-[#ACDEE7]/40 bg-[#ACDEE7]/50 text-[#23262D]'
       : 'border border-[#82ADB5]/30 bg-[#82ADB5]/50 text-[#F9F9F7]',
