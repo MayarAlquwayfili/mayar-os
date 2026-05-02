@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom'
 const CURSOR_GAP_PX = 8
 
 /** Desktop folder cursor tooltip — always highlight yellow + charcoal (same in Light/Dark). */
+// eslint-disable-next-line react-refresh/only-export-components -- helper shares pill classes with folder chrome
 export function cursorTipPillClass() {
   return [
     'inline-flex max-w-[min(280px,calc(100vw-48px))] items-center rounded-full',

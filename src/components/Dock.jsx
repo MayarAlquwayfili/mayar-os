@@ -35,7 +35,7 @@ function DockTile({ id, label, icon, openWindows, onOpen, iconFit = 'cover', uiT
     <div className="group relative flex flex-col items-center">
       <div className="pointer-events-none absolute -top-11 left-1/2 -translate-x-1/2 select-none opacity-0 transition-opacity duration-150 group-hover:opacity-100">
         <div
-          className="relative whitespace-nowrap rounded-lg bg-white/90 px-3 py-1 text-[11px] font-medium text-black"
+          className="relative whitespace-nowrap rounded-lg bg-white/90 px-3 py-1 text-[11px] font-medium text-[#23262D]"
           style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08)' }}
         >
           {label}

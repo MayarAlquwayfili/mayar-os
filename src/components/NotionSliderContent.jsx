@@ -23,7 +23,7 @@ function NotionSliderPlaceholder() {
         <p className="mt-2 text-[13px] font-medium text-gray-500">Coming soon — workspace preview</p>
         <div className="mx-auto mt-6 flex h-1.5 w-40 overflow-hidden rounded-full bg-white/60">
           <div
-            className="h-full w-1/3 animate-pulse rounded-full bg-gradient-to-r from-[#ACDEE7] to-[#7ec9d4]"
+            className="h-full w-1/3 animate-pulse rounded-full bg-gradient-to-r from-[#ACDEE7] to-[#82ADB5]"
             style={{ animationDuration: '1.6s' }}
           />
         </div>

@@ -2,13 +2,10 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import FolderIcon from './assets/Folder.svg'
 import AppIconMoheetik from './assets/Moheetik/AppIconMoheetik.svg'
 import AppIconRECLAB from './assets/RECLAB/AppIconRECLAB.svg'
-import MockupRECLABHome from './assets/RECLAB/MockupHome.svg'
 import MockupRECLABLab from './assets/RECLAB/MockupLab.svg'
-import MockupRECLABExperiment from './assets/RECLAB/MockupExperiment.svg'
 import MockupRECLABWinCollection from './assets/RECLAB/MockupWinCollection.svg'
 import RECLABPopup from './assets/RECLAB/RECLAB_POPUP.svg'
 // RECLAB_POPUP02.svg — drop this file into src/assets/RECLAB/ to activate the second popup
-import RECLABPopup02 from './assets/RECLAB/RECLAB_POPUP.svg'
 import RECLABButton from './assets/RECLAB/RECLAB_BUTTON.svg'
 import MockupMoheetik01 from './assets/Moheetik/MockupMoheetik01.svg'
 import MockupMoheetik02 from './assets/Moheetik/MockupMoheetik02.svg'
@@ -88,7 +85,6 @@ function getResizeZone(clientX, clientY, rect) {
 const BODY_CLS    = 'text-[13.5px] leading-[1.8] tracking-[0.01em] text-gray-700'
 const META_KEY_CLS = 'text-[10px] font-medium uppercase tracking-[0.09em] text-gray-400 mb-1'
 const META_VAL_CLS = 'text-[13px] font-medium text-gray-900'
-const SECTION_H2   = 'mb-4 text-[15px] font-semibold tracking-tight text-gray-900'
 
 function MoheetikSplitContent({ uiTheme = 'light' }) {
   const T = contentTokens(uiTheme)
@@ -808,7 +804,7 @@ const WINDOW_PRESETS = {
 }
 
 function MacWindow({
-  id,
+  id: _id,
   title,
   zIndex,
   initialX,
@@ -1338,17 +1334,6 @@ function randomFolderPosInBounds() {
 
 const LS_KEY = 'mayaros-folder-positions'
 const LS_UI_THEME = 'mayaros-ui-theme'
-const LS_ADMIN_STATUS = 'mayaros-admin-status'
-
-function loadPersistedAdminFlow() {
-  try {
-    // TODO: UNCOMMENT FOR PRODUCTION
-    // return localStorage.getItem(LS_ADMIN_STATUS) === 'accepted' ? 'accepted' : 'idle'
-    return 'idle'
-  } catch {
-    return 'idle'
-  }
-}
 
 function loadLayout() {
   try {
@@ -1402,7 +1387,9 @@ function getInitialFolderPositions() {
         cur[f.id] = result[f.id]
       })
       localStorage.setItem(LS_KEY, JSON.stringify(cur))
-    } catch {}
+    } catch {
+      /* skip persist if storage unavailable */
+    }
     return result
   }
   DESKTOP_FOLDERS.forEach((f) => {

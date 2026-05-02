@@ -59,7 +59,7 @@ export function useWindowManager() {
         },
       ]
     })
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [])
 
   /** Promote an already-open window to the top of the z-stack. */
   const bringToFront = useCallback((id) => {
@@ -67,7 +67,7 @@ export function useWindowManager() {
       const newZ = nextZ()
       return prev.map((w) => w.id === id ? { ...w, zIndex: newZ } : w)
     })
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [])
 
   /** Collapse window to dock (still in stack). */
   const minimizeWindow = useCallback((id) => {

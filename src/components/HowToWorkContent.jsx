@@ -60,35 +60,6 @@ const INITIAL_ITEMS = [
   },
 ]
 
-const LS_WORK_GUIDE_CHECKLIST = 'mayaros-work-guide-checklist'
-
-function loadSavedChecklist() {
-  try {
-    // TODO: UNCOMMENT FOR PRODUCTION
-    // const raw = localStorage.getItem(LS_WORK_GUIDE_CHECKLIST)
-    // TODO: UNCOMMENT FOR PRODUCTION
-    // if (raw == null) return null
-    // TODO: UNCOMMENT FOR PRODUCTION
-    // const parsed = JSON.parse(raw)
-    // TODO: UNCOMMENT FOR PRODUCTION
-    // if (!Array.isArray(parsed)) return null
-    // TODO: UNCOMMENT FOR PRODUCTION
-    // const doneById = new Map(
-    //   parsed
-    //     .filter((row) => row && typeof row.id === 'number' && typeof row.done === 'boolean')
-    //     .map((row) => [row.id, row.done]),
-    // )
-    // TODO: UNCOMMENT FOR PRODUCTION
-    // return INITIAL_ITEMS.map((i) => ({
-    //   ...i,
-    //   done: Boolean(doneById.get(i.id)),
-    // }))
-    return null
-  } catch {
-    return null
-  }
-}
-
 const listContainer = {
   hidden: { opacity: 0 },
   show: {
@@ -113,8 +84,6 @@ export default function HowToWorkContent({ uiTheme = 'light' }) {
   const captionActive = uiTheme === 'dark' ? 'rgba(249,249,247,0.72)' : '#636366'
   const mutedDone = uiTheme === 'dark' ? 'rgba(249,249,247,0.42)' : '#aeaeb2'
   const subtitleMuted = uiTheme === 'dark' ? 'rgba(249,249,247,0.55)' : '#8e8e93'
-  // TODO: UNCOMMENT FOR PRODUCTION
-  // const [items, setItems] = useState(() => loadSavedChecklist() ?? INITIAL_ITEMS.map((i) => ({ ...i })))
   const [items, setItems] = useState(() => INITIAL_ITEMS.map((i) => ({ ...i })))
 
   const toggle = (id) =>
@@ -123,7 +92,7 @@ export default function HowToWorkContent({ uiTheme = 'light' }) {
       try {
         // TODO: UNCOMMENT FOR PRODUCTION
         // localStorage.setItem(
-        //   LS_WORK_GUIDE_CHECKLIST,
+        //   'mayaros-work-guide-checklist',
         //   JSON.stringify(next.map(({ id: itemId, done }) => ({ id: itemId, done }))),
         // )
       } catch {
