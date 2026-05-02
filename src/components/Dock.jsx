@@ -13,7 +13,7 @@ function isWindowOpenOnDesktop(openWindows, id) {
   return Boolean(w && !w.minimized)
 }
 
-function DockTile({ id, label, icon, openWindows, onOpen, iconFit = 'cover' }) {
+function DockTile({ id, label, icon, openWindows, onOpen, iconFit = 'cover', uiTheme = 'light' }) {
   return (
     <div className="group relative flex flex-col items-center">
       <div className="pointer-events-none absolute -top-11 left-1/2 -translate-x-1/2 select-none opacity-0 transition-opacity duration-150 group-hover:opacity-100">
@@ -50,7 +50,11 @@ function DockTile({ id, label, icon, openWindows, onOpen, iconFit = 'cover' }) {
 
       <span
         className={`mt-1.5 h-1 w-1 rounded-full transition-all duration-500 group-hover:scale-125 ${
-          isWindowOpenOnDesktop(openWindows, id) ? 'bg-[#23262D] opacity-100' : 'opacity-0'
+          isWindowOpenOnDesktop(openWindows, id)
+            ? uiTheme === 'dark'
+              ? 'bg-[#F9F9F7] opacity-100'
+              : 'bg-[#23262D] opacity-100'
+            : 'opacity-0'
         }`}
         style={{ transitionTimingFunction: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}
       />
@@ -58,10 +62,18 @@ function DockTile({ id, label, icon, openWindows, onOpen, iconFit = 'cover' }) {
   )
 }
 
-export default function Dock({ openWindows = [], onOpen, supplementalApps = [] }) {
+export default function Dock({
+  openWindows = [],
+  onOpen,
+  supplementalApps = [],
+  uiTheme = 'light',
+}) {
+  const sepCls = uiTheme === 'dark' ? 'bg-[#F9F9F7]/15' : 'bg-[#23262D]/12'
   return (
     <div
-      className="fixed bottom-4 left-1/2 flex -translate-x-1/2 items-end gap-5 rounded-[22px] border border-white/30 px-5 py-2"
+      className={`fixed bottom-4 left-1/2 flex -translate-x-1/2 items-end gap-5 rounded-[22px] border px-5 py-2 ${
+        uiTheme === 'dark' ? 'border-white/15' : 'border-white/30'
+      }`}
       style={{
         zIndex: 5000,
         background: 'rgba(255,255,255,0.18)',
@@ -72,18 +84,28 @@ export default function Dock({ openWindows = [], onOpen, supplementalApps = [] }
       onClick={(e) => e.stopPropagation()}
     >
       {DOCK_APPS.map((app) => (
-        <DockTile key={app.id} {...app} openWindows={openWindows} onOpen={onOpen} iconFit="cover" />
+        <DockTile
+          key={app.id}
+          {...app}
+          openWindows={openWindows}
+          onOpen={onOpen}
+          iconFit="cover"
+          uiTheme={uiTheme}
+        />
       ))}
 
       {supplementalApps.length > 0 && (
         <>
-          <div
-            className="mx-2 h-8 w-[1px] shrink-0 self-center bg-[#23262D]/12"
-            role="separator"
-            aria-orientation="vertical"
-          />
+          <div className={`mx-2 h-8 w-[1px] shrink-0 self-center ${sepCls}`} role="separator" aria-orientation="vertical" />
           {supplementalApps.map((app) => (
-            <DockTile key={app.id} {...app} openWindows={openWindows} onOpen={onOpen} iconFit="contain" />
+            <DockTile
+              key={app.id}
+              {...app}
+              openWindows={openWindows}
+              onOpen={onOpen}
+              iconFit="contain"
+              uiTheme={uiTheme}
+            />
           ))}
         </>
       )}

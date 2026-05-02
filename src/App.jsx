@@ -1287,6 +1287,7 @@ function DraggableFolder({
   onSelect,
   onDoubleClick,
   onPositionChange,
+  uiTheme = 'light',
 }) {
   const [position, setPosition] = useState({ x: initialX, y: initialY })
   const [isDragging, setIsDragging] = useState(false)
@@ -1368,6 +1369,14 @@ function DraggableFolder({
     onDoubleClick()
   }
 
+  const titleColor =
+    isSelected ? 'text-[#23262D]' : uiTheme === 'dark' ? 'text-[#F9F9F7]' : 'text-[#23262D]'
+  const subColor = isSelected
+    ? 'text-[#23262D]/80'
+    : uiTheme === 'dark'
+      ? 'text-[#F9F9F7]/70'
+      : 'text-[#23262D]/70'
+
   return (
     <AdminFolderCursorTip
       ref={rootRef}
@@ -1391,15 +1400,13 @@ function DraggableFolder({
       </div>
 
       <div className="flex min-h-0 w-full flex-col items-center justify-center px-0.5 text-center">
-        <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-[#23262D]">
+        <span
+          className={`line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide ${titleColor}`}
+        >
           {title}
         </span>
         {subtitle ? (
-          <span
-            className={`mt-0.5 w-full break-words text-[11px] leading-snug ${
-              isSelected ? 'text-[#23262D]/80' : 'text-[#23262D]/70'
-            }`}
-          >
+          <span className={`mt-0.5 w-full break-words text-[11px] leading-snug ${subColor}`}>
             {subtitle}
           </span>
         ) : null}
@@ -1425,6 +1432,7 @@ function randomFolderPosInBounds() {
 }
 
 const LS_KEY = 'mayaros-folder-positions'
+const LS_UI_THEME = 'mayaros-ui-theme'
 const LS_ADMIN_STATUS = 'mayaros-admin-status'
 
 function loadPersistedAdminFlow() {
@@ -1518,7 +1526,20 @@ function formatNotifBody(body) {
   return parts.map((part, idx) => <span key={idx}>{part}</span>)
 }
 
+function loadPersistedUiTheme() {
+  try {
+    const t = localStorage.getItem(LS_UI_THEME)
+    if (t === 'dark' || t === 'light') return t
+  } catch {
+    /* ignore */
+  }
+  return 'light'
+}
+
 export default function App() {
+  const [uiTheme, setUiTheme] = useState(() =>
+    typeof window !== 'undefined' ? loadPersistedUiTheme() : 'light',
+  )
   const [selectedDesktopItemId, setSelectedDesktopItemId] = useState(null)
   const { openWindows, openOrFocusWindow, bringToFront, minimizeWindow, closeWindow } =
     useWindowManager()
@@ -1617,6 +1638,18 @@ export default function App() {
     }
   }, [])
 
+  useEffect(() => {
+    try {
+      localStorage.setItem(LS_UI_THEME, uiTheme)
+    } catch {
+      /* ignore */
+    }
+  }, [uiTheme])
+
+  const toggleUiTheme = useCallback(() => {
+    setUiTheme((t) => (t === 'light' ? 'dark' : 'light'))
+  }, [])
+
   const handleFolderPositionChange = useCallback(
     (id, pos) => {
       setFolderPositions((p) => ({ ...p, [id]: pos }))
@@ -1666,8 +1699,12 @@ export default function App() {
   )
 
   return (
-    <div className="fixed inset-0 min-h-0 w-full overflow-hidden bg-[#F9F9F7] font-sans text-[#23262D] antialiased">
-      <TopStatusBar />
+    <div
+      className={`fixed inset-0 min-h-0 w-full overflow-hidden font-sans antialiased ${
+        uiTheme === 'dark' ? 'bg-[#23262D] text-[#F9F9F7]' : 'bg-[#F9F9F7] text-[#23262D]'
+      }`}
+    >
+      <TopStatusBar theme={uiTheme} onToggleTheme={toggleUiTheme} />
 
       <main
         className="absolute inset-x-0 bottom-0 top-7 z-0 overflow-hidden"
@@ -1707,7 +1744,7 @@ export default function App() {
           className="z-[1] cursor-grab active:cursor-grabbing"
           draggingClassName="cursor-grabbing"
         >
-          <WorkMoodWidget />
+          <WorkMoodWidget uiTheme={uiTheme} />
         </DraggableDesktopItem>
 
         {adminFlow === 'accepted' && (
@@ -1734,7 +1771,11 @@ export default function App() {
                     />
                   </div>
                   <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
-                    <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-[#23262D]">
+                    <span
+                      className={`line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide ${
+                        uiTheme === 'dark' ? 'text-[#F9F9F7]' : 'text-[#23262D]'
+                      }`}
+                    >
                       Notion
                     </span>
                   </div>
@@ -1764,7 +1805,11 @@ export default function App() {
                     />
                   </div>
                   <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
-                    <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-[#23262D]">
+                    <span
+                      className={`line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide ${
+                        uiTheme === 'dark' ? 'text-[#F9F9F7]' : 'text-[#23262D]'
+                      }`}
+                    >
                       Coffee
                     </span>
                   </div>
@@ -1794,7 +1839,11 @@ export default function App() {
                     />
                   </div>
                   <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
-                    <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-[#23262D]">
+                    <span
+                      className={`line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide ${
+                        uiTheme === 'dark' ? 'text-[#F9F9F7]' : 'text-[#23262D]'
+                      }`}
+                    >
                       Figma
                     </span>
                   </div>
@@ -1818,6 +1867,7 @@ export default function App() {
             onSelect={() => setSelectedDesktopItemId(folder.id)}
             onDoubleClick={() => openOrFocusWindow(folder.windowTitle ?? folder.title)}
             onPositionChange={(pos) => handleFolderPositionChange(folder.id, pos)}
+            uiTheme={uiTheme}
           />
         ))}
         {openWindows
@@ -1861,6 +1911,7 @@ export default function App() {
       />
 
       <Dock
+        uiTheme={uiTheme}
         openWindows={openWindows}
         onOpen={openOrFocusWindow}
         supplementalApps={
