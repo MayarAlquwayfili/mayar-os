@@ -2,8 +2,25 @@ import { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { playNotificationSfx, getNotificationSfx } from '../utils/notificationSfx'
 
-export default function AdminNotifications({ items, adminFlow, onAccept, formatBody }) {
+export default function AdminNotifications({
+  uiTheme = 'light',
+  items,
+  adminFlow,
+  onAccept,
+  formatBody,
+}) {
   const seenIdsRef = useRef(new Set())
+  const dark = uiTheme === 'dark'
+
+  const cardClassName = [
+    'pointer-events-auto w-80 rounded-2xl border px-5 py-5',
+    dark
+      ? 'border-white/10 bg-[#2E3137] shadow-[0_24px_64px_-16px_rgba(0,0,0,0.55)]'
+      : 'border-black/[0.08] bg-[#F9F9F7] shadow-lg shadow-black/[0.08]',
+  ].join(' ')
+
+  const headerMuted = dark ? 'text-[#F9F9F7]/55' : 'text-gray-500'
+  const bodyText = dark ? 'text-[#F9F9F7]' : 'text-[#23262D]'
 
   useEffect(() => {
     // Preload on first mount (zero-latency feel).
@@ -38,10 +55,14 @@ export default function AdminNotifications({ items, adminFlow, onAccept, formatB
               opacity: { duration: 0.28, ease: 'easeOut' },
               layout: { duration: 0.2 },
             }}
-            className="pointer-events-auto w-80 rounded-2xl border border-[#ACDEE7]/30 bg-[#F9F9F7] px-5 py-5"
+            className={cardClassName}
           >
-            <p className="text-[12px] font-normal uppercase tracking-[0.12em] text-[#23262D]">{n.header}</p>
-            <p className="mt-2 text-[14px] font-normal leading-relaxed text-[#23262D]/90">{formatBody(n.body)}</p>
+            <p className={`text-[12px] font-normal uppercase tracking-[0.12em] ${headerMuted}`}>
+              {n.header}
+            </p>
+            <p className={`mt-2 text-[14px] font-normal leading-relaxed ${bodyText}`}>
+              {formatBody(n.body)}
+            </p>
 
             {n.isActionable && (
               <div className="mt-4">
@@ -49,10 +70,12 @@ export default function AdminNotifications({ items, adminFlow, onAccept, formatB
                   type="button"
                   aria-busy={adminFlow === 'loading'}
                   aria-label={adminFlow === 'loading' ? 'Loading' : 'Accept'}
-                  className={`inline-flex min-h-[40px] items-center rounded-lg py-2.5 text-sm font-medium ${
+                  className={`inline-flex min-h-[40px] items-center rounded-lg py-2.5 text-sm font-medium transition-opacity ${
                     adminFlow === 'loading'
-                      ? 'w-full cursor-default justify-start bg-[#ACDEE7]/15 pl-0 pr-5 text-[#23262D]'
-                      : 'min-w-[6.5rem] justify-center bg-[#ACDEE7] px-5 text-[#23262D] hover:opacity-90'
+                      ? `w-full cursor-default justify-start bg-[#ACDEE7]/15 pl-0 pr-5 ${
+                          dark ? 'text-[#F9F9F7]' : 'text-[#23262D]'
+                        }`
+                      : 'min-w-[6.5rem] justify-center bg-[#ACDEE7] px-5 text-[#23262D] hover:opacity-90 active:opacity-100'
                   }`}
                   onClick={() => {
                     playNotificationSfx()
@@ -61,7 +84,11 @@ export default function AdminNotifications({ items, adminFlow, onAccept, formatB
                 >
                   {adminFlow === 'loading' ? (
                     <span
-                      className="h-5 w-5 shrink-0 animate-spin rounded-full border-2 border-[#23262D]/35 border-t-[#23262D]"
+                      className={`h-5 w-5 shrink-0 animate-spin rounded-full border-2 ${
+                        dark
+                          ? 'border-[#F9F9F7]/35 border-t-[#F9F9F7]'
+                          : 'border-[#23262D]/35 border-t-[#23262D]'
+                      }`}
                       aria-hidden
                     />
                   ) : (

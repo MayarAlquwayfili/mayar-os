@@ -1863,6 +1863,7 @@ export default function App() {
       </main>
 
       <AdminNotifications
+        uiTheme={uiTheme}
         items={adminNotifs}
         adminFlow={adminFlow}
         formatBody={formatNotifBody}
