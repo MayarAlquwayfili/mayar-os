@@ -1,11 +1,18 @@
 import AppIconMoheetik from '../assets/Moheetik/AppIconMoheetik.svg'
 import AppIconQaffatek from '../assets/AppIconQaffatek.svg'
 import AppIconRECLAB from '../assets/RECLAB/AppIconRECLAB.svg'
+import ManualFolderIcon from '../assets/ManuaFloder.svg'
 
 const DOCK_APPS = [
-  { id: 'Moheetik', label: 'Moheetik', icon: AppIconMoheetik },
-  { id: 'Qaffatek', label: 'Qaffatek', icon: AppIconQaffatek },
-  { id: 'RECLAB', label: 'RECLAB', icon: AppIconRECLAB },
+  { id: 'Moheetik', label: 'Moheetik', icon: AppIconMoheetik, iconFit: 'cover' },
+  { id: 'Qaffatek', label: 'Qaffatek', icon: AppIconQaffatek, iconFit: 'cover' },
+  { id: 'RECLAB', label: 'RECLAB', icon: AppIconRECLAB, iconFit: 'cover' },
+  {
+    id: 'How to Work with Me',
+    label: 'Manual',
+    icon: ManualFolderIcon,
+    iconFit: 'contain',
+  },
 ]
 
 function isWindowOpenOnDesktop(openWindows, id) {
@@ -89,7 +96,7 @@ export default function Dock({
           {...app}
           openWindows={openWindows}
           onOpen={onOpen}
-          iconFit="cover"
+          iconFit={app.iconFit ?? 'cover'}
           uiTheme={uiTheme}
         />
       ))}

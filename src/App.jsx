@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import FolderIcon from './assets/Folder.svg'
-import FolderpdfIcon from './assets/Folderpdf.svg'
 import AppIconMoheetik from './assets/Moheetik/AppIconMoheetik.svg'
 import AppIconQaffatek from './assets/AppIconQaffatek.svg'
 import AppIconRECLAB from './assets/RECLAB/AppIconRECLAB.svg'
@@ -1910,22 +1909,7 @@ export default function App() {
         }}
       />
 
-      <Dock
-        uiTheme={uiTheme}
-        openWindows={openWindows}
-        onOpen={openOrFocusWindow}
-        supplementalApps={
-          adminFlow === 'accepted'
-            ? [
-                {
-                  id: 'How to Work with Me',
-                  label: 'Manual',
-                  icon: FolderpdfIcon,
-                },
-              ]
-            : []
-        }
-      />
+      <Dock uiTheme={uiTheme} openWindows={openWindows} onOpen={openOrFocusWindow} />
     </div>
   )
 }
