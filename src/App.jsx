@@ -24,6 +24,7 @@ import DraggableDesktopItem from './components/DraggableDesktopItem'
 import AdminFolderCursorTip from './components/AdminFolderCursorTip'
 import AdminNotifications from './components/AdminNotifications'
 import IdentityNameSticker from './components/IdentityNameSticker'
+import MobileEmptyState from './components/MobileEmptyState'
 import NotionFolderIcon from './assets/Admin/Notion_Folder.svg'
 import V60FolderIcon from './assets/Admin/V60_Folder.svg'
 import FigmaFolderIcon from './assets/Admin/Figma_Folder.svg'
@@ -1534,6 +1535,18 @@ export default function App() {
     setUiTheme((t) => (t === 'light' ? 'dark' : 'light'))
   }, [])
 
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth < 768 : false,
+  )
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)')
+    const apply = () => setIsMobile(mq.matches)
+    apply()
+    mq.addEventListener('change', apply)
+    return () => mq.removeEventListener('change', apply)
+  }, [])
+
   const handleFolderPositionChange = useCallback(
     (id, pos) => {
       setFolderPositions((p) => ({ ...p, [id]: pos }))
@@ -1573,6 +1586,10 @@ export default function App() {
     },
     [persistLayoutPatch],
   )
+
+  if (isMobile) {
+    return <MobileEmptyState uiTheme={uiTheme} />
+  }
 
   return (
     <div
