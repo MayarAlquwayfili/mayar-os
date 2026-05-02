@@ -42,16 +42,10 @@ const DESKTOP_ITEM_FRAME_BASE =
 /** Applied only while idle — omit during drag so left/top are not transition-animated. */
 const DESKTOP_ITEM_FRAME_IDLE_TRANSITION = 'transition-all duration-200'
 
-function desktopItemSelectionClass(isSelected, uiTheme = 'light') {
-  const dark = uiTheme === 'dark'
-  if (isSelected) {
-    return dark
-      ? 'border-[#ACDEE7]/35 bg-[#ACDEE7]/15 hover:bg-[#ACDEE7]/22'
-      : 'border-[#82ADB5]/35 bg-[#82ADB5]/15 hover:bg-[#82ADB5]/22'
-  }
-  return dark
-    ? 'border-transparent bg-transparent hover:border-transparent hover:bg-[#ACDEE7]/12'
-    : 'border-transparent bg-transparent hover:border-transparent hover:bg-[#82ADB5]/18'
+function desktopItemSelectionClass(isSelected) {
+  return isSelected
+    ? 'border-[#FEF0BC]/45 bg-[#FEF0BC]/35 hover:bg-[#FEF0BC]/40'
+    : 'border-transparent bg-transparent hover:border-transparent hover:bg-[#FEF0BC]/40'
 }
 const EDGE_PX = 10
 const MIN_W = 380
@@ -1296,7 +1290,6 @@ function DraggableFolder({
         !isDragging ? DESKTOP_ITEM_FRAME_IDLE_TRANSITION : ''
       } cursor-grab select-none active:cursor-grabbing ${desktopItemSelectionClass(
         isSelected,
-        uiTheme,
       )}`}
       style={{ left: position.x, top: position.y }}
       onMouseDown={onMouseDown}

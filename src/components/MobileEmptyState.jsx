@@ -99,11 +99,7 @@ export default function MobileEmptyState({ uiTheme = 'light' }) {
       <button
         type="button"
         onClick={handleCopy}
-        className={`mt-8 min-h-[44px] rounded-lg border px-6 py-2.5 text-[15px] font-medium transition-opacity hover:opacity-90 active:opacity-100 ${
-          dark
-            ? 'border-[#ACDEE7]/25 bg-[#ACDEE7]/15 text-[#F9F9F7]'
-            : 'border-[#82ADB5]/20 bg-[#82ADB5]/15 text-[#23262D]'
-        }`}
+        className="mt-8 min-h-[44px] rounded-lg bg-[#FEF0BC] px-6 py-2.5 text-[15px] font-medium text-[#23262D] transition-opacity hover:opacity-90 active:opacity-100"
       >
         {copied ? 'Copied!' : 'Copy Portfolio Link'}
       </button>

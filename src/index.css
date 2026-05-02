@@ -14,14 +14,14 @@ body,
   overflow: hidden;
 }
 
-/* Text selection — translucent accent (aligned with pill / chrome accent) */
+/* Desktop / shell text selection — brand butter yellow */
 ::selection {
-  background-color: rgba(130, 173, 181, 0.35);
+  background-color: #fef0bc;
   color: #23262d;
 }
 
 ::-moz-selection {
-  background-color: rgba(130, 173, 181, 0.35);
+  background-color: #fef0bc;
   color: #23262d;
 }
 

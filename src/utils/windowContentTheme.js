@@ -1,7 +1,7 @@
 /**
- * Shared classes for Mac windows and scrollable inner content (Light / Dark uiTheme).
- * Theme-aware accent: Light #82ADB5 (readable on #F9F9F7), Dark #ACDEE7.
- * Content pills use translucent blue/gray (pillStatus, pillDefault) — no solid pill fills.
+ * Shared classes for Mac window *body* content only (Light / Dark uiTheme).
+ * Desktop chrome (dock, menu bar, folders, tooltips) uses brand yellow (#FEF0BC) in components — not these tokens.
+ * Project pills: pillStatus (accent at 50%), pillDefault (translucent gray).
  */
 
 const ACCENT_LIGHT = '#82ADB5'
@@ -54,10 +54,10 @@ export function contentTokens(uiTheme) {
     textStrong: dark ? 'text-[#F9F9F7]' : 'text-[#23262D]',
     border: dark ? 'border-[#F9F9F7]/10' : 'border-[#23262D]/10',
     borderMuted: dark ? 'border-[#F9F9F7]/15' : 'border-[#23262D]/15',
-    /** Status labels (MVP, Completed, Awards, Live on Store) — stronger accent tint + swapped text for contrast */
+    /** Status labels inside project windows only — 50% accent fill (MVP, Completed, Live on Store) */
     pillStatus: dark
-      ? 'border border-[#ACDEE7]/40 bg-[#ACDEE7]/70 text-[#23262D]'
-      : 'border border-[#82ADB5]/30 bg-[#82ADB5]/70 text-[#F9F9F7]',
+      ? 'border border-[#ACDEE7]/40 bg-[#ACDEE7]/50 text-[#23262D]'
+      : 'border border-[#82ADB5]/30 bg-[#82ADB5]/50 text-[#F9F9F7]',
     /** Tools, roles, tech tags — neutral translucent gray */
     pillDefault: dark
       ? 'border border-[#F9F9F7]/10 bg-[#F9F9F7]/5 text-[#F9F9F7]'

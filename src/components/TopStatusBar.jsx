@@ -61,7 +61,7 @@ function ThemeToggle({ theme, onToggleTheme }) {
       onClick={() => onToggleTheme?.()}
       aria-label={isLight ? 'Switch to dark mode' : 'Switch to light mode'}
       className={`relative flex h-6 w-6 shrink-0 items-center justify-center rounded-md transition-colors duration-200 ${
-        isLight ? 'hover:bg-[#82ADB5]/22' : 'hover:bg-[#ACDEE7]/14'
+        isLight ? 'hover:bg-[#FEF0BC]/40' : 'hover:bg-[#FEF0BC]/15'
       }`}
     >
       <AnimatePresence mode="wait" initial={false}>
@@ -109,8 +109,8 @@ export default function TopStatusBar({ theme = 'light', onToggleTheme }) {
     ? 'inset 0 1px 0 rgba(255, 255, 255, 0.06)'
     : 'inset 0 1px 0 rgba(255, 255, 255, 0.9)'
   const socialHover = isDark
-    ? 'flex shrink-0 items-center justify-center rounded-md p-1 transition-all duration-150 ease-out hover:bg-[#ACDEE7]/14'
-    : 'flex shrink-0 items-center justify-center rounded-md p-1 transition-all duration-150 ease-out hover:bg-[#82ADB5]/22'
+    ? 'flex shrink-0 items-center justify-center rounded-md p-1 transition-all duration-150 ease-out hover:bg-[#FEF0BC]/15'
+    : 'flex shrink-0 items-center justify-center rounded-md p-1 transition-all duration-150 ease-out hover:bg-[#FEF0BC]/50'
   const iconInvert = isDark ? 'brightness-0 invert opacity-90' : ''
 
   return (
