@@ -545,6 +545,7 @@ function RECLABContent({ uiTheme = 'light' }) {
 
 function CVContent({ uiTheme = 'light' }) {
   const T = contentTokens(uiTheme)
+  const bulletDot = T.contentAccentBulletBefore
   return (
     <div
       className={`h-full overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRootThin} ${T.contentProse}`}
@@ -581,11 +582,13 @@ function CVContent({ uiTheme = 'light' }) {
         {/* ── Education ── */}
         <Section title="Education">
           <CVEntry
+            bulletBeforeAccent={bulletDot}
             title="Apple Developer Academy at TUWAIQ"
             meta="Education Scholarship"
             date="2025 – Present"
           />
           <CVEntry
+            bulletBeforeAccent={bulletDot}
             title="Princess Nourah Bint Abdulrahman University"
             meta="Bachelor's degree, Economics"
             date="2022 – Present"
@@ -595,6 +598,7 @@ function CVContent({ uiTheme = 'light' }) {
         {/* ── Projects ── */}
         <Section title="Projects">
           <CVEntry
+            bulletBeforeAccent={bulletDot}
             title="RECLAB App — Personal Project"
             meta="iOS Developer & Product Designer"
             date="Jan 2026 – Present"
@@ -604,6 +608,7 @@ function CVContent({ uiTheme = 'light' }) {
             ]}
           />
           <CVEntry
+            bulletBeforeAccent={bulletDot}
             title="Qaffatek — Apple Developer Academy"
             titleHref="https://apps.apple.com/sa/app/%D9%82%D9%81%D8%B7%D8%AA%D9%83/id6757811186"
             meta="iOS Developer & Product Designer"
@@ -615,6 +620,7 @@ function CVContent({ uiTheme = 'light' }) {
             ]}
           />
           <CVEntry
+            bulletBeforeAccent={bulletDot}
             title="Moheetik App — Apple Developer Academy"
             meta="Lead iOS Developer & UI/UX Designer"
             date="Nov 2025 – Jan 2026"
@@ -625,6 +631,7 @@ function CVContent({ uiTheme = 'light' }) {
             ]}
           />
           <CVEntry
+            bulletBeforeAccent={bulletDot}
             title="Brewcha Studio — Entrepreneurship Project"
             meta="Product Manager & Designer"
             date="Sep 2025 – Nov 2025"
@@ -635,6 +642,7 @@ function CVContent({ uiTheme = 'light' }) {
             ]}
           />
           <CVEntry
+            bulletBeforeAccent={bulletDot}
             title="Digital Payments Impact on Korean SMEs — Research"
             meta="Independent Researcher"
             date="Sep 2025 – Nov 2025"
@@ -724,7 +732,7 @@ function Section({ title, children }) {
   )
 }
 
-function CVEntry({ title, titleHref, meta, date, bullets }) {
+function CVEntry({ title, titleHref, meta, date, bullets, bulletBeforeAccent }) {
   return (
     <div className="mb-5 last:mb-0">
       <div className="flex items-baseline justify-between gap-4">
@@ -765,10 +773,10 @@ function CVEntry({ title, titleHref, meta, date, bullets }) {
           {bullets.map((b) => (
             <li
               key={b}
-              className="relative text-[13px] leading-7 text-gray-700
+              className={`relative text-[13px] leading-7 text-gray-700
                          before:absolute before:left-[-13px] before:top-[0.65em]
                          before:h-[5px] before:w-[5px] before:rounded-full
-                         before:bg-gray-300 before:content-['']"
+                         ${bulletBeforeAccent ?? 'before:bg-gray-300'} before:content-['']`}
             >
               {b}
             </li>

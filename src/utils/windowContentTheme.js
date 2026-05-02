@@ -71,5 +71,13 @@ export function contentTokens(uiTheme) {
         : '[&::-webkit-scrollbar-thumb]:bg-[#23262D]/20'),
     /** Remap Tailwind gray utilities inside Mac window bodies (Light + Dark) */
     contentProse: dark ? 'window-content-dark' : 'window-content-light',
+
+    /** Content accent — checklists, selection chrome, CV bullets (Light #82ADB5 / Dark #ACDEE7) */
+    contentAccentHex: dark ? ACCENT_DARK : ACCENT_LIGHT,
+    contentAccentText: dark ? 'text-[#ACDEE7]' : 'text-[#82ADB5]',
+    contentAccentTintBg: dark ? 'bg-[#ACDEE7]/12' : 'bg-[#82ADB5]/12',
+    contentAccentTintBorder: dark ? 'border-[#ACDEE7]/25' : 'border-[#82ADB5]/25',
+    /** CV / custom ::before list dot */
+    contentAccentBulletBefore: dark ? 'before:bg-[#ACDEE7]' : 'before:bg-[#82ADB5]',
   }
 }

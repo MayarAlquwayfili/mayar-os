@@ -40,7 +40,7 @@ export default function CreativeLabFolderContent({ onOpenProject, uiTheme = 'lig
               aria-label={`${item.title} — double-click to open`}
               className={`group flex w-[128px] cursor-default flex-col items-center gap-1.5 rounded-xl border p-2 text-center outline-none transition-colors ${
                 isSelected
-                  ? 'bg-[#ACDEE7]/12 border-[#ACDEE7]/25'
+                  ? `${T.contentAccentTintBg} ${T.contentAccentTintBorder}`
                   : uiTheme === 'dark'
                     ? 'bg-transparent border-transparent hover:bg-white/5'
                     : 'bg-transparent border-transparent hover:bg-black/5'

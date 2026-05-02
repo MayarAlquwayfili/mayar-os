@@ -2,9 +2,6 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { contentTokens } from '../utils/windowContentTheme'
 
-// Aqua accent — admin / brand chrome (#ACDEE7).
-const WORK_ACCENT = '#ACDEE7'
-
 const INITIAL_ITEMS = [
   {
     id: 1,
@@ -111,6 +108,7 @@ const listItem = {
 
 export default function HowToWorkContent({ uiTheme = 'light' }) {
   const T = contentTokens(uiTheme)
+  const accentHex = T.contentAccentHex
   const titleActive = uiTheme === 'dark' ? '#F9F9F7' : '#1c1c1e'
   const captionActive = uiTheme === 'dark' ? 'rgba(249,249,247,0.72)' : '#636366'
   const mutedDone = uiTheme === 'dark' ? 'rgba(249,249,247,0.42)' : '#aeaeb2'
@@ -149,7 +147,7 @@ export default function HowToWorkContent({ uiTheme = 'light' }) {
         >
           <h1
             className="text-[18px] font-bold leading-tight tracking-tight"
-            style={{ color: WORK_ACCENT }}
+            style={{ color: accentHex }}
           >
             How to Work with Me
           </h1>
@@ -181,8 +179,8 @@ export default function HowToWorkContent({ uiTheme = 'light' }) {
                 className="mt-1 flex h-4 w-4 shrink-0 items-center justify-center
                            rounded-full border-[1.5px] transition-all duration-150"
                 style={{
-                  borderColor: WORK_ACCENT,
-                  backgroundColor: item.done ? WORK_ACCENT : 'transparent',
+                  borderColor: accentHex,
+                  backgroundColor: item.done ? accentHex : 'transparent',
                 }}
               >
                 {item.done && (

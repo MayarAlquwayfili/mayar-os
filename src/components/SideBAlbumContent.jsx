@@ -41,7 +41,7 @@ export default function SideBAlbumContent({
               aria-label={`${item.placeholder ?? item.id} — double-click to preview`}
               className={`group w-full cursor-default rounded-xl border p-1.5 outline-none transition-colors ${
                 isSelected
-                  ? 'border-[#ACDEE7]/25 bg-[#ACDEE7]/12'
+                  ? `${T.contentAccentTintBorder} ${T.contentAccentTintBg}`
                   : uiTheme === 'dark'
                     ? 'border-transparent hover:bg-white/5'
                     : 'border-transparent hover:bg-black/5'

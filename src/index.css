@@ -81,6 +81,15 @@ body,
   border-color: rgb(35 38 45 / 0.15) !important;
 }
 
+/* Content accent — native list markers / bullets */
+.window-content-light ::marker {
+  color: #82adb5;
+}
+
+.window-content-dark ::marker {
+  color: #acdee7;
+}
+
 /* ─── Dark (window surface #2E3137) ─── */
 .window-content-dark .text-black {
   color: #f9f9f7 !important;

@@ -33,6 +33,8 @@ const CALLOUT_LAYOUT = [
 
 export default function BrewchaContent({ uiTheme = 'light' }) {
   const T = contentTokens(uiTheme)
+  const watermarkVia =
+    uiTheme === 'dark' ? 'via-[#ACDEE7]/[0.12]' : 'via-[#82ADB5]/[0.12]'
   return (
     <div
       className={`h-full overflow-y-auto overflow-x-hidden font-sans antialiased ${T.surface} ${T.text} ${T.scrollRoot} ${T.contentProse}`}
@@ -124,7 +126,7 @@ export default function BrewchaContent({ uiTheme = 'light' }) {
             aria-hidden
           >
             <span
-              className="block bg-gradient-to-br from-neutral-300/25 via-[#ACDEE7]/[0.12] to-neutral-300/20 bg-clip-text text-center text-[clamp(2.5rem,11vw,6.5rem)] font-black leading-none tracking-tight text-transparent"
+              className={`block bg-gradient-to-br from-neutral-300/25 ${watermarkVia} to-neutral-300/20 bg-clip-text text-center text-[clamp(2.5rem,11vw,6.5rem)] font-black leading-none tracking-tight text-transparent`}
             >
               BREWCHA
             </span>
