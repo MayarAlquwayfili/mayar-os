@@ -92,7 +92,11 @@ export default function DraggableDesktopItem({
   return (
     <div
       ref={rootRef}
-      className={`absolute touch-none select-none ${dragging ? draggingClassName : ''} ${className}`}
+      className={`absolute touch-none select-none ${
+        dragging
+          ? `transition-none [&_*]:transition-none ${draggingClassName}`
+          : ''
+      } ${className}`}
       style={{ left: position.x, top: position.y, ...style }}
       onClick={(e) => e.stopPropagation()}
       onPointerDown={onPointerDown}

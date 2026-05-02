@@ -40,7 +40,9 @@ const DOCK_SAFE_PX = 96
 
 /** Post-admin-flow desktop items — share selection state with standard folders. */
 const DESKTOP_ITEM_FRAME_BASE =
-  'box-border flex w-[132px] flex-col items-center gap-2 rounded-xl border p-3 text-center outline-none transition-all duration-200'
+  'box-border flex w-[132px] flex-col items-center gap-2 rounded-xl border p-3 text-center outline-none'
+/** Applied only while idle — omit during drag so left/top are not transition-animated. */
+const DESKTOP_ITEM_FRAME_IDLE_TRANSITION = 'transition-all duration-200'
 
 function desktopItemSelectionClass(isSelected) {
   return isSelected
@@ -1283,7 +1285,9 @@ function DraggableFolder({
       label={cursorTipLabel}
       uiTheme={uiTheme}
       aria-label={`Folder ${id}: ${title}`}
-      wrapperClassName={`absolute ${DESKTOP_ITEM_FRAME_BASE} cursor-grab select-none active:cursor-grabbing ${desktopItemSelectionClass(
+      wrapperClassName={`absolute ${DESKTOP_ITEM_FRAME_BASE} ${
+        !isDragging ? DESKTOP_ITEM_FRAME_IDLE_TRANSITION : ''
+      } cursor-grab select-none active:cursor-grabbing ${desktopItemSelectionClass(
         isSelected,
       )}`}
       style={{ left: position.x, top: position.y }}
@@ -1635,7 +1639,7 @@ export default function App() {
             >
               <AdminFolderCursorTip label="it's all documented." uiTheme={uiTheme}>
                 <div
-                  className={`${DESKTOP_ITEM_FRAME_BASE} border-transparent bg-transparent`}
+                  className={`${DESKTOP_ITEM_FRAME_BASE} ${DESKTOP_ITEM_FRAME_IDLE_TRANSITION} border-transparent bg-transparent`}
                   role="presentation"
                   onDoubleClick={(e) => e.stopPropagation()}
                 >
@@ -1669,7 +1673,7 @@ export default function App() {
             >
               <AdminFolderCursorTip label="trust the process." uiTheme={uiTheme}>
                 <div
-                  className={`${DESKTOP_ITEM_FRAME_BASE} border-transparent bg-transparent`}
+                  className={`${DESKTOP_ITEM_FRAME_BASE} ${DESKTOP_ITEM_FRAME_IDLE_TRANSITION} border-transparent bg-transparent`}
                   role="presentation"
                   onDoubleClick={(e) => e.stopPropagation()}
                 >
@@ -1703,7 +1707,7 @@ export default function App() {
             >
               <AdminFolderCursorTip label="pixel-perfect." uiTheme={uiTheme}>
                 <div
-                  className={`${DESKTOP_ITEM_FRAME_BASE} border-transparent bg-transparent`}
+                  className={`${DESKTOP_ITEM_FRAME_BASE} ${DESKTOP_ITEM_FRAME_IDLE_TRANSITION} border-transparent bg-transparent`}
                   role="presentation"
                   onDoubleClick={(e) => e.stopPropagation()}
                 >
