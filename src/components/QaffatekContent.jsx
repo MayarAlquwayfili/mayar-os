@@ -203,21 +203,6 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
             </div>
           </div>
         </div>
-
-        <section
-          className={`mb-10 rounded-2xl border px-5 py-5 ${T.borderMuted} ${
-            uiTheme === 'dark' ? 'bg-white/[0.06]' : 'bg-gray-50'
-          }`}
-          aria-label="Project origins"
-        >
-          <p className={`text-[15px] leading-[1.75] ${T.text}`}>
-            <strong className="font-semibold">Mayar created and originated Qaffatek</strong>, an iOS-based mobile
-            game started in <strong className="font-semibold">October 2025</strong>, successfully digitizing a
-            traditional regional paper game for iPhone. She led the UI design process in{' '}
-            <strong className="font-semibold">Figma</strong>, then implemented the game logic and gameplay in{' '}
-            <strong className="font-semibold">Swift</strong> (SwiftUI).
-          </p>
-        </section>
       </div>
 
       {/* ══ 01. The Challenge — centered block (NO PHONE) ═══════════════════ */}
@@ -230,7 +215,13 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
           <span className="block text-[32px] text-gray-400 font-normal">and we miss how we used to hang out back then.</span>
         </h2>
         <div className={BODY_CLS}>
-          <p className="mb-6">We’ve all been there: the conversation dies, boredom kicks in, and suddenly everyone is staring at their phones just because there’s nothing else to do. It’s a moment that always made us miss how we used to hang out back then.</p>
+          <p className="mb-6">
+            Mayar created and originated Qaffatek as an iOS game from October 2025 onward, successfully digitizing a
+            traditional regional paper game for iPhone. The interface was designed in Figma, and the game logic and
+            gameplay were implemented in Swift (SwiftUI). We’ve all been there: the conversation dies, boredom kicks in,
+            and suddenly everyone is staring at their phones just because there’s nothing else to do. It’s a moment that
+            always made us miss how we used to hang out back then.
+          </p>
           <p className="mb-6">Back in school, our breaks felt completely different. All we had was a pen, some paper, and a game everyone knows called "Ghamza." We would start by writing the roles of the Weld, Bint, and Ajouz on tiny scraps of paper, then spend the whole break trying to catch a wink or hide one. That’s the connection we miss, and we really wanted to bring back.</p>
           <p className="mb-6">We realized we weren't the only ones feeling this way; it’s a huge part of our culture. 70% of Saudi families still play traditional games during gatherings like Ramadan, and 60% of people believe these games are essential for strengthening family bonds.</p>
           <p className="mb-0">Our goal was to digitize that old-school paper game and make it work for today, building a digital bridge that transforms that nostalgia into a modern way to get people together again.</p>
