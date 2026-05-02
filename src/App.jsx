@@ -1713,7 +1713,7 @@ export default function App() {
               setAdminFlow('triggering_notifications')
             }}
           >
-            <IdentityNameSticker />
+            <IdentityNameSticker uiTheme={uiTheme} />
           </div>
         </DraggableDesktopItem>
 

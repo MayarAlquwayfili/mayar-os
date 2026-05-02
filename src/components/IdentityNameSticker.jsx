@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
-import HelloCard from '../assets/HelloCard.svg'
+import LightCard from '../assets/HelloCardLight.svg'
+import DarkCard from '../assets/HelloCardDark.svg'
 import AdminFolderCursorTip from './AdminFolderCursorTip'
 
 const shadowXl =
@@ -8,7 +9,8 @@ const shadowXl =
 /**
  * Desk sticker — parent wraps this for drag + clean click to start the admin / workspace flow.
  */
-export default function IdentityNameSticker() {
+export default function IdentityNameSticker({ uiTheme = 'light' }) {
+  const cardSrc = uiTheme === 'dark' ? DarkCard : LightCard
   return (
     <AdminFolderCursorTip
       label="Mayar ID"
@@ -21,7 +23,7 @@ export default function IdentityNameSticker() {
         transition={{ type: 'spring', stiffness: 420, damping: 28 }}
       >
         <img
-          src={HelloCard}
+          src={cardSrc}
           alt=""
           draggable={false}
           className="block h-auto w-full"
