@@ -150,7 +150,7 @@ function MoheetikSplitContent({ uiTheme = 'light' }) {
         <div className="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-4 pb-8 mb-10 border-b border-gray-100">
           <div>
             <p className={META_KEY_CLS}>Timeline</p>
-            <p className={META_VAL_CLS}>Nov 4 – Dec 16, 2025</p>
+            <p className={META_VAL_CLS}>11.2025 - 12.2025</p>
           </div>
           <div>
             <p className={META_KEY_CLS}>My Role</p>
@@ -158,7 +158,7 @@ function MoheetikSplitContent({ uiTheme = 'light' }) {
           </div>
           <div>
             <p className={META_KEY_CLS}>Project Type</p>
-            <p className={META_VAL_CLS}>iOS App (Apple Dev Academy)</p>
+            <p className={META_VAL_CLS}>iOS App (Apple Developer Academy)</p>
           </div>
           <div>
             <p className={META_KEY_CLS}>Tools</p>
