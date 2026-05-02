@@ -72,11 +72,10 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
   const [weldToBintP,    setWeldToBintP]    = useState(0)
   const [bintToAjouzP,   setBintToAjouzP]   = useState(0)
   const [ajouzToTimeP,   setAjouzToTimeP]   = useState(0)
-  const [secretNarrativeFade, setSecretNarrativeFade] = useState(1)
+  const [secretReadProgress, setSecretReadProgress] = useState(0)
   const [phoneEndFade,   setPhoneEndFade]   = useState(1)
 
   /** Scroll-derived lane / intersection state — updated in handleScroll, not read from refs during render. */
-  const [visualEnterBlend, setVisualEnterBlend] = useState(0)
   const [ixVisual, setIxVisual] = useState(false)
   const [ixBridge, setIxBridge] = useState(false)
   const [ixImpact, setIxImpact] = useState(false)
@@ -151,26 +150,16 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
 
     // Weld: full by lower-third read (anchor 2/3); Bint/Ajouz: viewport center; Vibe→Time: earlier than center.
     setSecretToWeldP(handoffProgress(weldRef, 2 / 3))
-    setWeldToBintP(handoffProgress(bintRef, 0.5))
-    setBintToAjouzP(handoffProgress(ajouzRef, 0.5))
-    setAjouzToTimeP(handoffProgress(vibeRef, 0.68))
+    setWeldToBintP(handoffProgress(bintRef, 0.99))
+    setBintToAjouzP(handoffProgress(ajouzRef, 0.99))
+    setAjouzToTimeP(handoffProgress(vibeRef, 0.99))
 
-    // Secret: start fading as soon as 02 enters; graceful curve across ~40% of solution read-progress span.
-    const solRP = readProgress(solutionRef)
-    const solVis = sectionVisible(solutionRef)
-    const pace01 = Math.min(
-      1,
-      Math.max(0, (solRP * 0.95 + solVis * 0.22) / 0.4),
-    )
-    setSecretNarrativeFade(1 - smooth01(pace01))
+    setSecretReadProgress(readProgress(solutionRef))
 
     const impactVis = sectionVisible(impactRef)
     const pef = 1 - Math.min(1, Math.max(0, (impactVis - 0.05) / 0.4))
     setPhoneEndFade(pef)
 
-    setVisualEnterBlend(
-      Math.min(1, Math.max(0, (sectionVisible(visualIdRef) - 0.02) * 1.25)),
-    )
     setIxVisual(isIntersecting(visualIdRef))
     setIxBridge(isIntersecting(bridgeRef))
     setIxImpact(isIntersecting(impactRef))
@@ -190,11 +179,16 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
   // Visual Identity section: logo follows a bell curve.
   const visualIdentityMask = 1 - bell(visualRP)
 
-  const qsecretExitMask = 1 - visualEnterBlend
+  // Secret: hold full opacity until 50% solution read, then fade over the second half (no qsecretExitMask).
+  const secretFadeWindow = Math.min(
+    1,
+    Math.max(0, (secretReadProgress - 0.5) / 0.5),
+  )
+  const secretNarrativeFade = 1 - smooth01(secretFadeWindow)
 
   // ── Mockup opacities (cascading cross-fade) ──────────────────────────────
   const secretOpacity =
-    (1 - secretToWeldP) * phoneInP * qsecretExitMask * secretNarrativeFade * phoneEndFade
+    (1 - secretToWeldP) * phoneInP * secretNarrativeFade * phoneEndFade
   const weldOpacity =
     (secretToWeldP * (1 - weldToBintP)) * phoneInP * visualIdentityMask * phoneEndFade
   const weldOpacityFinal = weldRP <= 0 ? 0 : weldOpacity
@@ -382,7 +376,7 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
           {/* ══ 02. The Solution — RIGHT ══════════════════════════════════════ */}
           <section
             ref={solutionRef}
-            className="md:col-start-3 md:row-start-1 flex items-center py-24 min-h-[85vh] relative z-20"
+            className="md:col-start-3 md:row-start-1 flex items-center py-24 min-h-[130vh] relative z-20"
           >
             <div className="min-w-0">
               <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-400 mb-5">
