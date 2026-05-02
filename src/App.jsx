@@ -48,14 +48,16 @@ function desktopItemSelectionClass(isSelected) {
     : 'border-transparent bg-transparent hover:border-transparent hover:bg-[#FEF0BC]/40'
 }
 const EDGE_PX = 10
+/** Matches MacWindow title bar `h-11` (2.75rem) — used for resize hit geometry. */
+const MAC_WINDOW_TITLEBAR_PX = 44
 const MIN_W = 500
 const MIN_H = 400
 /** Qaffatek — wide stage for sticky mockup + narrative columns. */
 const MIN_W_QAFFATEK = 1400
 const MIN_H_QAFFATEK = 750
-/** RECLAB — larger layout floor so rich media grids don’t collapse. */
-const MIN_W_RECLAB = 900
-const MIN_H_RECLAB = 700
+/** RECLAB — same large floor as Qaffatek for rich media layout. */
+const MIN_W_RECLAB = 1400
+const MIN_H_RECLAB = 750
 
 function minWindowSizeForTitle(title) {
   if (title === 'Qaffatek') return { w: MIN_W_QAFFATEK, h: MIN_H_QAFFATEK }
@@ -74,20 +76,26 @@ const RESIZE_CURSORS = {
   se: 'nwse-resize',
 }
 
-function getResizeZone(clientX, clientY, rect) {
+function getResizeZone(clientX, clientY, rect, titleBarPx = MAC_WINDOW_TITLEBAR_PX) {
   const x = clientX - rect.left
   const y = clientY - rect.top
   const w = rect.width
   const h = rect.height
-  const onN = y < EDGE_PX
   const onS = y > h - EDGE_PX
   const onW = x < EDGE_PX
   const onE = x > w - EDGE_PX
-  if (onN && onW) return 'nw'
-  if (onN && onE) return 'ne'
+  /** Thin strip at the very top of the window (mostly under traffic lights) — corners only to avoid fighting title-bar drag. */
+  const onNWindowTop = y < EDGE_PX
+  /** Usable north edge on the first row of content below the title bar. */
+  const onNContent = y >= titleBarPx && y < titleBarPx + EDGE_PX
+
+  if (onNWindowTop && onW) return 'nw'
+  if (onNWindowTop && onE) return 'ne'
+  if (onNContent && onW) return 'nw'
+  if (onNContent && onE) return 'ne'
+  if (onNContent && !onW && !onE) return 'n'
   if (onS && onW) return 'sw'
   if (onS && onE) return 'se'
-  if (onN) return 'n'
   if (onS) return 's'
   if (onW) return 'w'
   if (onE) return 'e'
@@ -810,7 +818,7 @@ const WINDOW_PRESETS = {
   'How to Work with Me': { w: 440, h: 560, centered: true },
   Lab: { w: 440, h: 400, centered: true },
   Qaffatek: { w: 1400, h: 750, centered: true },
-  RECLAB: { w: 900, h: 750, centered: true },
+  RECLAB: { w: 1400, h: 750, centered: true },
   'cash-obsolete-research': { w: 1080, h: 800, centered: true },
   'Side B': { w: 960, h: 640, centered: true },
   SIDE_B_ALBUM: { w: 720, h: 520, centered: true },
@@ -922,15 +930,15 @@ function MacWindow({
       let newL = startLeft
       let newT = startTop
 
-      if (zone.includes('e')) newW = Math.max(minW, startW + dx)
-      if (zone.includes('s')) newH = Math.max(minH, startH + dy)
+      if (zone.includes('e')) newW = startW + dx
+      if (zone.includes('s')) newH = startH + dy
       if (zone.includes('w')) {
-        const propW = Math.max(minW, startW - dx)
+        const propW = startW - dx
         newL = startLeft + (startW - propW)
         newW = propW
       }
       if (zone.includes('n')) {
-        const propH = Math.max(minH, startH - dy)
+        const propH = startH - dy
         newT = startTop + (startH - propH)
         newH = propH
       }
@@ -947,6 +955,33 @@ function MacWindow({
 
       newW = Math.max(minW, newW)
       newH = Math.max(minH, newH)
+
+      // Keep opposite edges fixed when min-size clamping widens/talls the window (avoids left/top jump).
+      if (zone.includes('w')) {
+        newL = startLeft + startW - newW
+      }
+      if (zone.includes('n')) {
+        newT = startTop + startH - newH
+      }
+
+      if (newL < 0) {
+        newL = 0
+        if (zone.includes('w')) {
+          newW = Math.max(minW, startLeft + startW)
+        }
+      }
+      if (newT < MENU_BAR_PX) {
+        newT = MENU_BAR_PX
+        if (zone.includes('n')) {
+          newH = Math.max(minH, startTop + startH - MENU_BAR_PX)
+        }
+      }
+      if (newL + newW > window.innerWidth) {
+        newW = Math.max(minW, window.innerWidth - newL)
+      }
+      if (newT + newH > window.innerHeight - DOCK_SAFE_PX) {
+        newH = Math.max(minH, window.innerHeight - DOCK_SAFE_PX - newT)
+      }
 
       setPosition({ x: newL, y: newT })
       setSize({ w: newW, h: newH })
@@ -1161,6 +1196,47 @@ function MacWindow({
           </div>
         )}
       </div>
+
+      {/* Perimeter hit rails — sit above scroll content so 8-way resize works; SE thumb remains on top at the corner. */}
+      {!isMaximized && (
+        <>
+          <div
+            aria-hidden
+            className="pointer-events-auto absolute z-[25] touch-none"
+            style={{
+              top: MAC_WINDOW_TITLEBAR_PX,
+              left: EDGE_PX,
+              right: EDGE_PX,
+              height: EDGE_PX,
+            }}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-auto absolute z-[25] touch-none"
+            style={{
+              top: MAC_WINDOW_TITLEBAR_PX,
+              left: 0,
+              width: EDGE_PX,
+              bottom: 0,
+            }}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-auto absolute z-[25] touch-none"
+            style={{
+              top: MAC_WINDOW_TITLEBAR_PX,
+              right: 0,
+              width: EDGE_PX,
+              bottom: 0,
+            }}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-auto absolute z-[25] touch-none"
+            style={{ left: 0, right: 0, bottom: 0, height: EDGE_PX }}
+          />
+        </>
+      )}
 
       {/* SE corner resize handle — above in-window content (e.g. z-20 media) so it always receives pointer events */}
       {!isMaximized && (
