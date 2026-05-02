@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 
 const MOVE_THRESHOLD_PX = 6
 
@@ -17,16 +17,20 @@ export default function DraggableDesktopItem({
   draggingClassName = '',
 }) {
   const [position, setPosition] = useState({ x: initialX, y: initialY })
+  const [propsAnchor, setPropsAnchor] = useState({ x: initialX, y: initialY })
   const [dragging, setDragging] = useState(false)
   const rootRef = useRef(null)
   const dragOffsetRef = useRef({ x: 0, y: 0 })
   const lastPositionRef = useRef({ x: initialX, y: initialY })
   const movedRef = useRef(false)
-
-  useEffect(() => {
+  if (propsAnchor.x !== initialX || propsAnchor.y !== initialY) {
+    setPropsAnchor({ x: initialX, y: initialY })
     setPosition({ x: initialX, y: initialY })
-    lastPositionRef.current = { x: initialX, y: initialY }
-  }, [initialX, initialY])
+  }
+
+  useLayoutEffect(() => {
+    lastPositionRef.current = position
+  }, [position])
 
   const onPointerDown = (e) => {
     if (e.button !== 0) return

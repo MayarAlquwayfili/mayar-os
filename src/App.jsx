@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react'
 import FolderIcon from './assets/Folder.svg'
 import AppIconMoheetik from './assets/Moheetik/AppIconMoheetik.svg'
 import AppIconRECLAB from './assets/RECLAB/AppIconRECLAB.svg'
@@ -260,16 +260,6 @@ function RECLABContent({ uiTheme = 'light' }) {
     return Math.min(1, Math.max(0, 1 - elCenter / cRect.height))
   }, [])
 
-  // sectionScrolled: 0 when section top hits viewport top, 1 when section bottom passes top
-  const sectionScrolled = useCallback((ref) => {
-    const container = scrollRef.current
-    const el = ref.current
-    if (!container || !el) return 0
-    const cRect = container.getBoundingClientRect()
-    const eRect = el.getBoundingClientRect()
-    return Math.min(1, Math.max(0, (cRect.top - eRect.top) / eRect.height))
-  }, [])
-
   // sectionVisible: starts the moment the section's TOP enters the viewport from below.
   // Returns 0 at first pixel of visibility, rising to 1 as the section scrolls upward.
   const sectionVisible = useCallback((ref) => {
@@ -288,7 +278,7 @@ function RECLABContent({ uiTheme = 'light' }) {
     // 0.3 dead-zone: transition waits until 30% of S04 is visible, then ×8 makes it fast.
     const sec4Progress = Math.max(0, sectionVisible(sec4Ref) - 0.3)
     setLabToWCP(Math.min(1, sec4Progress * 8))
-  }, [readProgress, sectionScrolled, sectionVisible])
+  }, [readProgress, sectionVisible])
 
   // ── Mockup: Lab is static through S02 & S03, blends to WC early in S04 ──
   const labOpacity = 1 - labToWCP
@@ -1193,11 +1183,15 @@ function DraggableFolder({
   const rootRef = useRef(null)
   const dragOffsetRef = useRef({ x: 0, y: 0 })
   const lastPositionRef = useRef({ x: initialX, y: initialY })
-
-  useEffect(() => {
+  const [propsAnchor, setPropsAnchor] = useState({ x: initialX, y: initialY })
+  if (propsAnchor.x !== initialX || propsAnchor.y !== initialY) {
+    setPropsAnchor({ x: initialX, y: initialY })
     setPosition({ x: initialX, y: initialY })
-    lastPositionRef.current = { x: initialX, y: initialY }
-  }, [initialX, initialY])
+  }
+
+  useLayoutEffect(() => {
+    lastPositionRef.current = position
+  }, [position])
 
   useEffect(() => {
     if (!isDragging) return
@@ -1453,7 +1447,6 @@ export default function App() {
     if (adminFlow !== 'triggering_notifications') return
 
     clearAdminTimers()
-    setAdminNotifs([])
 
     const push = (notif) => {
       setAdminNotifs((prev) => [
@@ -1467,33 +1460,37 @@ export default function App() {
       ])
     }
 
-    push({
-      id: 'n1',
-      header: 'System',
-      body: 'Admin: Mayar logged in.',
-    })
-
-    timeoutsRef.current.push(
-      setTimeout(() => {
-        push({
-          id: 'n2',
+    queueMicrotask(() => {
+      setAdminNotifs([
+        {
+          id: 'n1',
           header: 'System',
-          body: 'Welcome to my OS.',
-        })
-      }, 1000)
-    )
+          body: 'Admin: Mayar logged in.',
+        },
+      ])
 
-    timeoutsRef.current.push(
-      setTimeout(() => {
-        push({
-          id: 'n3',
-          header: 'Screen Sharing',
-          body: 'Admin (Mayar) would like to share "Admin_Desktop" with you.',
-          isActionable: true,
-        })
-        setAdminFlow('waiting_accept')
-      }, 2500)
-    )
+      timeoutsRef.current.push(
+        setTimeout(() => {
+          push({
+            id: 'n2',
+            header: 'System',
+            body: 'Welcome to my OS.',
+          })
+        }, 1000),
+      )
+
+      timeoutsRef.current.push(
+        setTimeout(() => {
+          push({
+            id: 'n3',
+            header: 'Screen Sharing',
+            body: 'Admin (Mayar) would like to share "Admin_Desktop" with you.',
+            isActionable: true,
+          })
+          setAdminFlow('waiting_accept')
+        }, 2500),
+      )
+    })
   }, [adminFlow, clearAdminTimers])
 
   useEffect(() => {

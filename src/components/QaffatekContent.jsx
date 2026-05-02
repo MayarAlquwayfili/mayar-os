@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useLayoutEffect } from 'react'
 import AppIconQaffatek from '../assets/AppIconQaffatek.svg'
 import QaffatekLogo   from '../assets/Qaffatek/LOGO.svg'
 import MockupQsecret  from '../assets/Qaffatek/MockupQsecret.svg'
@@ -50,6 +50,14 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
   const [weldToBintP,    setWeldToBintP]    = useState(0)
   const [bintToAjouzP,   setBintToAjouzP]   = useState(0)
   const [ajouzToTimeP,   setAjouzToTimeP]   = useState(0)
+
+  /** Scroll-derived lane / intersection state — updated in handleScroll, not read from refs during render. */
+  const [visualEnterBlend, setVisualEnterBlend] = useState(0)
+  const [ixVisual, setIxVisual] = useState(false)
+  const [ixBridge, setIxBridge] = useState(false)
+  const [ixImpact, setIxImpact] = useState(false)
+  const [ixSolution, setIxSolution] = useState(false)
+  const [solutionVisAmt, setSolutionVisAmt] = useState(0)
 
   // ── Helpers ──────────────────────────────────────────────────────────────
 
@@ -105,7 +113,20 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
     setWeldToBintP  (blend(bintRef))
     setBintToAjouzP (blend(ajouzRef))
     setAjouzToTimeP (blend(vibeRef))
-  }, [readProgress, sectionVisible])
+
+    setVisualEnterBlend(
+      Math.min(1, Math.max(0, (sectionVisible(visualIdRef) - 0.02) * 1.25)),
+    )
+    setIxVisual(isIntersecting(visualIdRef))
+    setIxBridge(isIntersecting(bridgeRef))
+    setIxImpact(isIntersecting(impactRef))
+    setIxSolution(isIntersecting(solutionRef))
+    setSolutionVisAmt(sectionVisible(solutionRef))
+  }, [readProgress, sectionVisible, isIntersecting])
+
+  useLayoutEffect(() => {
+    handleScroll()
+  }, [handleScroll])
 
   // ── Bell-curve for floating elements ────────────────────────────────────
   // bell(p) = sin(p·π)^6 : 0 at entry, peaks at centre, 0 at exit
@@ -115,9 +136,7 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
   // Visual Identity section: logo follows a bell curve.
   const visualIdentityMask = 1 - bell(visualRP)
 
-  // Qsecret should fade naturally as Visual Identity begins entering view (before the hard hide).
-  const visualEnterP = Math.min(1, Math.max(0, (sectionVisible(visualIdRef) - 0.02) * 1.25))
-  const qsecretExitMask = 1 - visualEnterP
+  const qsecretExitMask = 1 - visualEnterBlend
 
   // ── Mockup opacities (cascading cross-fade) ──────────────────────────────
   const secretOpacity = (1 - secretToWeldP) * phoneInP * qsecretExitMask
@@ -130,15 +149,10 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
   const brandOpacity = bell(visualRP)
   const brandTY      = floatTY(visualRP)
 
-  // ── STRICT LANES: eliminate reverse-scroll visibility leaks ───────────────
-  // 1) Phone must be PERFECTLY gone in 02.1 + 03 (Visual Identity + Bridge)
-  const phoneSuppressed = isIntersecting(visualIdRef) || isIntersecting(bridgeRef) || isIntersecting(impactRef)
-
-  // 2) MockupQsecret must ONLY exist during 02 (Solution)
-  const inSolutionLane = isIntersecting(solutionRef) && !phoneSuppressed
-
-  // Phone entry should slide up starting at Section 02 (The Solution)
-  const phoneDocked = sectionVisible(solutionRef) > 0.1
+  // ── STRICT LANES (state mirrors refs; updated in handleScroll) ───────────
+  const phoneSuppressed = ixVisual || ixBridge || ixImpact
+  const inSolutionLane = ixSolution && !phoneSuppressed
+  const phoneDocked = solutionVisAmt > 0.1
 
   return (
     <div
