@@ -67,19 +67,17 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
   // ── Scroll-driven state ──────────────────────────────────────────────────
   const [visualRP,       setVisualRP]       = useState(0) // read-progress for 02.1 (logo + phone suppression)
   const [phoneInP,       setPhoneInP]       = useState(0) // starts fading in at 02 (Solution)
-  const [secretToWeldP,  setSecretToWeldP]  = useState(0)
+  const [weldEntranceP, setWeldEntranceP] = useState(0)
   const [weldToBintP,    setWeldToBintP]    = useState(0)
   const [bintToAjouzP,   setBintToAjouzP]   = useState(0)
   const [ajouzToTimeP,   setAjouzToTimeP]   = useState(0)
   const [secretReadProgress, setSecretReadProgress] = useState(0)
-  const [weldReadProgress, setWeldReadProgress] = useState(0)
   const [phoneEndFade,   setPhoneEndFade]   = useState(1)
 
   /** Scroll-derived lane / intersection state — updated in handleScroll, not read from refs during render. */
   const [ixVisual, setIxVisual] = useState(false)
   const [ixBridge, setIxBridge] = useState(false)
   const [ixImpact, setIxImpact] = useState(false)
-  const [ixSolution, setIxSolution] = useState(false)
   const [solutionVisAmt, setSolutionVisAmt] = useState(0)
 
   // ── Helpers ──────────────────────────────────────────────────────────────
@@ -145,9 +143,7 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
     // Phone starts at 02 (Solution). (01 is standalone above the stage.)
     setPhoneInP(Math.min(1, Math.max(0, sectionVisible(solutionRef)) * 1.25))
 
-    // Secret→Weld handoff + delayed Weld narrative fade (weldReadProgress); Bint/Ajouz/Vibe unchanged.
-    setSecretToWeldP(handoffProgress(weldRef, 2 / 3))
-    setWeldReadProgress(readProgress(weldRef))
+    setWeldEntranceP(handoffProgress(weldRef, 0.98))
     setWeldToBintP(handoffProgress(bintRef, 0.99))
     setBintToAjouzP(handoffProgress(ajouzRef, 0.99))
     setAjouzToTimeP(handoffProgress(vibeRef, 0.99))
@@ -161,7 +157,6 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
     setIxVisual(isIntersecting(visualIdRef))
     setIxBridge(isIntersecting(bridgeRef))
     setIxImpact(isIntersecting(impactRef))
-    setIxSolution(isIntersecting(solutionRef))
     setSolutionVisAmt(sectionVisible(solutionRef))
   }, [readProgress, sectionVisible, isIntersecting, handoffProgress])
 
@@ -174,24 +169,21 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
   const bell    = (p) => Math.pow(Math.sin(p * Math.PI), 6)
   const floatTY = (p) => (0.5 - p) * 72   // ±36 px cinematic drift
 
-  // Secret: hold full opacity until 50% solution read, then fade over the second half (no qsecretExitMask).
+  // Secret: hold until 50% solution read, then narrative fade; exits as Weld handoff rises.
   const secretFadeWindow = Math.min(
     1,
     Math.max(0, (secretReadProgress - 0.5) / 0.5),
   )
-  const secretNarrativeFade = 1 - smooth01(secretFadeWindow)
-
-  const weldFadeWindow = Math.min(
-    1,
-    Math.max(0, (weldReadProgress - 0.5) / 0.5),
-  )
-  const weldScreenFade = 1 - smooth01(weldFadeWindow)
+  const secretScreenFade = 1 - smooth01(secretFadeWindow)
 
   // ── Mockup opacities (cascading cross-fade) ──────────────────────────────
   const secretOpacity =
-    (1 - secretToWeldP) * phoneInP * secretNarrativeFade * phoneEndFade
+    secretScreenFade *
+    (1 - smooth01(weldEntranceP)) *
+    phoneInP *
+    phoneEndFade
   const weldOpacity =
-    weldScreenFade * (1 - weldToBintP) * phoneInP * phoneEndFade
+    smooth01(weldEntranceP) * (1 - weldToBintP) * phoneInP * phoneEndFade
   const bintOpacity =
     (weldToBintP * (1 - bintToAjouzP)) * phoneInP * phoneEndFade
   const ajouzOpacity =
@@ -204,7 +196,6 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
   // ── STRICT LANES (state mirrors refs; updated in handleScroll) ───────────
   const phoneSuppressed =
     ixVisual || ixBridge || (ixImpact && phoneEndFade <= 0.02)
-  const inSolutionLane = ixSolution && !phoneSuppressed
   const phoneDocked = solutionVisAmt > 0.1
 
   return (
@@ -248,11 +239,11 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
             </div>
             <div>
               <p className={META_KEY}>My Role</p>
-              <p className={META_VAL}>Apple Developer Academy | iOS Developer &amp; Product Designer</p>
+              <p className={META_VAL}>iOS Developer &amp; Product Designer</p>
             </div>
             <div>
               <p className={META_KEY}>Project Type</p>
-              <p className={META_VAL}>iOS App (PNU · Apple Developer Academy)</p>
+              <p className={META_VAL}>iOS App (Apple Developer Academy)</p>
             </div>
             <div>
               <p className={META_KEY}>Tools</p>
@@ -308,7 +299,7 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
           >
             <div
               className={
-                'pointer-events-auto relative w-full max-w-[400px] will-change-transform ' +
+                'pointer-events-auto relative w-full max-w-[400px] aspect-[390/844] will-change-transform ' +
                 dockMotionClass +
                 (phoneSuppressed ? ' !opacity-0 !invisible' : '') +
                 (phoneDocked ? ' translate-y-0' : ' translate-y-full')
@@ -319,15 +310,10 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
                 src={MockupQsecret}
                 alt="Secret role assignment screen"
                 className={
-                  'pointer-events-auto h-auto w-full object-contain ' +
-                  mockupOpacityClass +
-                  (inSolutionLane ? '' : ' !opacity-0 !invisible')
+                  'pointer-events-auto absolute inset-0 h-full w-full object-contain ' +
+                  mockupOpacityClass
                 }
-                style={
-                  inSolutionLane
-                    ? { opacity: secretOpacity }
-                    : { opacity: 0, visibility: 'hidden' }
-                }
+                style={{ zIndex: 1, opacity: secretOpacity }}
               />
 
               <img
@@ -337,7 +323,7 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
                   'pointer-events-auto absolute inset-0 h-full w-full object-contain ' +
                   mockupOpacityClass
                 }
-                style={{ opacity: weldOpacity }}
+                style={{ zIndex: 10, opacity: weldOpacity }}
               />
 
               <img
@@ -347,7 +333,7 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
                   'pointer-events-auto absolute inset-0 h-full w-full object-contain ' +
                   mockupOpacityClass
                 }
-                style={{ opacity: bintOpacity }}
+                style={{ zIndex: 20, opacity: bintOpacity }}
               />
 
               <img
@@ -357,7 +343,7 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
                   'pointer-events-auto absolute inset-0 h-full w-full object-contain ' +
                   mockupOpacityClass
                 }
-                style={{ opacity: ajouzOpacity }}
+                style={{ zIndex: 30, opacity: ajouzOpacity }}
               />
 
               <img
@@ -367,7 +353,7 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
                   'pointer-events-auto absolute inset-0 h-full w-full object-contain ' +
                   mockupOpacityClass
                 }
-                style={{ opacity: timeOpacity }}
+                style={{ zIndex: 40, opacity: timeOpacity }}
               />
             </div>
           </div>
