@@ -1,7 +1,7 @@
 /**
  * Shared classes for Mac window *body* content only (Light / Dark uiTheme).
  * Desktop chrome (dock, menu bar, folders, tooltips) uses brand yellow (#FEF0BC) in components — not these tokens.
- * Project pills: pillStatus (accent at 50%), pillDefault (translucent gray).
+ * Project pills: pillStatus (accent bg /50 + theme-aware text), pillDefault (gray /5 + theme text).
  */
 
 const ACCENT_LIGHT = '#82ADB5'
@@ -54,10 +54,10 @@ export function contentTokens(uiTheme) {
     textStrong: dark ? 'text-[#F9F9F7]' : 'text-[#23262D]',
     border: dark ? 'border-[#F9F9F7]/10' : 'border-[#23262D]/10',
     borderMuted: dark ? 'border-[#F9F9F7]/15' : 'border-[#23262D]/15',
-    /** Status labels — 0.5 opacity accent (Tailwind /50); Brewcha/Moheetik/RECLAB/Qaffatek/Cash research */
+    /** Status labels — bg /50 (0.5); text follows theme (light bg → charcoal, dark bg → warm white) */
     pillStatus: dark
-      ? 'border border-[#ACDEE7]/40 bg-[#ACDEE7]/50 text-[#23262D]'
-      : 'border border-[#82ADB5]/30 bg-[#82ADB5]/50 text-[#F9F9F7]',
+      ? 'border border-[#ACDEE7]/40 bg-[#ACDEE7]/50 text-[#F9F9F7]'
+      : 'border border-[#82ADB5]/30 bg-[#82ADB5]/50 text-[#23262D]',
     /** Tools, roles, tech tags — neutral translucent gray */
     pillDefault: dark
       ? 'border border-[#F9F9F7]/10 bg-[#F9F9F7]/5 text-[#F9F9F7]'
