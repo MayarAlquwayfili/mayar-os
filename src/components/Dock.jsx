@@ -50,7 +50,7 @@ function DockTile({ id, label, icon, openWindows, onOpen, iconFit = 'cover' }) {
 
       <span
         className={`mt-1.5 h-1 w-1 rounded-full transition-all duration-500 group-hover:scale-125 ${
-          isWindowOpenOnDesktop(openWindows, id) ? 'bg-[#F9F9F7] opacity-100' : 'opacity-0'
+          isWindowOpenOnDesktop(openWindows, id) ? 'bg-[#23262D] opacity-100' : 'opacity-0'
         }`}
         style={{ transitionTimingFunction: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}
       />
@@ -78,7 +78,7 @@ export default function Dock({ openWindows = [], onOpen, supplementalApps = [] }
       {supplementalApps.length > 0 && (
         <>
           <div
-            className="mx-2 h-8 w-[1px] shrink-0 self-center bg-white/15"
+            className="mx-2 h-8 w-[1px] shrink-0 self-center bg-[#23262D]/12"
             role="separator"
             aria-orientation="vertical"
           />

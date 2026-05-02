@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Pause, Play } from 'lucide-react'
 
-const ACCENT = '#544EAE'
+const ACCENT = '#ACDEE7'
 
 function formatHMS(totalSeconds) {
   const h = Math.floor(totalSeconds / 3600)
@@ -57,25 +57,25 @@ export default function WorkMoodWidget() {
   const secondsDisplay = running ? elapsed : 0
 
   return (
-    <div className="w-[min(260px,85vw)] select-none rounded-2xl border border-white/20 bg-white/10 px-4 py-3.5 shadow-lg backdrop-blur-md">
+    <div className="w-[min(260px,85vw)] select-none rounded-2xl border border-[#23262D]/10 bg-white/70 px-4 py-3.5 shadow-lg backdrop-blur-md">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           {running ? (
-            <h2 className="text-[15px] font-bold leading-tight tracking-wide text-[#F9F9F7]">
+            <h2 className="text-[15px] font-bold leading-tight tracking-wide text-[#23262D]">
               Work Mood: <span style={{ color: ACCENT }}>ON</span>
             </h2>
           ) : (
-            <h2 className="text-[15px] font-bold leading-tight tracking-wide text-[#F9F9F7]">
+            <h2 className="text-[15px] font-bold leading-tight tracking-wide text-[#23262D]">
               Work Mood
             </h2>
           )}
           <div className="mt-2 min-h-[28px]">
             {showTime ? (
-              <p className="text-[22px] font-semibold tabular-nums tracking-tight text-[#F9F9F7] font-mono">
+              <p className="text-[22px] font-semibold tabular-nums tracking-tight text-[#23262D] font-mono">
                 {formatHMS(secondsDisplay)}
               </p>
             ) : (
-              <p className="text-[13px] font-medium leading-snug tracking-wide text-[#F9F9F7]/90">
+              <p className="text-[13px] font-medium leading-snug tracking-wide text-[#23262D]/90">
                 Time for a Coffee break? ☕️
               </p>
             )}
@@ -84,7 +84,7 @@ export default function WorkMoodWidget() {
         <motion.button
           type="button"
           aria-label={running ? 'Pause work mood timer' : 'Start work mood timer'}
-          className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/25 bg-white/20 text-[#F9F9F7] shadow-sm transition-colors hover:bg-[#FEF0BC]/25 hover:text-[#23262D] disabled:pointer-events-none disabled:opacity-50"
+          className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#ACDEE7]/60 bg-[#ACDEE7]/25 text-[#23262D] shadow-sm transition-colors hover:bg-[#FEF0BC]/70 hover:border-[#FEF0BC]/50 disabled:pointer-events-none disabled:opacity-50"
           whileTap={{ scale: 0.95 }}
           onPointerDown={(e) => e.stopPropagation()}
           onClick={handleToggle}

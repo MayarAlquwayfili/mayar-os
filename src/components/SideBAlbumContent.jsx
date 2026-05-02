@@ -32,7 +32,7 @@ export default function SideBAlbumContent({ projectKey, onOpenPreview }) {
               aria-label={`${item.placeholder ?? item.id} — double-click to preview`}
               className={`group w-full cursor-default rounded-xl border p-1.5 outline-none transition-colors ${
                 isSelected
-                  ? 'border-[#6B3FA0]/20 bg-[#6B3FA0]/10'
+                  ? 'border-[#ACDEE7]/25 bg-[#ACDEE7]/12'
                   : 'border-transparent hover:bg-black/5'
               } focus-visible:ring-2 focus-visible:ring-[#10B981]/40 focus-visible:ring-offset-2`}
               onClick={(e) => {

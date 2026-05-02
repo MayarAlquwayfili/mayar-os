@@ -12,7 +12,7 @@ const SOCIAL_LINKS = [
 ]
 
 const SOCIAL_HOVER =
-  'flex shrink-0 items-center justify-center rounded-md p-1 transition-all duration-150 ease-out hover:bg-[#FEF0BC]/22'
+  'flex shrink-0 items-center justify-center rounded-md p-1 transition-all duration-150 ease-out hover:bg-[#FEF0BC]/50'
 
 /* Static menu-bar chrome (no hover) */
 const STATIC_CLUSTER = 'px-1.5 py-0.5 select-none'
@@ -29,17 +29,17 @@ function formatMenuBarClock(d) {
 function StatusItem() {
   return (
     <>
-      <span className="mx-1 h-3 w-px shrink-0 bg-[#F9F9F7]/25" aria-hidden />
+      <span className="mx-1 h-3 w-px shrink-0 bg-[#23262D]/20" aria-hidden />
       <span
         role="status"
         aria-label="Hunting for COOP"
         className={`flex cursor-default items-center gap-1.5 ${STATIC_CLUSTER}`}
       >
         <span
-          className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500 animate-pulse"
+          className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#ACDEE7] animate-pulse"
           aria-hidden
         />
-        <span className="whitespace-nowrap text-[12px] font-medium leading-none tracking-tight text-[#F9F9F7] sm:text-[13px]">
+        <span className="whitespace-nowrap text-[12px] font-medium leading-none tracking-tight text-[#23262D] sm:text-[13px]">
           Hunting for COOP
         </span>
       </span>
@@ -58,13 +58,13 @@ export default function TopStatusBar() {
   return (
     <header
       role="banner"
-      className="fixed inset-x-0 top-0 z-[9999] box-border flex h-[28px] min-h-[28px] max-h-[28px] flex-nowrap items-center justify-between border-b border-white/10 px-2 font-sans sm:px-3 bg-[#2E3137] text-[#F9F9F7]"
+      className="fixed inset-x-0 top-0 z-[9999] box-border flex h-[28px] min-h-[28px] max-h-[28px] flex-nowrap items-center justify-between border-b border-[#23262D]/10 bg-[#F9F9F7] px-2 font-sans text-[#23262D] sm:px-3"
       style={{
-        boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.06)',
+        boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.9)',
       }}
     >
       {/* ── Left cluster (sparkle — menu anchor) ── */}
-      <div className="flex min-w-0 flex-1 flex-nowrap items-center gap-0.5 text-[13px] font-medium leading-none text-[#F9F9F7]">
+      <div className="flex min-w-0 flex-1 flex-nowrap items-center gap-0.5 text-[13px] font-medium leading-none text-[#23262D]">
         <span className={`flex items-center justify-center ${STATIC_CLUSTER}`} aria-hidden>
           <img
             src={SparkleIcon}
@@ -78,7 +78,7 @@ export default function TopStatusBar() {
       </div>
 
       {/* ── Right cluster ── */}
-      <div className="flex shrink-0 flex-nowrap items-center gap-0.5 text-[#F9F9F7]">
+      <div className="flex shrink-0 flex-nowrap items-center gap-0.5 text-[#23262D]">
         {SOCIAL_LINKS.map(({ href, icon, label }) => (
           <a
             key={label}
@@ -99,7 +99,7 @@ export default function TopStatusBar() {
 
         <StatusItem />
 
-        <span className="mx-1 h-3 w-px shrink-0 bg-[#F9F9F7]/30" aria-hidden />
+        <span className="mx-1 h-3 w-px shrink-0 bg-[#23262D]/25" aria-hidden />
 
         <span className="sr-only">Wi-Fi</span>
         <span className={`flex items-center ${STATIC_CLUSTER}`}>
@@ -108,7 +108,7 @@ export default function TopStatusBar() {
 
         <time
           dateTime={now.toISOString()}
-          className={`shrink-0 whitespace-nowrap text-[12px] font-medium tabular-nums leading-none tracking-tight text-[#F9F9F7] sm:text-[13px] ${STATIC_CLUSTER}`}
+          className={`shrink-0 whitespace-nowrap text-[12px] font-medium tabular-nums leading-none tracking-tight text-[#23262D] sm:text-[13px] ${STATIC_CLUSTER}`}
         >
           {formatMenuBarClock(now)}
         </time>

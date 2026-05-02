@@ -14,7 +14,7 @@ function NotionSliderPlaceholder() {
         aria-hidden
       />
       <div className="relative z-[1] text-center">
-        <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-[#6B3FA0]/80">
+        <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-[#ACDEE7]/90">
           System
         </p>
         <p className="mt-3 text-[20px] font-bold tracking-tight text-gray-900 sm:text-[22px]">
@@ -23,7 +23,7 @@ function NotionSliderPlaceholder() {
         <p className="mt-2 text-[13px] font-medium text-gray-500">Coming soon — workspace preview</p>
         <div className="mx-auto mt-6 flex h-1.5 w-40 overflow-hidden rounded-full bg-white/60">
           <div
-            className="h-full w-1/3 animate-pulse rounded-full bg-gradient-to-r from-[#6B3FA0] to-[#8b7fd9]"
+            className="h-full w-1/3 animate-pulse rounded-full bg-gradient-to-r from-[#ACDEE7] to-[#7ec9d4]"
             style={{ animationDuration: '1.6s' }}
           />
         </div>

@@ -1390,15 +1390,13 @@ function DraggableFolder({
 
       <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
         <span
-          className={`line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide ${
-            isSelected ? 'text-[#23262D]' : 'text-[#F9F9F7]'
-          }`}
+          className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-[#23262D]"
         >
           {title}
         </span>
         <span
           className={`w-full break-words text-[11px] leading-snug ${
-            isSelected ? 'text-[#23262D]/80' : 'text-[#F9F9F7]/70'
+            isSelected ? 'text-[#23262D]/80' : 'text-[#23262D]/70'
           }`}
         >
           {subtitle ?? '2 items'}
@@ -1666,7 +1664,7 @@ export default function App() {
   )
 
   return (
-    <div className="fixed inset-0 min-h-0 w-full overflow-hidden bg-[#23262D] font-sans text-[#F9F9F7] antialiased">
+    <div className="fixed inset-0 min-h-0 w-full overflow-hidden bg-[#F9F9F7] font-sans text-[#23262D] antialiased">
       <TopStatusBar />
 
       <main
@@ -1734,7 +1732,7 @@ export default function App() {
                     />
                   </div>
                   <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
-                    <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-[#F9F9F7]">
+                    <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-[#23262D]">
                       Notion
                     </span>
                   </div>
@@ -1764,7 +1762,7 @@ export default function App() {
                     />
                   </div>
                   <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
-                    <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-[#F9F9F7]">
+                    <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-[#23262D]">
                       Coffee
                     </span>
                   </div>
@@ -1794,7 +1792,7 @@ export default function App() {
                     />
                   </div>
                   <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
-                    <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-[#F9F9F7]">
+                    <span className="line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide text-[#23262D]">
                       Figma
                     </span>
                   </div>

@@ -95,7 +95,7 @@ export default function BrewchaContent() {
               We all love a good coffee or matcha run. For many, a quick grab-and-go from a traditional café is exactly what they need. However, our research showed that this passive experience leaves out a specific group: the creators who love the process just as much as the product.
             </p>
             <p>
-              We surveyed 81 respondents; 77% felt that current café experiences have become repetitive, and 67% expressed a strong interest in building their own drinks from scratch.
+              We surveyed 81 respondents; 77% felt that current cafe experiences have become repetitive, and 67% expressed a strong interest in building their own drinks from scratch.
             </p>
             <p>
               Instead of opening just another cafe, we created Brewcha Studio an interactive beverage workshop. To test and validate this concept with real users, we executed a live prototype.
@@ -120,7 +120,7 @@ export default function BrewchaContent() {
             aria-hidden
           >
             <span
-              className="block bg-gradient-to-br from-neutral-300/25 via-[#6B3FA0]/[0.07] to-neutral-300/20 bg-clip-text text-center text-[clamp(2.5rem,11vw,6.5rem)] font-black leading-none tracking-tight text-transparent"
+              className="block bg-gradient-to-br from-neutral-300/25 via-[#ACDEE7]/[0.12] to-neutral-300/20 bg-clip-text text-center text-[clamp(2.5rem,11vw,6.5rem)] font-black leading-none tracking-tight text-transparent"
             >
               BREWCHA
             </span>

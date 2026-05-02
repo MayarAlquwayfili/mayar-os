@@ -38,10 +38,10 @@ export default function AdminNotifications({ items, adminFlow, onAccept, formatB
               opacity: { duration: 0.28, ease: 'easeOut' },
               layout: { duration: 0.2 },
             }}
-            className="pointer-events-auto w-80 rounded-2xl border border-[#6B3FA0]/20 bg-[#f8f6f0] px-5 py-5"
+            className="pointer-events-auto w-80 rounded-2xl border border-[#ACDEE7]/30 bg-[#F9F9F7] px-5 py-5"
           >
-            <p className="text-[12px] font-normal uppercase tracking-[0.12em] text-[#6B3FA0]">{n.header}</p>
-            <p className="mt-2 text-[14px] font-normal leading-relaxed text-gray-800">{formatBody(n.body)}</p>
+            <p className="text-[12px] font-normal uppercase tracking-[0.12em] text-[#23262D]">{n.header}</p>
+            <p className="mt-2 text-[14px] font-normal leading-relaxed text-[#23262D]/90">{formatBody(n.body)}</p>
 
             {n.isActionable && (
               <div className="mt-4">
@@ -51,8 +51,8 @@ export default function AdminNotifications({ items, adminFlow, onAccept, formatB
                   aria-label={adminFlow === 'loading' ? 'Loading' : 'Accept'}
                   className={`inline-flex min-h-[40px] items-center rounded-lg py-2.5 text-sm font-medium ${
                     adminFlow === 'loading'
-                      ? 'w-full cursor-default justify-start bg-[#6B3FA0]/12 pl-0 pr-5 text-[#6B3FA0]'
-                      : 'min-w-[6.5rem] justify-center bg-[#6B3FA0] px-5 text-white hover:opacity-90'
+                      ? 'w-full cursor-default justify-start bg-[#ACDEE7]/15 pl-0 pr-5 text-[#23262D]'
+                      : 'min-w-[6.5rem] justify-center bg-[#ACDEE7] px-5 text-[#23262D] hover:opacity-90'
                   }`}
                   onClick={() => {
                     playNotificationSfx()
@@ -61,7 +61,7 @@ export default function AdminNotifications({ items, adminFlow, onAccept, formatB
                 >
                   {adminFlow === 'loading' ? (
                     <span
-                      className="h-5 w-5 shrink-0 animate-spin rounded-full border-2 border-[#6B3FA0] border-t-transparent"
+                      className="h-5 w-5 shrink-0 animate-spin rounded-full border-2 border-[#23262D]/35 border-t-[#23262D]"
                       aria-hidden
                     />
                   ) : (

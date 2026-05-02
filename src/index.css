@@ -14,7 +14,7 @@ body,
   overflow: hidden;
 }
 
-/* Dark-theme highlight selection — butter yellow bg, dark text for contrast */
+/* Highlight selection — butter yellow bg, dark text for contrast */
 ::selection {
   background-color: #fef0bc;
   color: #23262d;
@@ -40,7 +40,7 @@ body,
   font-variant-numeric: tabular-nums;
 }
 
-/* Admin desktop folder hover — purple tooltip + ::after caption (data-admin-tip) */
+/* Admin desktop folder — ::after caption (data-admin-tip) */
 .admin-desktop-folder-tip-inner[data-admin-tip]::after {
   content: attr(data-admin-tip);
   display: block;
@@ -48,5 +48,5 @@ body,
   font-size: 0.6875rem;
   font-weight: 600;
   letter-spacing: 0.04em;
-  color: #fef0bc;
+  color: #acdee7;
 }

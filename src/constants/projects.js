@@ -66,7 +66,7 @@ export const LAB_FOLDER_CONTENTS = [
   },
   {
     id: 'cash-obsolete-research',
-    title: 'Will Cash Become Obsolete?',
+    title: 'Digital Payments Research',
     subtitle: 'Research Project',
     openWindowTitle: 'cash-obsolete-research',
     icon: 'folder',
@@ -97,7 +97,7 @@ export const DESKTOP_FOLDERS = [
   },
   {
     id: 'cash-obsolete-research',
-    title: 'Will Cash Become Obsolete?',
+    title: 'Digital Payments Research',
     windowTitle: 'cash-obsolete-research',
     icon: PayFolderIcon,
     subtitle: 'Research Project',

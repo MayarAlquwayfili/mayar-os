@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 
-// Purple accent aligns with identity sticker / admin chrome (#544EAE).
-const WORK_ACCENT = '#544EAE'
+// Aqua accent — admin / brand chrome (#ACDEE7).
+const WORK_ACCENT = '#ACDEE7'
 
 const INITIAL_ITEMS = [
   {

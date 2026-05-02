@@ -38,7 +38,7 @@ export default function AdminFolderCursorTip({ label, children, wrapperClassName
               transform: 'translateY(-50%)',
             }}
           >
-            <span className="inline-flex max-w-[min(280px,calc(100vw-48px))] items-center rounded-full bg-[#6B3FA0] px-4 py-1.5 text-left text-[11px] font-medium leading-snug text-white">
+            <span className="inline-flex max-w-[min(280px,calc(100vw-48px))] items-center rounded-full border border-[#ACDEE7]/40 bg-[#ACDEE7] px-4 py-1.5 text-left text-[11px] font-medium leading-snug text-[#23262D]">
               {label}
             </span>
           </div>,
