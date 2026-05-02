@@ -154,7 +154,7 @@ function MoheetikSplitContent({ uiTheme = 'light' }) {
           </div>
           <div>
             <p className={META_KEY_CLS}>My Role</p>
-            <p className={META_VAL_CLS}>Apple Developer Academy | Lead iOS Developer &amp; Product Designer</p>
+            <p className={META_VAL_CLS}>Lead iOS Developer &amp; Product Designer</p>
           </div>
           <div>
             <p className={META_KEY_CLS}>Project Type</p>
@@ -359,7 +359,7 @@ function RECLABContent({ uiTheme = 'light' }) {
           </div>
           <div>
             <p className={META_KEY_CLS}>My Role</p>
-            <p className={META_VAL_CLS}>Personal Project | iOS Developer &amp; Product Designer</p>
+            <p className={META_VAL_CLS}>iOS Developer &amp; Product Designer</p>
           </div>
           <div>
             <p className={META_KEY_CLS}>Project Type</p>
@@ -571,7 +571,6 @@ function RECLABContent({ uiTheme = 'light' }) {
 function CVContent({ uiTheme = 'light' }) {
   const T = contentTokens(uiTheme)
   const bulletDot = T.contentAccentBulletBefore
-  const cvPdfHref = `${import.meta.env.BASE_URL}MayarAlquwayfiliCv.pdf`
   return (
     <div
       className={`h-full overflow-y-auto font-sans ${T.surface} ${T.text} ${T.scrollRootThin} ${T.contentProse}`}
@@ -731,7 +730,7 @@ function CVContent({ uiTheme = 'light' }) {
         {/* ── Download button ── */}
         <div className="mt-10 flex justify-start border-t border-gray-100 pt-7">
           <a
-            href={cvPdfHref}
+            href="/MayarAlquwayfiliCv.pdf"
             download="MayarAlquwayfiliCv.pdf"
             target="_blank"
             rel="noopener noreferrer"
