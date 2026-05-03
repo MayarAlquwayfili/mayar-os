@@ -35,11 +35,13 @@ export default function MobileEmptyState({ uiTheme = 'light' }) {
         />
       </div>
 
-      <h1 className={`max-w-md text-[22px] font-semibold leading-snug tracking-tight sm:text-[24px] ${titleColor}`}>
-        Best Experienced on Desktop
+      <h1
+        className={`max-w-md text-balance text-[22px] font-semibold leading-snug tracking-tight sm:text-[24px] ${titleColor}`}
+      >
+        Explore Mayar OS
       </h1>
-      <p className={`mt-4 max-w-md text-[15px] leading-relaxed ${bodyColor}`}>
-        To explore the full interactive interface and project details, please visit Mayar OS from a laptop or PC.
+      <p className={`mt-4 max-w-md text-balance text-[15px] leading-relaxed ${bodyColor}`}>
+        Open on desktop to view the full portfolio.
       </p>
       <button
         type="button"
