@@ -23,7 +23,7 @@ const AdminFolderCursorTip = forwardRef(function AdminFolderCursorTip(
     label,
     children,
     wrapperClassName,
-    uiTheme = 'light',
+    uiTheme: _uiTheme = 'light',
     style,
     onMouseMove: onMouseMoveProp,
     onMouseLeave: onMouseLeaveProp,

@@ -1,37 +1,24 @@
 import { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { playNotificationSfx, getNotificationSfx } from '../utils/notificationSfx'
-import { accentTokens } from '../utils/windowContentTheme'
 
-export default function AdminNotifications({
-  uiTheme = 'light',
-  items,
-  adminFlow,
-  onAccept,
-  formatBody,
-}) {
+export default function AdminNotifications({ items, adminFlow, onAccept, formatBody }) {
   const seenIdsRef = useRef(new Set())
-  const dark = uiTheme === 'dark'
-  const A = accentTokens(uiTheme)
 
   const cardClassName = [
-    'pointer-events-auto w-80 rounded-2xl border px-5 py-5',
-    dark
-      ? 'border-white/10 bg-[#2E3137] shadow-[0_24px_64px_-16px_rgba(0,0,0,0.55)]'
-      : 'border-black/[0.08] bg-[#F9F9F7] shadow-lg shadow-black/[0.08]',
-    A.ringAccentTop,
+    'pointer-events-auto w-80 rounded-2xl border border-white/10 px-5 py-5',
+    'bg-slate-950/40 backdrop-blur-2xl',
+    'shadow-[0_24px_64px_-16px_rgba(0,0,0,0.45)]',
   ].join(' ')
 
-  const headerMuted = dark ? 'text-[#F9F9F7]/55' : 'text-gray-500'
-  const bodyText = dark ? 'text-[#F9F9F7]' : 'text-[#23262D]'
+  const headerMuted = 'text-white/50'
+  const bodyText = 'text-white/95'
 
   useEffect(() => {
-    // Preload on first mount (zero-latency feel).
     getNotificationSfx()
   }, [])
 
   useEffect(() => {
-    // Play for each newly-added notification card.
     const seen = seenIdsRef.current
     let newCount = 0
     for (const n of items) {
@@ -43,8 +30,10 @@ export default function AdminNotifications({
     for (let k = 0; k < newCount; k += 1) playNotificationSfx()
   }, [items])
 
+  const isLoading = adminFlow === 'loading'
+
   return (
-    <div className="pointer-events-none fixed right-4 top-14 z-[8000] flex w-80 flex-col gap-3">
+    <div className="pointer-events-none fixed right-4 top-4 z-[8000] flex w-80 flex-col gap-3">
       <AnimatePresence mode="popLayout">
         {items.map((n) => (
           <motion.div
@@ -71,30 +60,29 @@ export default function AdminNotifications({
               <div className="mt-4">
                 <button
                   type="button"
-                  aria-busy={adminFlow === 'loading'}
-                  aria-label={adminFlow === 'loading' ? 'Loading' : 'Accept'}
-                  className={`inline-flex min-h-[40px] items-center rounded-lg py-2.5 text-sm font-medium transition-opacity ${
-                    adminFlow === 'loading'
-                      ? `w-full cursor-default justify-start pl-0 pr-5 ${A.btnTint} ${
-                          dark ? 'text-[#F9F9F7]' : 'text-[#23262D]'
-                        }`
-                      : `min-w-[6.5rem] justify-center px-5 ${A.btnSolid} ${A.textOnAccent} hover:opacity-90 active:opacity-100`
-                  }`}
+                  disabled={isLoading}
+                  aria-busy={isLoading}
+                  aria-label={isLoading ? 'Loading' : 'Accept'}
+                  className={[
+                    'inline-flex min-h-[40px] w-full min-w-[6.5rem] items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium transition-all',
+                    'border border-white/15 text-white',
+                    isLoading
+                      ? 'cursor-not-allowed bg-slate-900/80 animate-pulse opacity-95'
+                      : 'bg-white/15 hover:bg-white/20 active:bg-white/10',
+                  ].join(' ')}
                   onClick={() => {
+                    if (isLoading) return
                     playNotificationSfx()
                     onAccept?.()
                   }}
                 >
-                  {adminFlow === 'loading' ? (
+                  {isLoading ? (
                     <span
-                      className={`h-5 w-5 shrink-0 animate-spin rounded-full border-2 ${
-                        dark ? 'border-[#F9F9F7]/35' : 'border-[#23262D]/35'
-                      } ${A.spinnerRingAccent}`}
+                      className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-white/25 border-t-white/90"
                       aria-hidden
                     />
-                  ) : (
-                    'Accept'
-                  )}
+                  ) : null}
+                  Accept
                 </button>
               </div>
             )}
