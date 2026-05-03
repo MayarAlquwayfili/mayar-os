@@ -30,6 +30,7 @@ import V60FolderIcon from './assets/Admin/V60_Folder.svg'
 import FigmaFolderIcon from './assets/Admin/Figma_Folder.svg'
 import { useWindowManager } from './hooks/useWindowManager'
 import { MOHEETIK_TOOLS, RECLAB_TOOLS, DESKTOP_FOLDERS } from './constants/projects'
+import { INITIAL_MANUAL_TASKS } from './constants/manualTasks'
 import { windowChrome, contentTokens } from './utils/windowContentTheme'
 
 const MENU_BAR_PX = 28
@@ -845,6 +846,8 @@ function MacWindow({
   sideBAlbumKey,
   imagePreview,
   uiTheme = 'light',
+  manualTasks,
+  setManualTasks,
 }) {
   const chrome = windowChrome(uiTheme)
 
@@ -1201,7 +1204,11 @@ function MacWindow({
             {/* TODO: REMOVE OR REUSE — was <NotionSliderContent />; Notion folder is static (no window). */}
           </>
         ) : title === 'How to Work with Me' ? (
-          <HowToWorkContent uiTheme={uiTheme} />
+          <HowToWorkContent
+            uiTheme={uiTheme}
+            items={manualTasks}
+            onSetItems={setManualTasks}
+          />
         ) : (
           <div
             className={`p-6 text-sm ${uiTheme === 'dark' ? 'text-[#F9F9F7]/75' : 'text-gray-600'}`}
@@ -1554,6 +1561,11 @@ export default function App() {
   const [folderPositions, setFolderPositions] = useState(() => getInitialFolderPositions())
   const [adminLayout, setAdminLayout] = useState(() => getInitialAdminLayout())
 
+  /** Manual checklist — survives closing the window for the session (lifted from HowToWorkContent). */
+  const [manualTasks, setManualTasks] = useState(() =>
+    INITIAL_MANUAL_TASKS.map((t) => ({ ...t })),
+  )
+
   // ─── Admin login flow ─────────────────────────────────────────────────────
   // TODO: UNCOMMENT FOR PRODUCTION
   // const [adminFlow, setAdminFlow] = useState(() => loadPersistedAdminFlow()) // idle → triggering_notifications → waiting_accept → loading → accepted
@@ -1711,6 +1723,15 @@ export default function App() {
       persistLayoutPatch({ 'identity-sticker': pos })
     },
     [persistLayoutPatch],
+  )
+
+  /** Dock cannot open Manual until the Accept onboarding flow has finished (programmatic open still uses openOrFocusWindow). */
+  const handleDockOpen = useCallback(
+    (id) => {
+      if (id === 'How to Work with Me' && adminFlow !== 'accepted') return
+      openOrFocusWindow(id)
+    },
+    [adminFlow, openOrFocusWindow],
   )
 
   if (isMobile) {
@@ -1896,6 +1917,8 @@ export default function App() {
               onMinimize={() => minimizeWindow(win.id)}
               onFocus={() => bringToFront(win.id)}
               openOrFocusWindow={openOrFocusWindow}
+              manualTasks={win.title === 'How to Work with Me' ? manualTasks : undefined}
+              setManualTasks={win.title === 'How to Work with Me' ? setManualTasks : undefined}
             />
           ))}
       </main>
@@ -1920,7 +1943,12 @@ export default function App() {
         }}
       />
 
-      <Dock uiTheme={uiTheme} openWindows={openWindows} onOpen={openOrFocusWindow} />
+      <Dock
+        uiTheme={uiTheme}
+        openWindows={openWindows}
+        onOpen={handleDockOpen}
+        manualUnlocked={adminFlow === 'accepted'}
+      />
     </div>
   )
 }

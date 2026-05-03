@@ -22,8 +22,18 @@ function isWindowOpenOnDesktop(openWindows, id) {
   return Boolean(w && !w.minimized)
 }
 
-function DockTile({ id, label, icon, openWindows, onOpen, iconFit = 'cover', uiTheme = 'light' }) {
+function DockTile({
+  id,
+  label,
+  icon,
+  openWindows,
+  onOpen,
+  iconFit = 'cover',
+  uiTheme = 'light',
+  manualUnlocked = true,
+}) {
   const A = accentTokens(uiTheme)
+  const manualLocked = id === 'How to Work with Me' && !manualUnlocked
   const resolvedIcon =
     id === 'How to Work with Me'
       ? uiTheme === 'dark'
@@ -52,10 +62,18 @@ function DockTile({ id, label, icon, openWindows, onOpen, iconFit = 'cover', uiT
 
       <button
         type="button"
-        aria-label={`Open ${label}`}
-        className="h-[54px] w-[54px] rounded-[12px] transition-[transform] duration-500 hover:-translate-y-2 hover:scale-[1.3] focus:outline-none active:scale-100"
+        aria-label={manualLocked ? `${label} — complete onboarding to unlock` : `Open ${label}`}
+        disabled={manualLocked}
+        className={`h-[54px] w-[54px] rounded-[12px] transition-[transform] duration-500 focus:outline-none ${
+          manualLocked
+            ? 'cursor-not-allowed opacity-35'
+            : 'hover:-translate-y-2 hover:scale-[1.3] active:scale-100'
+        }`}
         style={{ transitionTimingFunction: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}
-        onClick={() => onOpen?.(id)}
+        onClick={() => {
+          if (manualLocked) return
+          onOpen?.(id)
+        }}
       >
         <img
           src={resolvedIcon}
@@ -80,6 +98,7 @@ export default function Dock({
   onOpen,
   supplementalApps = [],
   uiTheme = 'light',
+  manualUnlocked = true,
 }) {
   const sepCls = uiTheme === 'dark' ? 'bg-[#F9F9F7]/15' : 'bg-[#23262D]/12'
   return (
@@ -104,6 +123,7 @@ export default function Dock({
           onOpen={onOpen}
           iconFit={app.iconFit ?? 'cover'}
           uiTheme={uiTheme}
+          manualUnlocked={manualUnlocked}
         />
       ))}
 
@@ -118,6 +138,7 @@ export default function Dock({
               onOpen={onOpen}
               iconFit="contain"
               uiTheme={uiTheme}
+              manualUnlocked={manualUnlocked}
             />
           ))}
         </>
