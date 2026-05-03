@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Moon, Sun } from 'lucide-react'
 import { accentTokens } from '../utils/windowContentTheme'
-import SparkleIcon from '../assets/sparkle.svg'
 import IcWifi from '../assets/Ic_wifi.svg'
 import IcGithub from '../assets/Ic_Github.svg'
 import IcLinkedin from '../assets/Ic_linkedin.svg'
@@ -128,13 +127,17 @@ export default function TopStatusBar({ theme = 'light', onToggleTheme }) {
         }`}
       >
         <span className={`flex items-center justify-center ${STATIC_CLUSTER}`} aria-hidden>
-          <img
-            src={SparkleIcon}
-            alt=""
+          <svg
+            className="h-3 w-3 shrink-0 text-current"
+            viewBox="0 0 19.3848 19.0137"
+            xmlns="http://www.w3.org/2000/svg"
             aria-hidden
-            className={`h-3 w-3 shrink-0 block ${iconInvert}`}
-            draggable={false}
-          />
+          >
+            <path
+              fill="currentColor"
+              d="M9.51172 19.0039C9.87305 19.0039 10.166 18.7402 10.2246 18.3496C11.0645 11.8457 11.9824 10.918 18.3398 10.2148C18.7402 10.1758 19.0234 9.88281 19.0234 9.50195C19.0234 9.12109 18.7402 8.82812 18.3398 8.7793C11.9824 8.08594 11.0645 7.1582 10.2246 0.644531C10.166 0.253906 9.87305 0 9.51172 0C9.15039 0 8.85742 0.253906 8.79883 0.644531C7.95898 7.1582 7.04102 8.08594 0.683594 8.7793C0.283203 8.82812 0 9.12109 0 9.50195C0 9.88281 0.283203 10.1758 0.683594 10.2148C7.04102 11.0547 7.90039 11.8555 8.79883 18.3496C8.85742 18.7402 9.15039 19.0039 9.51172 19.0039Z"
+            />
+          </svg>
         </span>
         <span className={`font-semibold ${STATIC_CLUSTER}`}>Mayar</span>
       </div>
