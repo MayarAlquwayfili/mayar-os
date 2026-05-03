@@ -39,6 +39,7 @@ import {
 } from './constants/projects'
 import { INITIAL_MANUAL_TASKS } from './constants/manualTasks'
 import { windowChrome, contentTokens } from './utils/windowContentTheme'
+import { playDesktopDropSfx } from './utils/desktopDropSfx'
 
 const MENU_BAR_PX = 28
 // Dock: bottom-4 (16px) + py-2 (16px) + icon (54px) + dot gap + dot = ~96px clearance
@@ -1837,23 +1838,24 @@ export default function App() {
           </>
         )}
 
-        {DESKTOP_FOLDERS.map((folder) => (
-          <DraggableFolder
-            key={folder.id}
-            id={folder.id}
-            title={folder.title}
-            icon={folder.icon}
-            subtitle={folder.subtitle}
-            cursorTipLabel={folder.cursorTipLabel}
-            initialX={folderPositions[folder.id]?.x ?? folder.x}
-            initialY={folderPositions[folder.id]?.y ?? folder.y}
-            isSelected={selectedDesktopItemId === folder.id}
-            onSelect={() => setSelectedDesktopItemId(folder.id)}
-            onDoubleClick={() => openOrFocusWindow(folder.windowTitle ?? folder.title)}
-            onPositionChange={(pos) => handleFolderPositionChange(folder.id, pos)}
-            uiTheme={uiTheme}
-          />
-        ))}
+        {adminFlow === 'accepted' &&
+          DESKTOP_FOLDERS.map((folder) => (
+            <DraggableFolder
+              key={folder.id}
+              id={folder.id}
+              title={folder.title}
+              icon={folder.icon}
+              subtitle={folder.subtitle}
+              cursorTipLabel={folder.cursorTipLabel}
+              initialX={folderPositions[folder.id]?.x ?? folder.x}
+              initialY={folderPositions[folder.id]?.y ?? folder.y}
+              isSelected={selectedDesktopItemId === folder.id}
+              onSelect={() => setSelectedDesktopItemId(folder.id)}
+              onDoubleClick={() => openOrFocusWindow(folder.windowTitle ?? folder.title)}
+              onPositionChange={(pos) => handleFolderPositionChange(folder.id, pos)}
+              uiTheme={uiTheme}
+            />
+          ))}
         {openWindows
           .filter((w) => !w.minimized)
           .map((win) => (
@@ -1889,9 +1891,14 @@ export default function App() {
           clearAdminTimers()
           const t = setTimeout(() => {
             setAdminFlow('accepted')
-            // After Accept SFX + loading beat: open Manual only for this explicit session completion (not on refresh).
+            // Double rAF: wait until folders paint, then drop SFX; next frame opens Manual (notification click already played).
             requestAnimationFrame(() => {
-              openOrFocusWindow('How to Work with Me')
+              requestAnimationFrame(() => {
+                playDesktopDropSfx()
+                requestAnimationFrame(() => {
+                  openOrFocusWindow('How to Work with Me')
+                })
+              })
             })
           }, 2000)
           timeoutsRef.current.push(t)
