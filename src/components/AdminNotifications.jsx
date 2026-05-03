@@ -1,29 +1,39 @@
 import { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { accentTokens } from '../utils/windowContentTheme'
 import { playNotificationSfx, getNotificationSfx } from '../utils/notificationSfx'
 
 export default function AdminNotifications({ uiTheme = 'light', items, adminFlow, onAccept, formatBody }) {
   const seenIdsRef = useRef(new Set())
   const isDark = uiTheme === 'dark'
+  const accent = accentTokens(uiTheme)
 
   const cardClassName = [
-    'pointer-events-auto w-80 rounded-2xl border-[0.5px] border-white/20 px-5 py-5 backdrop-blur-xl drop-shadow-lg',
-    isDark ? 'bg-slate-900/60' : 'bg-white/60',
+    'pointer-events-auto w-80 rounded-2xl border-[1.5px] bg-transparent px-5 py-5',
+    isDark ? 'border-white/35' : 'border-[#23262D]/30',
   ].join(' ')
 
-  const headerMuted = isDark ? 'text-[#F9F9F7]/55' : 'text-gray-500'
+  const textLegibility = isDark
+    ? '[text-shadow:0_1px_14px_rgba(0,0,0,0.92),0_0_1px_rgba(0,0,0,0.9)]'
+    : '[text-shadow:0_1px_14px_rgba(255,255,255,0.95),0_0_1px_rgba(255,255,255,0.9)]'
+
+  const headerMuted = isDark ? 'text-[#F9F9F7]/70' : 'text-[#23262D]/75'
   const bodyText = isDark ? 'text-[#F9F9F7]' : 'text-[#23262D]'
 
   const btnBase =
-    'inline-flex min-h-[40px] w-full min-w-[6.5rem] items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold text-white transition-all border border-transparent'
-  const btnIdle = isDark
-    ? 'bg-[#0A84FF] hover:brightness-110 active:brightness-95'
-    : 'bg-[#007AFF] hover:brightness-110 active:brightness-95'
-  const btnLoading = isDark
-    ? 'cursor-not-allowed bg-[#0A84FF]/85 animate-pulse text-white border-[#0A84FF]/50'
-    : 'cursor-not-allowed bg-[#007AFF]/85 animate-pulse text-white border-[#007AFF]/50'
+    `inline-flex min-h-[40px] w-full min-w-[6.5rem] items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold transition-all border ${accent.textOnAccent}`
+  const btnIdle = [accent.btnSolid, 'hover:brightness-110 active:brightness-95 border-transparent'].join(' ')
+  const btnLoading = [
+    'cursor-not-allowed animate-pulse border',
+    accent.borderAccentSoft,
+    isDark ? 'bg-[#ACDEE7]/85' : 'bg-[#82ADB5]/85',
+    accent.textOnAccent,
+  ].join(' ')
 
-  const spinnerCls = 'border-2 border-white/30 border-t-white'
+  const spinnerCls = [
+    'h-4 w-4 shrink-0 animate-spin rounded-full border-2',
+    isDark ? 'border-[#ACDEE7]/30 border-t-[#ACDEE7]' : 'border-[#82ADB5]/30 border-t-[#82ADB5]',
+  ].join(' ')
 
   useEffect(() => {
     getNotificationSfx()
@@ -60,10 +70,14 @@ export default function AdminNotifications({ uiTheme = 'light', items, adminFlow
             }}
             className={cardClassName}
           >
-            <p className={`text-[12px] font-normal uppercase tracking-[0.12em] ${headerMuted}`}>
+            <p
+              className={`text-[12px] font-normal uppercase tracking-[0.12em] ${headerMuted} ${textLegibility}`}
+            >
               {n.header}
             </p>
-            <p className={`mt-2 text-[14px] font-normal leading-relaxed ${bodyText}`}>
+            <p
+              className={`mt-2 text-[14px] font-normal leading-relaxed ${bodyText} ${textLegibility}`}
+            >
               {formatBody(n.body)}
             </p>
 
@@ -81,12 +95,7 @@ export default function AdminNotifications({ uiTheme = 'light', items, adminFlow
                     onAccept?.()
                   }}
                 >
-                  {isLoading ? (
-                    <span
-                      className={`h-4 w-4 shrink-0 animate-spin rounded-full ${spinnerCls}`}
-                      aria-hidden
-                    />
-                  ) : null}
+                  {isLoading ? <span className={spinnerCls} aria-hidden /> : null}
                   Accept
                 </button>
               </div>
