@@ -887,6 +887,10 @@ function MacWindow({
   })
   const dragOffsetRef = useRef({ x: 0, y: 0 })
   const resizeRef = useRef(null)
+  const dragMoveRafRef = useRef(0)
+  const dragMovePendingRef = useRef(null)
+  const resizeMoveRafRef = useRef(0)
+  const resizeMovePendingRef = useRef(null)
 
   const windowRef = useRef(null)
 
@@ -923,7 +927,11 @@ function MacWindow({
 
   useEffect(() => {
     if (!isDragging) return
-    const onMouseMove = (e) => {
+    const flushDrag = () => {
+      dragMoveRafRef.current = 0
+      const e = dragMovePendingRef.current
+      dragMovePendingRef.current = null
+      if (!e) return
       const el = windowRef.current
       if (!el) return
       const w = el.offsetWidth
@@ -937,12 +945,29 @@ function MacWindow({
         y: Math.max(MENU_BAR_PX, Math.min(ny, maxY)),
       })
     }
-    const onMouseUp = () => setIsDragging(false)
+    const onMouseMove = (e) => {
+      dragMovePendingRef.current = e
+      if (dragMoveRafRef.current) return
+      dragMoveRafRef.current = requestAnimationFrame(flushDrag)
+    }
+    const onMouseUp = () => {
+      if (dragMoveRafRef.current) {
+        cancelAnimationFrame(dragMoveRafRef.current)
+        dragMoveRafRef.current = 0
+      }
+      flushDrag()
+      setIsDragging(false)
+    }
     window.addEventListener('mousemove', onMouseMove)
     window.addEventListener('mouseup', onMouseUp)
     return () => {
       window.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('mouseup', onMouseUp)
+      if (dragMoveRafRef.current) {
+        cancelAnimationFrame(dragMoveRafRef.current)
+        dragMoveRafRef.current = 0
+      }
+      dragMovePendingRef.current = null
     }
   }, [isDragging])
 
@@ -951,7 +976,12 @@ function MacWindow({
     const { zone, startX, startY, startW, startH, startLeft, startTop } =
       resizeRef.current
 
-    const onMouseMove = (e) => {
+    const flushResize = () => {
+      resizeMoveRafRef.current = 0
+      const e = resizeMovePendingRef.current
+      resizeMovePendingRef.current = null
+      if (!e) return
+
       const dx = e.clientX - startX
       const dy = e.clientY - startY
       let newW = startW
@@ -985,7 +1015,6 @@ function MacWindow({
       newW = Math.max(minW, newW)
       newH = Math.max(minH, newH)
 
-      // Keep opposite edges fixed when min-size clamping widens/talls the window (avoids left/top jump).
       if (zone.includes('w')) {
         newL = startLeft + startW - newW
       }
@@ -1016,10 +1045,22 @@ function MacWindow({
       setSize({ w: newW, h: newH })
     }
 
+    const onMouseMove = (e) => {
+      resizeMovePendingRef.current = e
+      if (resizeMoveRafRef.current) return
+      resizeMoveRafRef.current = requestAnimationFrame(flushResize)
+    }
+
     const onMouseUp = () => {
+      if (resizeMoveRafRef.current) {
+        cancelAnimationFrame(resizeMoveRafRef.current)
+        resizeMoveRafRef.current = 0
+      }
+      flushResize()
       setIsResizing(false)
       resizeRef.current = null
       setHoverZone(null)
+      resizeMovePendingRef.current = null
     }
 
     window.addEventListener('mousemove', onMouseMove)
@@ -1027,6 +1068,11 @@ function MacWindow({
     return () => {
       window.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('mouseup', onMouseUp)
+      if (resizeMoveRafRef.current) {
+        cancelAnimationFrame(resizeMoveRafRef.current)
+        resizeMoveRafRef.current = 0
+      }
+      resizeMovePendingRef.current = null
     }
   }, [isResizing, minW, minH])
 
@@ -1099,6 +1145,7 @@ function MacWindow({
         height: size.h,
         cursor: shellCursor,
         zIndex,
+        ...(isDragging || isResizing ? { willChange: 'left, top, width, height' } : {}),
       }
 
   return (
@@ -1318,6 +1365,8 @@ function DraggableFolder({
   const rootRef = useRef(null)
   const dragOffsetRef = useRef({ x: 0, y: 0 })
   const lastPositionRef = useRef({ x: initialX, y: initialY })
+  const folderDragRafRef = useRef(0)
+  const folderDragPendingRef = useRef(null)
   const [propsAnchor, setPropsAnchor] = useState({ x: initialX, y: initialY })
   if (propsAnchor.x !== initialX || propsAnchor.y !== initialY) {
     setPropsAnchor({ x: initialX, y: initialY })
@@ -1331,7 +1380,11 @@ function DraggableFolder({
   useEffect(() => {
     if (!isDragging) return
 
-    const onMouseMove = (e) => {
+    const flushFolderDrag = () => {
+      folderDragRafRef.current = 0
+      const e = folderDragPendingRef.current
+      folderDragPendingRef.current = null
+      if (!e) return
       const el = rootRef.current
       if (!el) return
       const parent = el.parentElement
@@ -1356,7 +1409,18 @@ function DraggableFolder({
       setPosition(newPos)
     }
 
+    const onMouseMove = (e) => {
+      folderDragPendingRef.current = e
+      if (folderDragRafRef.current) return
+      folderDragRafRef.current = requestAnimationFrame(flushFolderDrag)
+    }
+
     const onMouseUp = () => {
+      if (folderDragRafRef.current) {
+        cancelAnimationFrame(folderDragRafRef.current)
+        folderDragRafRef.current = 0
+      }
+      flushFolderDrag()
       setIsDragging(false)
       onPositionChange?.(lastPositionRef.current)
     }
@@ -1367,6 +1431,11 @@ function DraggableFolder({
     return () => {
       window.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('mouseup', onMouseUp)
+      if (folderDragRafRef.current) {
+        cancelAnimationFrame(folderDragRafRef.current)
+        folderDragRafRef.current = 0
+      }
+      folderDragPendingRef.current = null
     }
   }, [isDragging, onPositionChange])
 
@@ -1747,7 +1816,7 @@ export default function App() {
       <TopStatusBar theme={uiTheme} onToggleTheme={toggleUiTheme} />
 
       <main
-        className="absolute inset-x-0 bottom-0 top-7 z-0 overflow-hidden"
+        className="absolute inset-x-0 bottom-0 top-7 z-0 min-h-0 min-w-0 overflow-hidden"
         onClick={() => setSelectedDesktopItemId(null)}
       >
         <DraggableDesktopItem

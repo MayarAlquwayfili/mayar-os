@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from 'framer-motion'
 import AppIconMoheetik from '../assets/Moheetik/AppIconMoheetik.svg'
 import AppIconQaffatek from '../assets/AppIconQaffatek.svg'
 import AppIconRECLAB from '../assets/RECLAB/AppIconRECLAB.svg'
@@ -17,6 +18,9 @@ const DOCK_APPS = [
   },
 ]
 
+const DOCK_CORE_APPS = DOCK_APPS.filter((a) => a.id !== 'How to Work with Me')
+const DOCK_MANUAL_APP = DOCK_APPS.find((a) => a.id === 'How to Work with Me')
+
 function isWindowOpenOnDesktop(openWindows, id) {
   const w = openWindows.find((o) => o.id === id)
   return Boolean(w && !w.minimized)
@@ -30,10 +34,8 @@ function DockTile({
   onOpen,
   iconFit = 'cover',
   uiTheme = 'light',
-  manualUnlocked = true,
 }) {
   const A = accentTokens(uiTheme)
-  const manualLocked = id === 'How to Work with Me' && !manualUnlocked
   const resolvedIcon =
     id === 'How to Work with Me'
       ? uiTheme === 'dark'
@@ -62,18 +64,10 @@ function DockTile({
 
       <button
         type="button"
-        aria-label={manualLocked ? `${label} — complete onboarding to unlock` : `Open ${label}`}
-        disabled={manualLocked}
-        className={`h-[54px] w-[54px] rounded-[12px] transition-[transform] duration-500 focus:outline-none ${
-          manualLocked
-            ? 'cursor-not-allowed opacity-35'
-            : 'hover:-translate-y-2 hover:scale-[1.3] active:scale-100'
-        }`}
+        aria-label={`Open ${label}`}
+        className="h-[54px] w-[54px] rounded-[12px] transition-[transform] duration-500 hover:-translate-y-2 hover:scale-[1.3] focus:outline-none active:scale-100"
         style={{ transitionTimingFunction: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}
-        onClick={() => {
-          if (manualLocked) return
-          onOpen?.(id)
-        }}
+        onClick={() => onOpen?.(id)}
       >
         <img
           src={resolvedIcon}
@@ -93,17 +87,21 @@ function DockTile({
   )
 }
 
+const manualEnter = { opacity: 0, scale: 0.72, y: 18 }
+const manualAnim = { opacity: 1, scale: 1, y: 0 }
+const manualExit = { opacity: 0, scale: 0.72, y: 14 }
+
 export default function Dock({
   openWindows = [],
   onOpen,
   supplementalApps = [],
   uiTheme = 'light',
-  manualUnlocked = true,
+  manualUnlocked = false,
 }) {
   const sepCls = uiTheme === 'dark' ? 'bg-[#F9F9F7]/15' : 'bg-[#23262D]/12'
   return (
     <div
-      className={`fixed bottom-4 left-1/2 flex -translate-x-1/2 items-end gap-5 rounded-[22px] border px-5 py-2 ${
+      className={`fixed bottom-4 left-1/2 flex max-w-[calc(100vw-2rem)] -translate-x-1/2 flex-nowrap items-end justify-center gap-5 rounded-[22px] border px-5 py-2 ${
         uiTheme === 'dark' ? 'border-white/15' : 'border-white/30'
       }`}
       style={{
@@ -115,31 +113,52 @@ export default function Dock({
       }}
       onClick={(e) => e.stopPropagation()}
     >
-      {DOCK_APPS.map((app) => (
-        <DockTile
-          key={app.id}
-          {...app}
-          openWindows={openWindows}
-          onOpen={onOpen}
-          iconFit={app.iconFit ?? 'cover'}
-          uiTheme={uiTheme}
-          manualUnlocked={manualUnlocked}
-        />
+      {DOCK_CORE_APPS.map((app) => (
+        <motion.div key={app.id} layout="position" transition={{ type: 'spring', stiffness: 420, damping: 30 }}>
+          <DockTile
+            {...app}
+            openWindows={openWindows}
+            onOpen={onOpen}
+            iconFit={app.iconFit ?? 'cover'}
+            uiTheme={uiTheme}
+          />
+        </motion.div>
       ))}
+
+      <AnimatePresence mode="popLayout" initial={false}>
+        {manualUnlocked && DOCK_MANUAL_APP ? (
+          <motion.div
+            key="dock-manual"
+            layout="position"
+            initial={manualEnter}
+            animate={manualAnim}
+            exit={manualExit}
+            transition={{ type: 'spring', stiffness: 420, damping: 28, mass: 0.65 }}
+          >
+            <DockTile
+              {...DOCK_MANUAL_APP}
+              openWindows={openWindows}
+              onOpen={onOpen}
+              iconFit={DOCK_MANUAL_APP.iconFit ?? 'contain'}
+              uiTheme={uiTheme}
+            />
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
 
       {supplementalApps.length > 0 && (
         <>
           <div className={`mx-2 h-8 w-[1px] shrink-0 self-center ${sepCls}`} role="separator" aria-orientation="vertical" />
           {supplementalApps.map((app) => (
-            <DockTile
-              key={app.id}
-              {...app}
-              openWindows={openWindows}
-              onOpen={onOpen}
-              iconFit="contain"
-              uiTheme={uiTheme}
-              manualUnlocked={manualUnlocked}
-            />
+            <motion.div key={app.id} layout="position" transition={{ type: 'spring', stiffness: 420, damping: 30 }}>
+              <DockTile
+                {...app}
+                openWindows={openWindows}
+                onOpen={onOpen}
+                iconFit="contain"
+                uiTheme={uiTheme}
+              />
+            </motion.div>
           ))}
         </>
       )}
