@@ -33,10 +33,8 @@ import {
   MOHEETIK_TOOLS,
   RECLAB_TOOLS,
   DESKTOP_FOLDERS,
-  DESKTOP_GRID,
-  desktopLeftColumnX,
-  desktopRightColumnLeft,
-  getDesktopFolderPositions,
+  getOrganicAdminLayout,
+  getOrganicDesktopFolderPositions,
 } from './constants/projects'
 import { INITIAL_MANUAL_TASKS } from './constants/manualTasks'
 import { windowChrome, contentTokens } from './utils/windowContentTheme'
@@ -1522,26 +1520,18 @@ function DraggableFolder({
   )
 }
 
-/** Admin chrome + identity sticker — shared desktop grid (see `constants/projects.js` DESKTOP_GRID). */
+/** Admin chrome + identity sticker — organic % layout (`getOrganicAdminLayout`). */
 function getInitialAdminLayout() {
   const vw = typeof window !== 'undefined' ? window.innerWidth : 1200
-  const lx = desktopLeftColumnX()
-  const rx = desktopRightColumnLeft(vw)
-  const TOP = DESKTOP_GRID.ROW_TOP
-  const gap = DESKTOP_GRID.GAP_Y
-  return {
-    notion: { x: lx, y: TOP },
-    figma: { x: lx, y: TOP + gap },
-    v60: { x: lx, y: TOP + 2 * gap },
-    identitySticker: { x: rx, y: TOP },
-  }
+  const vh = typeof window !== 'undefined' ? window.innerHeight : 800
+  return getOrganicAdminLayout(vw, vh)
 }
 
-/** Desktop folder spawn — viewport-relative grid (no persistence). */
+/** Desktop folder spawn — organic % layout (no persistence). */
 function getInitialFolderPositions() {
   const vw = typeof window !== 'undefined' ? window.innerWidth : 1200
   const vh = typeof window !== 'undefined' ? window.innerHeight : 800
-  return getDesktopFolderPositions(vw, vh)
+  return getOrganicDesktopFolderPositions(vw, vh)
 }
 
 function formatNotifBody(body) {

@@ -73,60 +73,55 @@ export const LAB_FOLDER_CONTENTS = [
   },
 ]
 
-// ─── Desktop grid (fixed columns, consistent vertical gap) ───────────────────
+// ─── Organic desktop placement (percent → safe rect below menu / above dock) ─
 
-/**
- * Desktop icon layout: 130px vertical rhythm; left column workspace/research, right column identity/CV.
- * Coordinates are viewport-based; use `getDesktopFolderPositions` / admin helpers with live `innerWidth`/`innerHeight`.
- */
-export const DESKTOP_GRID = {
-  GAP_Y: 130,
-  LEFT_COL_X: 50,
-  ROW_TOP: 50,
-  /** Distance from viewport right used as folder **left** x (`vw - offset`), clamped so icons stay on-screen. */
-  RIGHT_COL_OFFSET: 150,
-  MIN_X: 16,
-  /** Dock + breathing room when pinning Brewcha to the bottom (mirrors App DOCK_SAFE_PX). */
+/** Mirrors App shell geometry — desktop icons clamp inside this footprint. */
+export const DESKTOP_SAFE = {
+  MENU_BAR_PX: 28,
   DOCK_SAFE_PX: 96,
-  /** Approx. desktop folder stack height (label + icon). */
-  FOLDER_STACK_H: 128,
-}
-
-export function desktopLeftColumnX() {
-  return DESKTOP_GRID.LEFT_COL_X
-}
-
-/** Right-column folder left edge: `innerWidth - offset`, clamped. */
-export function desktopRightColumnLeft(vw) {
-  return Math.max(DESKTOP_GRID.MIN_X, vw - DESKTOP_GRID.RIGHT_COL_OFFSET)
+  FOLDER_W: 132,
+  FOLDER_H: 128,
 }
 
 /**
- * @param {number} vw
- * @param {number} vh
- * @returns {Record<string, { x: number, y: number }>}
+ * Maps design percentages (0–100 along width / height) into pixel `left`/`top` for a ~132×128 folder,
+ * clamped so nothing sits under the menu bar or dock.
  */
-export function getDesktopFolderPositions(vw, vh) {
-  const G = DESKTOP_GRID
-  const lx = desktopLeftColumnX()
-  const rx = desktopRightColumnLeft(vw)
-  const TOP = G.ROW_TOP
-  const gap = G.GAP_Y
+export function desktopXYFromPercent(pctX, pctY, vw, vh) {
+  const M = DESKTOP_SAFE.MENU_BAR_PX
+  const D = DESKTOP_SAFE.DOCK_SAFE_PX
+  const FW = DESKTOP_SAFE.FOLDER_W
+  const FH = DESKTOP_SAFE.FOLDER_H
+  const safeW = Math.max(0, vw - FW)
+  const safeH = Math.max(0, vh - M - D - FH)
+  let x = Math.round((pctX / 100) * safeW)
+  let y = Math.round(M + (pctY / 100) * safeH)
+  x = Math.max(0, Math.min(x, Math.max(0, vw - FW)))
+  y = Math.max(M, Math.min(y, Math.max(M, vh - D - FH)))
+  return { x, y }
+}
 
-  const maxY = vh - G.DOCK_SAFE_PX - G.FOLDER_STACK_H - 16
-  /** Rows y=50/180/310 are admin Notion/Figma/V60 — Side B starts below that stack. */
-  let brewchaY = Math.min(TOP + 5 * gap, maxY)
-  brewchaY = Math.min(Math.max(brewchaY, TOP + 4 * gap), maxY)
-
+/** Desktop draggable folders — scatter % (see brief). */
+export function getOrganicDesktopFolderPositions(vw, vh) {
   return {
-    'side-b': { x: lx, y: TOP + 3 * gap },
-    'cash-obsolete-research': { x: lx, y: TOP + 4 * gap },
-    brewcha: { x: lx, y: brewchaY },
-    cv: { x: rx, y: TOP + gap },
+    'side-b': desktopXYFromPercent(61, 13, vw, vh),
+    cv: desktopXYFromPercent(31, 27, vw, vh),
+    brewcha: desktopXYFromPercent(10, 49, vw, vh),
+    'cash-obsolete-research': desktopXYFromPercent(16, 69, vw, vh),
   }
 }
 
-// ─── Desktop folder definitions (positions from grid — see getDesktopFolderPositions) ─
+/** Post-onboarding admin items — scatter % (see brief). */
+export function getOrganicAdminLayout(vw, vh) {
+  return {
+    identitySticker: desktopXYFromPercent(82, 75, vw, vh),
+    notion: desktopXYFromPercent(67, 82, vw, vh),
+    figma: desktopXYFromPercent(88, 56, vw, vh),
+    v60: desktopXYFromPercent(71, 59, vw, vh),
+  }
+}
+
+// ─── Desktop folder definitions (fallback x/y ≈ 1200×800 viewport; live positions from getOrganicDesktopFolderPositions)
 
 export const DESKTOP_FOLDERS = [
   {
@@ -135,8 +130,8 @@ export const DESKTOP_FOLDERS = [
     windowTitle: 'Side B',
     icon: SideBFolderIcon,
     cursorTipLabel: 'behind the screen',
-    x: 50,
-    y: 440,
+    x: 652,
+    y: 99,
   },
   {
     id: 'brewcha',
@@ -144,8 +139,8 @@ export const DESKTOP_FOLDERS = [
     windowTitle: 'Brewcha',
     icon: BrwchaFolderIcon,
     cursorTipLabel: 'Matcha & V60 Workshop',
-    x: 50,
-    y: 700,
+    x: 107,
+    y: 296,
   },
   {
     id: 'cash-obsolete-research',
@@ -153,8 +148,8 @@ export const DESKTOP_FOLDERS = [
     windowTitle: 'cash-obsolete-research',
     icon: PayFolderIcon,
     cursorTipLabel: 'Economics Research',
-    x: 50,
-    y: 570,
+    x: 171,
+    y: 406,
   },
   {
     id: 'cv',
@@ -162,7 +157,7 @@ export const DESKTOP_FOLDERS = [
     windowTitle: 'Preview — Mayar_CV.pdf',
     icon: PdfFloderIcon,
     cursorTipLabel: 'PNU x ADA',
-    x: 1050,
-    y: 180,
+    x: 331,
+    y: 176,
   },
 ]
