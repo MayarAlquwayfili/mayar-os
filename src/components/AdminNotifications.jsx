@@ -29,11 +29,17 @@ export default function AdminNotifications({ uiTheme = 'light', items, adminFlow
   const btnIdle = [accent.btnSolid, 'hover:brightness-110 active:brightness-95'].join(' ')
 
   const actionSlotClass =
-    'flex min-h-[40px] w-full min-w-[6.5rem] items-center justify-center rounded-lg px-5 py-2.5'
+    'pointer-events-auto flex min-h-[40px] w-full min-w-[6.5rem] shrink-0 items-center justify-center rounded-lg px-5 py-2.5'
+
+  /** Same fill as Accept — spinner rings sit on solid tint so light-mode white isn’t lost on the wallpaper. */
+  const loadingSlotClass = [
+    actionSlotClass,
+    isDark ? 'bg-[#ACDEE7]' : 'bg-[#82ADB5]',
+  ].join(' ')
 
   const spinnerCls = [
-    'h-5 w-5 shrink-0 animate-spin rounded-full border-2',
-    isDark ? 'border-[#23262D]/25 border-t-[#23262D]' : 'border-white/35 border-t-white',
+    'box-border inline-block h-5 w-5 min-h-[20px] min-w-[20px] shrink-0 animate-spin rounded-full border-2 border-solid',
+    isDark ? 'border-[#23262D]/35 border-t-[#23262D]' : 'border-white/45 border-t-white',
   ].join(' ')
 
   useEffect(() => {
@@ -86,7 +92,7 @@ export default function AdminNotifications({ uiTheme = 'light', items, adminFlow
               <div className="mt-4">
                 {isLoading ? (
                   <div
-                    className={actionSlotClass}
+                    className={loadingSlotClass}
                     role="status"
                     aria-live="polite"
                     aria-busy="true"
@@ -98,7 +104,7 @@ export default function AdminNotifications({ uiTheme = 'light', items, adminFlow
                   <button
                     type="button"
                     aria-label="Accept"
-                    className={[btnBase, btnIdle].join(' ')}
+                    className={[btnBase, btnIdle, 'pointer-events-auto'].join(' ')}
                     onClick={() => {
                       playNotificationSfx()
                       onAccept?.()
