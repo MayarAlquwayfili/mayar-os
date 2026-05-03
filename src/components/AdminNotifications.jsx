@@ -10,7 +10,9 @@ export default function AdminNotifications({ uiTheme = 'light', items, adminFlow
 
   const cardClassName = [
     'pointer-events-auto w-80 rounded-2xl border-[1.5px] bg-transparent px-5 py-5',
-    isDark ? 'border-white/35' : 'border-[#23262D]/30',
+    isDark
+      ? 'border-white/35 drop-shadow-[0_14px_40px_rgba(0,0,0,0.42)]'
+      : 'border-[#23262D]/30 drop-shadow-[0_14px_36px_rgba(0,0,0,0.11)]',
   ].join(' ')
 
   const textLegibility = isDark
@@ -21,17 +23,14 @@ export default function AdminNotifications({ uiTheme = 'light', items, adminFlow
   const bodyText = isDark ? 'text-[#F9F9F7]' : 'text-[#23262D]'
 
   const btnBase =
-    `inline-flex min-h-[40px] w-full min-w-[6.5rem] items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold transition-all border ${accent.textOnAccent}`
-  const btnIdle = [accent.btnSolid, 'hover:brightness-110 active:brightness-95 border-transparent'].join(' ')
-  const btnLoading = [
-    'cursor-not-allowed animate-pulse border',
-    accent.borderAccentSoft,
-    isDark ? 'bg-[#ACDEE7]/85' : 'bg-[#82ADB5]/85',
-    accent.textOnAccent,
-  ].join(' ')
+    `inline-flex min-h-[40px] w-full min-w-[6.5rem] items-center justify-center rounded-lg px-5 py-2.5 text-sm font-semibold transition-all border border-transparent ${accent.textOnAccent}`
+  const btnIdle = [accent.btnSolid, 'hover:brightness-110 active:brightness-95'].join(' ')
+
+  const actionSlotClass =
+    'flex min-h-[40px] w-full min-w-[6.5rem] items-center justify-center rounded-lg px-5 py-2.5'
 
   const spinnerCls = [
-    'h-4 w-4 shrink-0 animate-spin rounded-full border-2',
+    'h-5 w-5 shrink-0 animate-spin rounded-full border-2',
     isDark ? 'border-[#ACDEE7]/30 border-t-[#ACDEE7]' : 'border-[#82ADB5]/30 border-t-[#82ADB5]',
   ].join(' ')
 
@@ -83,21 +82,29 @@ export default function AdminNotifications({ uiTheme = 'light', items, adminFlow
 
             {n.isActionable && (
               <div className="mt-4">
-                <button
-                  type="button"
-                  disabled={isLoading}
-                  aria-busy={isLoading}
-                  aria-label={isLoading ? 'Loading' : 'Accept'}
-                  className={[btnBase, isLoading ? btnLoading : btnIdle].join(' ')}
-                  onClick={() => {
-                    if (isLoading) return
-                    playNotificationSfx()
-                    onAccept?.()
-                  }}
-                >
-                  {isLoading ? <span className={spinnerCls} aria-hidden /> : null}
-                  Accept
-                </button>
+                {isLoading ? (
+                  <div
+                    className={actionSlotClass}
+                    role="status"
+                    aria-live="polite"
+                    aria-busy="true"
+                    aria-label="Loading"
+                  >
+                    <span className={spinnerCls} aria-hidden />
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    aria-label="Accept"
+                    className={[btnBase, btnIdle].join(' ')}
+                    onClick={() => {
+                      playNotificationSfx()
+                      onAccept?.()
+                    }}
+                  >
+                    Accept
+                  </button>
+                )}
               </div>
             )}
           </motion.div>
