@@ -73,9 +73,60 @@ export const LAB_FOLDER_CONTENTS = [
   },
 ]
 
-// ─── Desktop folder definitions ───────────────────────────────────────────────
+// ─── Desktop grid (fixed columns, consistent vertical gap) ───────────────────
 
-/** Fallback x/y when restoring layout; real first-time positions come from App (random in bounds). */
+/**
+ * Desktop icon layout: 130px vertical rhythm; left column workspace/research, right column identity/CV.
+ * Coordinates are viewport-based; use `getDesktopFolderPositions` / admin helpers with live `innerWidth`/`innerHeight`.
+ */
+export const DESKTOP_GRID = {
+  GAP_Y: 130,
+  LEFT_COL_X: 50,
+  ROW_TOP: 50,
+  /** Distance from viewport right used as folder **left** x (`vw - offset`), clamped so icons stay on-screen. */
+  RIGHT_COL_OFFSET: 150,
+  MIN_X: 16,
+  /** Dock + breathing room when pinning Brewcha to the bottom (mirrors App DOCK_SAFE_PX). */
+  DOCK_SAFE_PX: 96,
+  /** Approx. desktop folder stack height (label + icon). */
+  FOLDER_STACK_H: 128,
+}
+
+export function desktopLeftColumnX() {
+  return DESKTOP_GRID.LEFT_COL_X
+}
+
+/** Right-column folder left edge: `innerWidth - offset`, clamped. */
+export function desktopRightColumnLeft(vw) {
+  return Math.max(DESKTOP_GRID.MIN_X, vw - DESKTOP_GRID.RIGHT_COL_OFFSET)
+}
+
+/**
+ * @param {number} vw
+ * @param {number} vh
+ * @returns {Record<string, { x: number, y: number }>}
+ */
+export function getDesktopFolderPositions(vw, vh) {
+  const G = DESKTOP_GRID
+  const lx = desktopLeftColumnX()
+  const rx = desktopRightColumnLeft(vw)
+  const TOP = G.ROW_TOP
+  const gap = G.GAP_Y
+
+  const maxY = vh - G.DOCK_SAFE_PX - G.FOLDER_STACK_H - 16
+  let brewchaY = Math.min(TOP + 4 * gap, maxY)
+  brewchaY = Math.min(Math.max(brewchaY, TOP + 2 * gap), maxY)
+
+  return {
+    'side-b': { x: lx, y: TOP + 2 * gap },
+    'cash-obsolete-research': { x: lx, y: TOP + 3 * gap },
+    brewcha: { x: lx, y: brewchaY },
+    cv: { x: rx, y: TOP + gap },
+  }
+}
+
+// ─── Desktop folder definitions (positions from grid — see getDesktopFolderPositions) ─
+
 export const DESKTOP_FOLDERS = [
   {
     id: 'side-b',
@@ -83,8 +134,8 @@ export const DESKTOP_FOLDERS = [
     windowTitle: 'Side B',
     icon: SideBFolderIcon,
     cursorTipLabel: 'behind the screen',
-    x: 72,
-    y: 100,
+    x: 50,
+    y: 310,
   },
   {
     id: 'brewcha',
@@ -92,8 +143,8 @@ export const DESKTOP_FOLDERS = [
     windowTitle: 'Brewcha',
     icon: BrwchaFolderIcon,
     cursorTipLabel: 'Matcha & V60 Workshop',
-    x: 240,
-    y: 120,
+    x: 50,
+    y: 570,
   },
   {
     id: 'cash-obsolete-research',
@@ -101,8 +152,8 @@ export const DESKTOP_FOLDERS = [
     windowTitle: 'cash-obsolete-research',
     icon: PayFolderIcon,
     cursorTipLabel: 'Economics Research',
-    x: 400,
-    y: 140,
+    x: 50,
+    y: 440,
   },
   {
     id: 'cv',
@@ -110,7 +161,7 @@ export const DESKTOP_FOLDERS = [
     windowTitle: 'Preview — Mayar_CV.pdf',
     icon: PdfFloderIcon,
     cursorTipLabel: 'PNU x ADA',
-    x: 560,
-    y: 160,
+    x: 1050,
+    y: 180,
   },
 ]

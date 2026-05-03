@@ -29,7 +29,15 @@ import NotionFolderIcon from './assets/Admin/Notion_Folder.svg'
 import V60FolderIcon from './assets/Admin/V60_Folder.svg'
 import FigmaFolderIcon from './assets/Admin/Figma_Folder.svg'
 import { useWindowManager } from './hooks/useWindowManager'
-import { MOHEETIK_TOOLS, RECLAB_TOOLS, DESKTOP_FOLDERS } from './constants/projects'
+import {
+  MOHEETIK_TOOLS,
+  RECLAB_TOOLS,
+  DESKTOP_FOLDERS,
+  DESKTOP_GRID,
+  desktopLeftColumnX,
+  desktopRightColumnLeft,
+  getDesktopFolderPositions,
+} from './constants/projects'
 import { INITIAL_MANUAL_TASKS } from './constants/manualTasks'
 import { windowChrome, contentTokens } from './utils/windowContentTheme'
 
@@ -1514,41 +1522,26 @@ function DraggableFolder({
   )
 }
 
-function defaultAdminNotionPos() {
-  const w = typeof window !== 'undefined' ? window.innerWidth : 1200
-  return { x: Math.max(16, w - 140), y: 96 }
-}
-
-function defaultAdminV60Pos() {
-  const w = typeof window !== 'undefined' ? window.innerWidth : 1200
-  return { x: Math.max(16, w - 140), y: 240 }
-}
-
-function defaultAdminFigmaPos() {
-  const w = typeof window !== 'undefined' ? window.innerWidth : 1200
-  return { x: Math.max(16, w - 140), y: 384 }
-}
-
-function defaultIdentityStickerPos() {
-  return { x: 24, y: MENU_BAR_PX + 16 }
-}
-
-/** Desktop folder spawn — constants only (no persistence). */
-function getInitialFolderPositions() {
-  const result = {}
-  DESKTOP_FOLDERS.forEach((f) => {
-    result[f.id] = { x: f.x, y: f.y }
-  })
-  return result
-}
-
+/** Admin chrome + identity sticker — shared desktop grid (see `constants/projects.js` DESKTOP_GRID). */
 function getInitialAdminLayout() {
+  const vw = typeof window !== 'undefined' ? window.innerWidth : 1200
+  const lx = desktopLeftColumnX()
+  const rx = desktopRightColumnLeft(vw)
+  const TOP = DESKTOP_GRID.ROW_TOP
+  const gap = DESKTOP_GRID.GAP_Y
   return {
-    notion: defaultAdminNotionPos(),
-    v60: defaultAdminV60Pos(),
-    figma: defaultAdminFigmaPos(),
-    identitySticker: defaultIdentityStickerPos(),
+    notion: { x: lx, y: TOP },
+    figma: { x: lx, y: TOP + gap },
+    v60: { x: lx, y: TOP + 2 * gap },
+    identitySticker: { x: rx, y: TOP },
   }
+}
+
+/** Desktop folder spawn — viewport-relative grid (no persistence). */
+function getInitialFolderPositions() {
+  const vw = typeof window !== 'undefined' ? window.innerWidth : 1200
+  const vh = typeof window !== 'undefined' ? window.innerHeight : 800
+  return getDesktopFolderPositions(vw, vh)
 }
 
 function formatNotifBody(body) {
