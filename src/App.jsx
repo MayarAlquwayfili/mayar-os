@@ -1539,9 +1539,6 @@ function formatNotifBody(body) {
   return <span>{body}</span>
 }
 
-// TODO: REMOVE THIS DEBUG OVERRIDE BEFORE PRODUCTION
-const DEBUG_FORCE_LOW_BATTERY = true
-
 /** Survives Strict Mode remount so low-battery toast fires only once per session. */
 let batteryLowToastShown = false
 
@@ -1666,25 +1663,6 @@ export default function App() {
   const [batteryLow, setBatteryLow] = useState(false)
 
   useEffect(() => {
-    if (DEBUG_FORCE_LOW_BATTERY) {
-      batteryLowToastShown = false
-      setBatterySupported(true)
-      setBatteryLow(true)
-      setSystemNotifs((prev) =>
-        prev.some((n) => n.id === 'battery-low')
-          ? prev
-          : [
-              ...prev,
-              {
-                id: 'battery-low',
-                header: 'Mayar OS',
-                body: 'Low Battery: Mayar OS is running in Power Reserve mode.',
-              },
-            ],
-      )
-      return undefined
-    }
-
     if (typeof navigator === 'undefined' || !navigator.getBattery) return undefined
 
     let battery
