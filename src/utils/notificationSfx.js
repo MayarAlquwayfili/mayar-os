@@ -1,18 +1,14 @@
+import { publicSoundsUrl } from './publicSoundsUrl'
+
 const NOTIFICATION_VOLUME = 0.3
 
 let audioSingleton = null
-
-function soundsUrl(file) {
-  const base = import.meta.env.BASE_URL || '/'
-  const prefix = base.endsWith('/') ? base : `${base}/`
-  return `${prefix}sounds/${file}`
-}
 
 export function getNotificationSfx() {
   if (typeof window === 'undefined') return null
   if (audioSingleton) return audioSingleton
 
-  const a = new Audio(soundsUrl('NotificationSound.wav'))
+  const a = new Audio(publicSoundsUrl('NotificationSound.wav'))
   a.preload = 'auto'
   a.volume = NOTIFICATION_VOLUME
   try {

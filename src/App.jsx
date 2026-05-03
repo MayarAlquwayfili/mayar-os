@@ -5,7 +5,6 @@ import AppIconRECLAB from './assets/RECLAB/AppIconRECLAB.svg'
 import MockupRECLABLab from './assets/RECLAB/MockupLab.svg'
 import MockupRECLABWinCollection from './assets/RECLAB/MockupWinCollection.svg'
 import RECLABPopup from './assets/RECLAB/RECLAB_POPUP.svg'
-// RECLAB_POPUP02.svg — drop this file into src/assets/RECLAB/ to activate the second popup
 import RECLABButton from './assets/RECLAB/RECLAB_BUTTON.svg'
 import MockupMoheetik01 from './assets/Moheetik/MockupMoheetik01.svg'
 import MockupMoheetik02 from './assets/Moheetik/MockupMoheetik02.svg'
@@ -39,7 +38,8 @@ import {
 } from './constants/projects'
 import { INITIAL_MANUAL_TASKS } from './constants/manualTasks'
 import { windowChrome, contentTokens } from './utils/windowContentTheme'
-import { playDesktopDropSfx } from './utils/desktopDropSfx'
+import { playDesktopDropSfx, preloadDesktopMountSfx } from './utils/desktopDropSfx'
+import { getNotificationSfx } from './utils/notificationSfx'
 
 const MENU_BAR_PX = 28
 /** Desktop folder unlock stagger (CSS animation-delay only; single mount SFX on Accept) — Dock is unaffected */
@@ -47,6 +47,11 @@ const FOLDER_REVEAL_STAGGER_S = 0.085
 const FOLDER_REVEAL_DURATION_S = 0.38
 const FOLDER_REVEAL_STAGGER_MS = Math.round(FOLDER_REVEAL_STAGGER_S * 1000)
 const FOLDER_REVEAL_DURATION_MS = Math.round(FOLDER_REVEAL_DURATION_S * 1000)
+/** Accept loading overlay duration before folder reveal + mount SFX. */
+const ACCEPT_LOADING_MS = 2000
+/** Delay after reveal before opening Manual (last folder stagger + pop + buffer). */
+const MANUAL_OPEN_AFTER_FOLDER_REVEAL_MS =
+  (DESKTOP_FOLDERS.length - 1) * FOLDER_REVEAL_STAGGER_MS + FOLDER_REVEAL_DURATION_MS + 120
 // Dock: bottom-4 (16px) + py-2 (16px) + icon (54px) + dot gap + dot = ~96px clearance
 const DOCK_SAFE_PX = 96
 
@@ -869,8 +874,7 @@ function MacWindow({
       ? WINDOW_PRESETS.SIDE_B_ALBUM ?? {}
       : variant === 'image-preview'
         ? WINDOW_PRESETS.IMAGE_PREVIEW ?? {}
-        : // TODO: REMOVE OR REUSE — notion-slider windows are disabled; keep branch for stale window records only.
-          variant === 'notion-slider'
+        : variant === 'notion-slider'
           ? WINDOW_PRESETS.NOTION_SLIDER ?? {}
           : WINDOW_PRESETS[title] ?? {}
   const { w: minW, h: minH } = minWindowSizeForTitle(title)
@@ -1259,11 +1263,7 @@ function MacWindow({
           <BrewchaContent uiTheme={uiTheme} />
         ) : title === 'Preview — Mayar_CV.pdf' ? (
           <CVContent uiTheme={uiTheme} />
-        ) : variant === 'notion-slider' ? (
-          <>
-            {/* TODO: REMOVE OR REUSE — was <NotionSliderContent />; Notion folder is static (no window). */}
-          </>
-        ) : title === 'How to Work with Me' ? (
+        ) : variant === 'notion-slider' ? null : title === 'How to Work with Me' ? (
           <HowToWorkContent
             uiTheme={uiTheme}
             items={manualTasks}
@@ -1587,6 +1587,11 @@ export default function App() {
   }, [clearAdminTimers])
 
   useEffect(() => {
+    preloadDesktopMountSfx()
+    getNotificationSfx()
+  }, [])
+
+  useEffect(() => {
     if (adminFlow !== 'triggering_notifications') return
 
     clearAdminTimers()
@@ -1701,6 +1706,23 @@ export default function App() {
     },
     [adminFlow, openOrFocusWindow],
   )
+
+  const handleAdminAccept = useCallback(() => {
+    if (adminFlow !== 'waiting_accept') return
+    setAdminFlow('loading')
+    clearAdminTimers()
+    const t = setTimeout(() => {
+      setAdminFlow('accepted')
+      setDesktopFoldersUnlockNonce((n) => n + 1)
+      playDesktopDropSfx()
+      timeoutsRef.current.push(
+        setTimeout(() => {
+          openOrFocusWindow('How to Work with Me')
+        }, MANUAL_OPEN_AFTER_FOLDER_REVEAL_MS),
+      )
+    }, ACCEPT_LOADING_MS)
+    timeoutsRef.current.push(t)
+  }, [adminFlow, clearAdminTimers, openOrFocusWindow])
 
   if (isMobile) {
     return (
@@ -1904,26 +1926,7 @@ export default function App() {
         items={adminNotifs}
         adminFlow={adminFlow}
         formatBody={formatNotifBody}
-        onAccept={() => {
-          if (adminFlow !== 'waiting_accept') return
-          setAdminFlow('loading')
-          clearAdminTimers()
-          const t = setTimeout(() => {
-            setAdminFlow('accepted')
-            setDesktopFoldersUnlockNonce((n) => n + 1)
-            playDesktopDropSfx()
-            const manualDelay =
-              (DESKTOP_FOLDERS.length - 1) * FOLDER_REVEAL_STAGGER_MS +
-              FOLDER_REVEAL_DURATION_MS +
-              120
-            timeoutsRef.current.push(
-              setTimeout(() => {
-                openOrFocusWindow('How to Work with Me')
-              }, manualDelay),
-            )
-          }, 2000)
-          timeoutsRef.current.push(t)
-        }}
+        onAccept={handleAdminAccept}
       />
 
       <Dock

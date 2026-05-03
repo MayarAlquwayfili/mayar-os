@@ -1,22 +1,34 @@
+import { publicSoundsUrl } from './publicSoundsUrl'
+
 const MOUNT_VOLUME = 0.5
 const MOUNT_SOUND_FILE = 'Volume Mount.wav'
 
-function soundsUrl(file) {
-  const base = import.meta.env.BASE_URL || '/'
-  const prefix = base.endsWith('/') ? base : `${base}/`
-  return `${prefix}sounds/${encodeURIComponent(file)}`
+let mountAudio = null
+
+function getMountAudio() {
+  if (typeof window === 'undefined') return null
+  if (!mountAudio) {
+    mountAudio = new Audio(publicSoundsUrl(MOUNT_SOUND_FILE))
+    mountAudio.preload = 'auto'
+    mountAudio.volume = MOUNT_VOLUME
+    try {
+      mountAudio.load()
+    } catch {
+      /* ignore */
+    }
+  }
+  return mountAudio
 }
 
-/** One shot per call — staggered with each desktop folder “mount” on Accept. */
+/** Warm decode/buffer on idle so Accept plays without first-hit latency. */
+export function preloadDesktopMountSfx() {
+  getMountAudio()
+}
+
+/** Single shared element — one mount sound per Accept (no per-play allocation). */
 export function playDesktopDropSfx() {
-  if (typeof window === 'undefined') return
-  const a = new Audio(soundsUrl(MOUNT_SOUND_FILE))
-  a.volume = MOUNT_VOLUME
-  try {
-    a.load()
-  } catch {
-    /* ignore */
-  }
+  const a = getMountAudio()
+  if (!a) return
   try {
     a.currentTime = 0
   } catch {
