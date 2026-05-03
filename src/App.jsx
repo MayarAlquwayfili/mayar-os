@@ -1206,7 +1206,7 @@ function MacWindow({
       </div>
 
       <div
-        className={`min-h-0 flex-1 overflow-hidden ${
+        className={`min-h-0 min-w-0 flex-1 overflow-x-hidden overflow-y-hidden ${
           variant === 'image-preview' ? chrome.bodyImagePreview : chrome.body
         }`}
       >
