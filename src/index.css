@@ -50,6 +50,13 @@ body,
   transform-origin: center center;
 }
 
+/* DraggableFolder — labels must not steal drags via text selection */
+.desktop-folder-item-labels,
+.desktop-folder-item-labels span {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 /* Tabular nums for clock so digits don't jump */
 .tabular-nums {
   font-variant-numeric: tabular-nums;

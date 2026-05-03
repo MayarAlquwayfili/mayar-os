@@ -1490,6 +1490,7 @@ function DraggableFolder({
 
   return (
     <div
+      ref={rootRef}
       style={{
         position: 'absolute',
         left: position.x,
@@ -1499,7 +1500,6 @@ function DraggableFolder({
       className={unlockNonce > 0 ? 'desktop-folder-unlock-pop' : undefined}
     >
       <AdminFolderCursorTip
-        ref={rootRef}
         label={cursorTipLabel}
         uiTheme={uiTheme}
         aria-label={`Folder ${id}: ${title}`}
@@ -1521,14 +1521,16 @@ function DraggableFolder({
           />
         </div>
 
-        <div className="flex min-h-0 w-full flex-col items-center justify-center px-0.5 text-center">
+        <div className="desktop-folder-item-labels flex min-h-0 w-full flex-col items-center justify-center px-0.5 text-center">
           <span
-            className={`line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide ${titleColor}`}
+            className={`pointer-events-none line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide ${titleColor}`}
           >
             {title}
           </span>
           {subtitle ? (
-            <span className={`mt-0.5 w-full break-words text-[11px] leading-snug ${subColor}`}>
+            <span
+              className={`pointer-events-none mt-0.5 w-full break-words text-[11px] leading-snug ${subColor}`}
+            >
               {subtitle}
             </span>
           ) : null}
