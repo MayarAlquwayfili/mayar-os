@@ -1,5 +1,4 @@
 import { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react'
-import { motion } from 'framer-motion'
 import FolderIcon from './assets/Folder.svg'
 import AppIconMoheetik from './assets/Moheetik/AppIconMoheetik.svg'
 import AppIconRECLAB from './assets/RECLAB/AppIconRECLAB.svg'
@@ -43,7 +42,7 @@ import { windowChrome, contentTokens } from './utils/windowContentTheme'
 import { playDesktopDropSfx } from './utils/desktopDropSfx'
 
 const MENU_BAR_PX = 28
-/** Desktop folder reveal after onboarding Accept — matches stagger SFX + motion.delay */
+/** Desktop folder unlock stagger (SFX + CSS animation-delay) — Dock is unaffected */
 const FOLDER_REVEAL_STAGGER_S = 0.085
 const FOLDER_REVEAL_DURATION_S = 0.38
 const FOLDER_REVEAL_STAGGER_MS = Math.round(FOLDER_REVEAL_STAGGER_S * 1000)
@@ -1372,9 +1371,8 @@ function DraggableFolder({
   onDoubleClick,
   onPositionChange,
   uiTheme = 'light',
-  folderRevealActive = true,
-  folderRevealDelay = 0,
-  folderRevealDuration = FOLDER_REVEAL_DURATION_S,
+  unlockNonce = 0,
+  unlockAnimationDelayMs = 0,
 }) {
   const [position, setPosition] = useState({ x: initialX, y: initialY })
   const [isDragging, setIsDragging] = useState(false)
@@ -1491,16 +1489,14 @@ function DraggableFolder({
       : 'text-[#23262D]/70'
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: folderRevealActive ? 1 : 0 }}
-      transition={{
-        duration: folderRevealActive ? folderRevealDuration : 0,
-        delay: folderRevealActive ? folderRevealDelay : 0,
-        ease: [0.22, 1, 0.36, 1],
+    <div
+      style={{
+        position: 'absolute',
+        left: position.x,
+        top: position.y,
+        ...(unlockNonce > 0 ? { animationDelay: `${unlockAnimationDelayMs}ms` } : {}),
       }}
-      style={{ position: 'absolute', left: position.x, top: position.y }}
-      className={folderRevealActive ? '' : 'pointer-events-none'}
+      className={unlockNonce > 0 ? 'desktop-folder-unlock-pop' : undefined}
     >
       <AdminFolderCursorTip
         ref={rootRef}
@@ -1538,7 +1534,7 @@ function DraggableFolder({
           ) : null}
         </div>
       </AdminFolderCursorTip>
-    </motion.div>
+    </div>
   )
 }
 
@@ -1577,6 +1573,8 @@ export default function App() {
   /** idle → triggering_notifications → waiting_accept → loading → accepted */
   const [adminFlow, setAdminFlow] = useState('idle')
   const [adminNotifs, setAdminNotifs] = useState([])
+  /** Bumped once on Accept — DESKTOP_FOLDERS only; triggers staggered unlock CSS animation. */
+  const [desktopFoldersUnlockNonce, setDesktopFoldersUnlockNonce] = useState(0)
   const timeoutsRef = useRef([])
 
   const clearAdminTimers = useCallback(() => {
@@ -1873,9 +1871,8 @@ export default function App() {
             onDoubleClick={() => openOrFocusWindow(folder.windowTitle ?? folder.title)}
             onPositionChange={(pos) => handleFolderPositionChange(folder.id, pos)}
             uiTheme={uiTheme}
-            folderRevealActive={adminFlow === 'accepted'}
-            folderRevealDelay={index * FOLDER_REVEAL_STAGGER_S}
-            folderRevealDuration={FOLDER_REVEAL_DURATION_S}
+            unlockNonce={desktopFoldersUnlockNonce}
+            unlockAnimationDelayMs={index * FOLDER_REVEAL_STAGGER_MS}
           />
         ))}
         {openWindows
@@ -1913,6 +1910,7 @@ export default function App() {
           clearAdminTimers()
           const t = setTimeout(() => {
             setAdminFlow('accepted')
+            setDesktopFoldersUnlockNonce((n) => n + 1)
             DESKTOP_FOLDERS.forEach((_, i) => {
               timeoutsRef.current.push(
                 setTimeout(() => playDesktopDropSfx(), i * FOLDER_REVEAL_STAGGER_MS),

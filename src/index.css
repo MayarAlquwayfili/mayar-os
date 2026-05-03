@@ -35,6 +35,21 @@ body,
   animation: pulse-slow 8s ease-in-out infinite;
 }
 
+/* One-shot after Accept — DESKTOP_FOLDERS only (stagger via animation-delay inline) */
+@keyframes desktop-folder-unlock-pop {
+  0% {
+    transform: scale(0.94);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.desktop-folder-unlock-pop {
+  animation: desktop-folder-unlock-pop 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transform-origin: center center;
+}
+
 /* Tabular nums for clock so digits don't jump */
 .tabular-nums {
   font-variant-numeric: tabular-nums;
