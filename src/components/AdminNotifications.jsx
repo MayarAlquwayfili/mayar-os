@@ -7,26 +7,23 @@ export default function AdminNotifications({ uiTheme = 'light', items, adminFlow
   const isDark = uiTheme === 'dark'
 
   const cardClassName = [
-    'pointer-events-auto w-80 rounded-2xl border border-white/20 px-5 py-5 backdrop-blur-xl',
-    isDark ? 'bg-slate-900/40' : 'bg-white/40',
-    'shadow-[0_24px_64px_-16px_rgba(0,0,0,0.35)]',
+    'pointer-events-auto w-80 rounded-2xl border-[0.5px] border-white/20 px-5 py-5 backdrop-blur-xl drop-shadow-lg',
+    isDark ? 'bg-slate-900/60' : 'bg-white/60',
   ].join(' ')
 
   const headerMuted = isDark ? 'text-[#F9F9F7]/55' : 'text-gray-500'
   const bodyText = isDark ? 'text-[#F9F9F7]' : 'text-[#23262D]'
 
   const btnBase =
-    'inline-flex min-h-[40px] w-full min-w-[6.5rem] items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium transition-all border'
+    'inline-flex min-h-[40px] w-full min-w-[6.5rem] items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold text-white transition-all border border-transparent'
   const btnIdle = isDark
-    ? 'border-white/20 bg-white/10 text-[#F9F9F7] hover:bg-white/15 active:bg-white/10'
-    : 'border-[#23262D]/15 bg-[#23262D]/10 text-[#23262D] hover:bg-[#23262D]/15 active:bg-[#23262D]/8'
+    ? 'bg-[#0A84FF] hover:brightness-110 active:brightness-95'
+    : 'bg-[#007AFF] hover:brightness-110 active:brightness-95'
   const btnLoading = isDark
-    ? 'cursor-not-allowed border-white/15 bg-slate-950/50 text-[#F9F9F7] animate-pulse opacity-95'
-    : 'cursor-not-allowed border-[#23262D]/15 bg-gray-200/80 text-[#23262D] animate-pulse opacity-95'
+    ? 'cursor-not-allowed bg-[#0A84FF]/85 animate-pulse text-white border-[#0A84FF]/50'
+    : 'cursor-not-allowed bg-[#007AFF]/85 animate-pulse text-white border-[#007AFF]/50'
 
-  const spinnerCls = isDark
-    ? 'border-2 border-[#F9F9F7]/25 border-t-[#F9F9F7]/90'
-    : 'border-2 border-[#23262D]/25 border-t-[#23262D]/90'
+  const spinnerCls = 'border-2 border-white/30 border-t-white'
 
   useEffect(() => {
     getNotificationSfx()
