@@ -2,17 +2,31 @@ import { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { playNotificationSfx, getNotificationSfx } from '../utils/notificationSfx'
 
-export default function AdminNotifications({ items, adminFlow, onAccept, formatBody }) {
+export default function AdminNotifications({ uiTheme = 'light', items, adminFlow, onAccept, formatBody }) {
   const seenIdsRef = useRef(new Set())
+  const isDark = uiTheme === 'dark'
 
   const cardClassName = [
-    'pointer-events-auto w-80 rounded-2xl border border-white/10 px-5 py-5',
-    'bg-slate-950/40 backdrop-blur-2xl',
-    'shadow-[0_24px_64px_-16px_rgba(0,0,0,0.45)]',
+    'pointer-events-auto w-80 rounded-2xl border border-white/20 px-5 py-5 backdrop-blur-xl',
+    isDark ? 'bg-slate-900/40' : 'bg-white/40',
+    'shadow-[0_24px_64px_-16px_rgba(0,0,0,0.35)]',
   ].join(' ')
 
-  const headerMuted = 'text-white/50'
-  const bodyText = 'text-white/95'
+  const headerMuted = isDark ? 'text-[#F9F9F7]/55' : 'text-gray-500'
+  const bodyText = isDark ? 'text-[#F9F9F7]' : 'text-[#23262D]'
+
+  const btnBase =
+    'inline-flex min-h-[40px] w-full min-w-[6.5rem] items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium transition-all border'
+  const btnIdle = isDark
+    ? 'border-white/20 bg-white/10 text-[#F9F9F7] hover:bg-white/15 active:bg-white/10'
+    : 'border-[#23262D]/15 bg-[#23262D]/10 text-[#23262D] hover:bg-[#23262D]/15 active:bg-[#23262D]/8'
+  const btnLoading = isDark
+    ? 'cursor-not-allowed border-white/15 bg-slate-950/50 text-[#F9F9F7] animate-pulse opacity-95'
+    : 'cursor-not-allowed border-[#23262D]/15 bg-gray-200/80 text-[#23262D] animate-pulse opacity-95'
+
+  const spinnerCls = isDark
+    ? 'border-2 border-[#F9F9F7]/25 border-t-[#F9F9F7]/90'
+    : 'border-2 border-[#23262D]/25 border-t-[#23262D]/90'
 
   useEffect(() => {
     getNotificationSfx()
@@ -33,7 +47,7 @@ export default function AdminNotifications({ items, adminFlow, onAccept, formatB
   const isLoading = adminFlow === 'loading'
 
   return (
-    <div className="pointer-events-none fixed right-4 top-4 z-[8000] flex w-80 flex-col gap-3">
+    <div className="pointer-events-none fixed right-4 top-14 z-[8000] flex w-80 flex-col gap-3">
       <AnimatePresence mode="popLayout">
         {items.map((n) => (
           <motion.div
@@ -63,13 +77,7 @@ export default function AdminNotifications({ items, adminFlow, onAccept, formatB
                   disabled={isLoading}
                   aria-busy={isLoading}
                   aria-label={isLoading ? 'Loading' : 'Accept'}
-                  className={[
-                    'inline-flex min-h-[40px] w-full min-w-[6.5rem] items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium transition-all',
-                    'border border-white/15 text-white',
-                    isLoading
-                      ? 'cursor-not-allowed bg-slate-900/80 animate-pulse opacity-95'
-                      : 'bg-white/15 hover:bg-white/20 active:bg-white/10',
-                  ].join(' ')}
+                  className={[btnBase, isLoading ? btnLoading : btnIdle].join(' ')}
                   onClick={() => {
                     if (isLoading) return
                     playNotificationSfx()
@@ -78,7 +86,7 @@ export default function AdminNotifications({ items, adminFlow, onAccept, formatB
                 >
                   {isLoading ? (
                     <span
-                      className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-white/25 border-t-white/90"
+                      className={`h-4 w-4 shrink-0 animate-spin rounded-full ${spinnerCls}`}
                       aria-hidden
                     />
                   ) : null}

@@ -11,7 +11,7 @@ import MockupMoheetik01 from './assets/Moheetik/MockupMoheetik01.svg'
 import MockupMoheetik02 from './assets/Moheetik/MockupMoheetik02.svg'
 import MockupMoheetik03 from './assets/Moheetik/MockupMoheetik03.svg'
 import Dock from './components/Dock'
-import { Moon, Sun } from 'lucide-react'
+import TopStatusBar from './components/TopStatusBar'
 import BrewchaContent from './components/BrewchaContent'
 import CreativeLabFolderContent from './components/CreativeLabFolderContent'
 import SideBFolderContent from './components/SideBFolderContent'
@@ -32,8 +32,7 @@ import { useWindowManager } from './hooks/useWindowManager'
 import { MOHEETIK_TOOLS, RECLAB_TOOLS, DESKTOP_FOLDERS } from './constants/projects'
 import { windowChrome, contentTokens } from './utils/windowContentTheme'
 
-/** Top inset for draggable windows (no menu bar — full-height desktop). */
-const MENU_BAR_PX = 0
+const MENU_BAR_PX = 28
 // Dock: bottom-4 (16px) + py-2 (16px) + icon (54px) + dot gap + dot = ~96px clearance
 const DOCK_SAFE_PX = 96
 
@@ -1724,19 +1723,10 @@ export default function App() {
         uiTheme === 'dark' ? 'bg-[#23262D] text-[#F9F9F7]' : 'bg-[#F9F9F7] text-[#23262D]'
       }`}
     >
-      <button
-        type="button"
-        onClick={toggleUiTheme}
-        aria-label={uiTheme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
-        className={`fixed left-4 top-4 z-[9001] flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-slate-950/40 backdrop-blur-2xl shadow-lg transition-colors hover:bg-slate-950/55 ${
-          uiTheme === 'dark' ? 'text-[#FEF0BC]' : 'text-[#23262D]'
-        }`}
-      >
-        {uiTheme === 'light' ? <Moon className="h-4 w-4" strokeWidth={2} /> : <Sun className="h-4 w-4" strokeWidth={2} />}
-      </button>
+      <TopStatusBar theme={uiTheme} onToggleTheme={toggleUiTheme} />
 
       <main
-        className="absolute inset-x-0 bottom-0 top-0 z-0 overflow-hidden"
+        className="absolute inset-x-0 bottom-0 top-7 z-0 overflow-hidden"
         onClick={() => setSelectedDesktopItemId(null)}
       >
         <DraggableDesktopItem
