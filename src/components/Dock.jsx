@@ -97,6 +97,8 @@ export default function Dock({
   supplementalApps = [],
   uiTheme = 'light',
   manualUnlocked = false,
+  /** When true (restored session), Manual tile appears without spring pop-in. */
+  manualSkipIntro = false,
 }) {
   const sepCls = uiTheme === 'dark' ? 'bg-[#F9F9F7]/15' : 'bg-[#23262D]/12'
   return (
@@ -130,10 +132,14 @@ export default function Dock({
           <motion.div
             key="dock-manual"
             layout="position"
-            initial={manualEnter}
+            initial={manualSkipIntro ? false : manualEnter}
             animate={manualAnim}
             exit={manualExit}
-            transition={{ type: 'spring', stiffness: 420, damping: 28, mass: 0.65 }}
+            transition={
+              manualSkipIntro
+                ? { duration: 0.22, ease: [0.22, 1, 0.36, 1] }
+                : { type: 'spring', stiffness: 420, damping: 28, mass: 0.65 }
+            }
           >
             <DockTile
               {...DOCK_MANUAL_APP}

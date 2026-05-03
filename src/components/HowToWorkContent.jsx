@@ -95,19 +95,9 @@ function HowToWorkContent({ uiTheme = 'light', items, onSetItems }) {
 
   const toggle = useCallback(
     (id) => {
-      onSetItems((prev) => {
-        const next = prev.map((item) => (item.id === id ? { ...item, done: !item.done } : item))
-        try {
-          // TODO: UNCOMMENT FOR PRODUCTION
-          // localStorage.setItem(
-          //   'mayaros-work-guide-checklist',
-          //   JSON.stringify(next.map(({ id: itemId, done }) => ({ id: itemId, done }))),
-          // )
-        } catch {
-          /* ignore */
-        }
-        return next
-      })
+      onSetItems((prev) =>
+        prev.map((item) => (item.id === id ? { ...item, done: !item.done } : item)),
+      )
     },
     [onSetItems],
   )

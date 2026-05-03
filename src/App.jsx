@@ -32,6 +32,17 @@ import { useWindowManager } from './hooks/useWindowManager'
 import { MOHEETIK_TOOLS, RECLAB_TOOLS, DESKTOP_FOLDERS } from './constants/projects'
 import { INITIAL_MANUAL_TASKS } from './constants/manualTasks'
 import { windowChrome, contentTokens } from './utils/windowContentTheme'
+import {
+  clearMayarOsPersistedState,
+  isOnboardingAcceptedInStorage,
+  loadPersistedAdminFlowSegment,
+  loadPersistedManualTasks,
+  persistAdminFlow,
+  persistManualTasks,
+} from './utils/mayarOsStorage'
+
+/** True once at module load: Manual dock tile should skip spring intro if user already completed onboarding. */
+const BOOT_MANUAL_DOCK_SKIP_INTRO = isOnboardingAcceptedInStorage()
 
 const MENU_BAR_PX = 28
 // Dock: bottom-4 (16px) + py-2 (16px) + icon (54px) + dot gap + dot = ~96px clearance
@@ -1630,15 +1641,18 @@ export default function App() {
   const [folderPositions, setFolderPositions] = useState(() => getInitialFolderPositions())
   const [adminLayout, setAdminLayout] = useState(() => getInitialAdminLayout())
 
-  /** Manual checklist — survives closing the window for the session (lifted from HowToWorkContent). */
-  const [manualTasks, setManualTasks] = useState(() =>
-    INITIAL_MANUAL_TASKS.map((t) => ({ ...t })),
-  )
+  /**
+   * Manual checklist — persisted under mayar-os-manual-tasks.
+   * Initializer reads localStorage synchronously so the first paint matches saved progress.
+   */
+  const [manualTasks, setManualTasks] = useState(() => {
+    const merged = loadPersistedManualTasks(INITIAL_MANUAL_TASKS)
+    return merged ?? INITIAL_MANUAL_TASKS.map((t) => ({ ...t }))
+  })
 
   // ─── Admin login flow ─────────────────────────────────────────────────────
-  // TODO: UNCOMMENT FOR PRODUCTION
-  // const [adminFlow, setAdminFlow] = useState(() => loadPersistedAdminFlow()) // idle → triggering_notifications → waiting_accept → loading → accepted
-  const [adminFlow, setAdminFlow] = useState('idle') // idle → triggering_notifications → waiting_accept → loading → accepted
+  /** idle → triggering_notifications → waiting_accept → loading → accepted (accepted restored from mayar-os-onboarding). */
+  const [adminFlow, setAdminFlow] = useState(() => loadPersistedAdminFlowSegment())
   const [adminNotifs, setAdminNotifs] = useState([])
   const timeoutsRef = useRef([])
 
@@ -1650,6 +1664,25 @@ export default function App() {
   useEffect(() => {
     return () => clearAdminTimers()
   }, [clearAdminTimers])
+
+  useEffect(() => {
+    persistAdminFlow(adminFlow)
+  }, [adminFlow])
+
+  useEffect(() => {
+    persistManualTasks(manualTasks)
+  }, [manualTasks])
+
+  useEffect(() => {
+    if (!import.meta.env.DEV) return
+    window.__MAYAR_OS_DEV_RESET__ = () => {
+      clearMayarOsPersistedState()
+      window.location.reload()
+    }
+    return () => {
+      delete window.__MAYAR_OS_DEV_RESET__
+    }
+  }, [])
 
   useEffect(() => {
     if (adminFlow !== 'triggering_notifications') return
@@ -2017,6 +2050,7 @@ export default function App() {
         openWindows={openWindows}
         onOpen={handleDockOpen}
         manualUnlocked={adminFlow === 'accepted'}
+        manualSkipIntro={BOOT_MANUAL_DOCK_SKIP_INTRO}
       />
     </div>
   )
