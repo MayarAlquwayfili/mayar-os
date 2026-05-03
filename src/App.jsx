@@ -1733,7 +1733,7 @@ export default function App() {
   if (isMobile) {
     return (
       <>
-        <OfflineOverlay visible={isOffline} uiTheme={uiTheme} fullBleed />
+        <OfflineOverlay visible={isOffline} uiTheme={uiTheme} />
         <AdminNotifications
           uiTheme={uiTheme}
           items={systemNotifs}

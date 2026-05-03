@@ -178,12 +178,18 @@ export default function TopStatusBar({
         <span className="sr-only">{isOffline ? 'No network connection' : 'Wi-Fi'}</span>
         {isOffline ? (
           <span
-            className={`flex items-center gap-1 ${STATIC_CLUSTER} text-[#8e8e93] dark:text-[#A3A6AD]`}
             role="status"
             aria-live="polite"
+            className={`flex cursor-default items-center gap-1.5 ${STATIC_CLUSTER} ${
+              isDark ? 'text-[#F9F9F7]' : 'text-[#23262D]'
+            }`}
           >
             <WifiOff className="h-[14px] w-[14px] shrink-0" strokeWidth={2} aria-hidden />
-            <span className="hidden font-medium leading-none sm:inline">Disconnected</span>
+            <span
+              className={`whitespace-nowrap text-[12px] font-medium leading-none tracking-tight sm:text-[13px]`}
+            >
+              Disconnected
+            </span>
           </span>
         ) : (
           <span className={`flex items-center ${STATIC_CLUSTER}`}>
