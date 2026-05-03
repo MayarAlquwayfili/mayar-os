@@ -1,4 +1,4 @@
-import Moheetik_B_01 from '../assets/SideB/Moheetik_B_01.png'
+import Moheetik_B_01 from '../assets/SideB/Moheetik_B_01.webp'
 import Moheetik_B_02 from '../assets/SideB/Moheetik_B_02.jpg'
 import Moheetik_B_03 from '../assets/SideB/Moheetik_B_03.jpg'
 import Moheetik_B_04 from '../assets/SideB/Moheetik_B_04.jpg'
@@ -22,14 +22,14 @@ import RECLAB_B_01 from '../assets/SideB/RECLAB_B_01.jpg'
 import RECLAB_B_02 from '../assets/SideB/RECLAB_B_02.jpg'
 import RECLAB_B_03 from '../assets/SideB/RECLAB_B_03.jpg'
 import RECLAB_B_04 from '../assets/SideB/RECLAB_B_04.jpg'
-import RECLAB_B_05 from '../assets/SideB/RECLAB_B_05.heic?url'
+import RECLAB_B_05 from '../assets/SideB/RECLAB_B_05.webp'
 
 import Random_B_01 from '../assets/SideB/Random_B_01.jpg'
 import Random_B_02 from '../assets/SideB/Random_B_02.jpg'
 import Random_B_03 from '../assets/SideB/Random_B_03.jpg'
 import Random_B_04 from '../assets/SideB/Random_B_04.jpg'
 import Random_B_05 from '../assets/SideB/Random_B_05.jpg'
-import Random_B_07 from '../assets/SideB/Random_B_07.heic?url'
+import Random_B_07 from '../assets/SideB/Random_B_07.webp'
 
 import { contentTokens } from '../utils/windowContentTheme'
 

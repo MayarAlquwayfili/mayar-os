@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
-import Figure1 from '../assets/Cash/Figure1.png'
-import Table1 from '../assets/Cash/Table1.png'
-import Figure3 from '../assets/Cash/Figure3.png'
+import Figure1 from '../assets/Cash/Figure1.webp'
+import Table1 from '../assets/Cash/Table1.webp'
+import Figure3 from '../assets/Cash/Figure3.webp'
 import { contentTokens } from '../utils/windowContentTheme'
 
 const BODY = 'text-[15px] leading-[1.8] text-gray-600'
