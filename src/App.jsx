@@ -42,7 +42,7 @@ import { windowChrome, contentTokens } from './utils/windowContentTheme'
 import { playDesktopDropSfx } from './utils/desktopDropSfx'
 
 const MENU_BAR_PX = 28
-/** Desktop folder unlock stagger (SFX + CSS animation-delay) — Dock is unaffected */
+/** Desktop folder unlock stagger (CSS animation-delay only; single mount SFX on Accept) — Dock is unaffected */
 const FOLDER_REVEAL_STAGGER_S = 0.085
 const FOLDER_REVEAL_DURATION_S = 0.38
 const FOLDER_REVEAL_STAGGER_MS = Math.round(FOLDER_REVEAL_STAGGER_S * 1000)
@@ -1911,11 +1911,7 @@ export default function App() {
           const t = setTimeout(() => {
             setAdminFlow('accepted')
             setDesktopFoldersUnlockNonce((n) => n + 1)
-            DESKTOP_FOLDERS.forEach((_, i) => {
-              timeoutsRef.current.push(
-                setTimeout(() => playDesktopDropSfx(), i * FOLDER_REVEAL_STAGGER_MS),
-              )
-            })
+            playDesktopDropSfx()
             const manualDelay =
               (DESKTOP_FOLDERS.length - 1) * FOLDER_REVEAL_STAGGER_MS +
               FOLDER_REVEAL_DURATION_MS +
