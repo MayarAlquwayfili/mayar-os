@@ -22,8 +22,10 @@ export default function AdminNotifications({ uiTheme = 'light', items, adminFlow
   const headerMuted = isDark ? 'text-[#F9F9F7]/70' : 'text-[#23262D]/75'
   const bodyText = isDark ? 'text-[#F9F9F7]' : 'text-[#23262D]'
 
+  /** Light: light label on #82ADB5 (reads with frosted glass). Dark: charcoal on #ACDEE7 per accentTokens. */
+  const btnText = isDark ? accent.textOnAccent : 'text-white'
   const btnBase =
-    `inline-flex min-h-[40px] w-full min-w-[6.5rem] items-center justify-center rounded-lg px-5 py-2.5 text-sm font-semibold transition-all border border-transparent ${accent.textOnAccent}`
+    `inline-flex min-h-[40px] w-full min-w-[6.5rem] items-center justify-center rounded-lg px-5 py-2.5 text-sm font-semibold transition-all border border-transparent ${btnText}`
   const btnIdle = [accent.btnSolid, 'hover:brightness-110 active:brightness-95'].join(' ')
 
   const actionSlotClass =
@@ -31,7 +33,7 @@ export default function AdminNotifications({ uiTheme = 'light', items, adminFlow
 
   const spinnerCls = [
     'h-5 w-5 shrink-0 animate-spin rounded-full border-2',
-    isDark ? 'border-[#ACDEE7]/30 border-t-[#ACDEE7]' : 'border-[#82ADB5]/30 border-t-[#82ADB5]',
+    isDark ? 'border-[#23262D]/25 border-t-[#23262D]' : 'border-white/35 border-t-white',
   ].join(' ')
 
   useEffect(() => {
