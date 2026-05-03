@@ -1,7 +1,4 @@
-/** Workspace folder “drop” after Accept (see onAccept in App). */
 const DROP_VOLUME = 0.45
-
-let audioSingleton = null
 
 function soundsUrl(file) {
   const base = import.meta.env.BASE_URL || '/'
@@ -9,24 +6,21 @@ function soundsUrl(file) {
   return `${prefix}sounds/${file}`
 }
 
+/** One shot per call — used for staggered folder drops (new Audio each time). */
 export function playDesktopDropSfx() {
   if (typeof window === 'undefined') return
-  if (!audioSingleton) {
-    const a = new Audio(soundsUrl('drop.wav'))
-    a.preload = 'auto'
-    a.volume = DROP_VOLUME
-    try {
-      a.load()
-    } catch {
-      /* ignore */
-    }
-    audioSingleton = a
-  }
+  const a = new Audio(soundsUrl('drop.wav'))
+  a.volume = DROP_VOLUME
   try {
-    audioSingleton.currentTime = 0
+    a.load()
   } catch {
     /* ignore */
   }
-  const p = audioSingleton.play()
+  try {
+    a.currentTime = 0
+  } catch {
+    /* ignore */
+  }
+  const p = a.play()
   if (p && typeof p.catch === 'function') p.catch(() => {})
 }

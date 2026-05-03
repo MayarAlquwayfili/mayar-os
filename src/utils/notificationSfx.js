@@ -1,14 +1,18 @@
 const NOTIFICATION_VOLUME = 0.3
-const START_TIME = 1.0
 
 let audioSingleton = null
+
+function soundsUrl(file) {
+  const base = import.meta.env.BASE_URL || '/'
+  const prefix = base.endsWith('/') ? base : `${base}/`
+  return `${prefix}sounds/${file}`
+}
 
 export function getNotificationSfx() {
   if (typeof window === 'undefined') return null
   if (audioSingleton) return audioSingleton
 
-  const src = new URL('../assets/notification.mp3', import.meta.url).toString()
-  const a = new Audio(src)
+  const a = new Audio(soundsUrl('NotificationSound.wav'))
   a.preload = 'auto'
   a.volume = NOTIFICATION_VOLUME
   try {
@@ -25,11 +29,10 @@ export function playNotificationSfx() {
   const a = getNotificationSfx()
   if (!a) return
   try {
-    a.currentTime = START_TIME
+    a.currentTime = 0
   } catch {
     /* ignore */
   }
   const p = a.play()
   if (p && typeof p.catch === 'function') p.catch(() => {})
 }
-

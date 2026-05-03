@@ -1,4 +1,5 @@
 import { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react'
+import { motion } from 'framer-motion'
 import FolderIcon from './assets/Folder.svg'
 import AppIconMoheetik from './assets/Moheetik/AppIconMoheetik.svg'
 import AppIconRECLAB from './assets/RECLAB/AppIconRECLAB.svg'
@@ -42,6 +43,11 @@ import { windowChrome, contentTokens } from './utils/windowContentTheme'
 import { playDesktopDropSfx } from './utils/desktopDropSfx'
 
 const MENU_BAR_PX = 28
+/** Desktop folder reveal after onboarding Accept — matches stagger SFX + motion.delay */
+const FOLDER_REVEAL_STAGGER_S = 0.085
+const FOLDER_REVEAL_DURATION_S = 0.38
+const FOLDER_REVEAL_STAGGER_MS = Math.round(FOLDER_REVEAL_STAGGER_S * 1000)
+const FOLDER_REVEAL_DURATION_MS = Math.round(FOLDER_REVEAL_DURATION_S * 1000)
 // Dock: bottom-4 (16px) + py-2 (16px) + icon (54px) + dot gap + dot = ~96px clearance
 const DOCK_SAFE_PX = 96
 
@@ -1366,6 +1372,9 @@ function DraggableFolder({
   onDoubleClick,
   onPositionChange,
   uiTheme = 'light',
+  folderRevealActive = true,
+  folderRevealDelay = 0,
+  folderRevealDuration = FOLDER_REVEAL_DURATION_S,
 }) {
   const [position, setPosition] = useState({ x: initialX, y: initialY })
   const [isDragging, setIsDragging] = useState(false)
@@ -1482,43 +1491,54 @@ function DraggableFolder({
       : 'text-[#23262D]/70'
 
   return (
-    <AdminFolderCursorTip
-      ref={rootRef}
-      label={cursorTipLabel}
-      uiTheme={uiTheme}
-      aria-label={`Folder ${id}: ${title}`}
-      wrapperClassName={`absolute ${DESKTOP_ITEM_FRAME_BASE} ${
-        !isDragging ? DESKTOP_ITEM_FRAME_IDLE_TRANSITION : ''
-      } cursor-grab select-none active:cursor-grabbing ${desktopItemSelectionClass(
-        isSelected,
-      )}`}
-      style={{ left: position.x, top: position.y }}
-      onMouseDown={onMouseDown}
-      onClick={onClick}
-      onDoubleClick={handleDoubleClick}
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: folderRevealActive ? 1 : 0 }}
+      transition={{
+        duration: folderRevealDuration,
+        delay: folderRevealActive ? folderRevealDelay : 0,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      style={{ position: 'absolute', left: position.x, top: position.y }}
+      className={folderRevealActive ? '' : 'pointer-events-none'}
     >
-      <div className="box-border flex h-[72px] w-[72px] shrink-0 items-center justify-center p-1">
-        <img
-          src={icon ?? FolderIcon}
-          className="h-16 w-16 shrink-0"
-          alt=""
-          draggable={false}
-        />
-      </div>
+      <AdminFolderCursorTip
+        ref={rootRef}
+        label={cursorTipLabel}
+        uiTheme={uiTheme}
+        aria-label={`Folder ${id}: ${title}`}
+        wrapperClassName={`${DESKTOP_ITEM_FRAME_BASE} ${
+          !isDragging ? DESKTOP_ITEM_FRAME_IDLE_TRANSITION : ''
+        } cursor-grab select-none active:cursor-grabbing ${desktopItemSelectionClass(
+          isSelected,
+        )}`}
+        onMouseDown={onMouseDown}
+        onClick={onClick}
+        onDoubleClick={handleDoubleClick}
+      >
+        <div className="box-border flex h-[72px] w-[72px] shrink-0 items-center justify-center p-1">
+          <img
+            src={icon ?? FolderIcon}
+            className="h-16 w-16 shrink-0"
+            alt=""
+            draggable={false}
+          />
+        </div>
 
-      <div className="flex min-h-0 w-full flex-col items-center justify-center px-0.5 text-center">
-        <span
-          className={`line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide ${titleColor}`}
-        >
-          {title}
-        </span>
-        {subtitle ? (
-          <span className={`mt-0.5 w-full break-words text-[11px] leading-snug ${subColor}`}>
-            {subtitle}
+        <div className="flex min-h-0 w-full flex-col items-center justify-center px-0.5 text-center">
+          <span
+            className={`line-clamp-2 w-full break-words text-[12px] font-medium leading-tight tracking-wide ${titleColor}`}
+          >
+            {title}
           </span>
-        ) : null}
-      </div>
-    </AdminFolderCursorTip>
+          {subtitle ? (
+            <span className={`mt-0.5 w-full break-words text-[11px] leading-snug ${subColor}`}>
+              {subtitle}
+            </span>
+          ) : null}
+        </div>
+      </AdminFolderCursorTip>
+    </motion.div>
   )
 }
 
@@ -1838,24 +1858,26 @@ export default function App() {
           </>
         )}
 
-        {adminFlow === 'accepted' &&
-          DESKTOP_FOLDERS.map((folder) => (
-            <DraggableFolder
-              key={folder.id}
-              id={folder.id}
-              title={folder.title}
-              icon={folder.icon}
-              subtitle={folder.subtitle}
-              cursorTipLabel={folder.cursorTipLabel}
-              initialX={folderPositions[folder.id]?.x ?? folder.x}
-              initialY={folderPositions[folder.id]?.y ?? folder.y}
-              isSelected={selectedDesktopItemId === folder.id}
-              onSelect={() => setSelectedDesktopItemId(folder.id)}
-              onDoubleClick={() => openOrFocusWindow(folder.windowTitle ?? folder.title)}
-              onPositionChange={(pos) => handleFolderPositionChange(folder.id, pos)}
-              uiTheme={uiTheme}
-            />
-          ))}
+        {DESKTOP_FOLDERS.map((folder, index) => (
+          <DraggableFolder
+            key={folder.id}
+            id={folder.id}
+            title={folder.title}
+            icon={folder.icon}
+            subtitle={folder.subtitle}
+            cursorTipLabel={folder.cursorTipLabel}
+            initialX={folderPositions[folder.id]?.x ?? folder.x}
+            initialY={folderPositions[folder.id]?.y ?? folder.y}
+            isSelected={selectedDesktopItemId === folder.id}
+            onSelect={() => setSelectedDesktopItemId(folder.id)}
+            onDoubleClick={() => openOrFocusWindow(folder.windowTitle ?? folder.title)}
+            onPositionChange={(pos) => handleFolderPositionChange(folder.id, pos)}
+            uiTheme={uiTheme}
+            folderRevealActive={adminFlow === 'accepted'}
+            folderRevealDelay={index * FOLDER_REVEAL_STAGGER_S}
+            folderRevealDuration={FOLDER_REVEAL_DURATION_S}
+          />
+        ))}
         {openWindows
           .filter((w) => !w.minimized)
           .map((win) => (
@@ -1891,15 +1913,20 @@ export default function App() {
           clearAdminTimers()
           const t = setTimeout(() => {
             setAdminFlow('accepted')
-            // Double rAF: wait until folders paint, then drop SFX; next frame opens Manual (notification click already played).
-            requestAnimationFrame(() => {
-              requestAnimationFrame(() => {
-                playDesktopDropSfx()
-                requestAnimationFrame(() => {
-                  openOrFocusWindow('How to Work with Me')
-                })
-              })
+            DESKTOP_FOLDERS.forEach((_, i) => {
+              timeoutsRef.current.push(
+                setTimeout(() => playDesktopDropSfx(), i * FOLDER_REVEAL_STAGGER_MS),
+              )
             })
+            const manualDelay =
+              (DESKTOP_FOLDERS.length - 1) * FOLDER_REVEAL_STAGGER_MS +
+              FOLDER_REVEAL_DURATION_MS +
+              120
+            timeoutsRef.current.push(
+              setTimeout(() => {
+                openOrFocusWindow('How to Work with Me')
+              }, manualDelay),
+            )
           }, 2000)
           timeoutsRef.current.push(t)
         }}
