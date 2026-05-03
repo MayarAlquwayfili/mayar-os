@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Battery, Moon, Sun, WifiOff } from 'lucide-react'
+import { Moon, Sun, WifiOff } from 'lucide-react'
 import { accentTokens } from '../utils/windowContentTheme'
 import IcWifi from '../assets/Ic_wifi.svg'
 import IcGithub from '../assets/Ic_Github.svg'
@@ -92,13 +92,7 @@ function ThemeToggle({ theme, onToggleTheme }) {
   )
 }
 
-export default function TopStatusBar({
-  theme = 'light',
-  onToggleTheme,
-  isOffline = false,
-  batterySupported = false,
-  batteryLow = false,
-}) {
+export default function TopStatusBar({ theme = 'light', onToggleTheme, isOffline = false }) {
   const [now, setNow] = useState(() => new Date())
   const isDark = theme === 'dark'
 
@@ -202,26 +196,6 @@ export default function TopStatusBar({
             />
           </span>
         )}
-
-        {batterySupported ? (
-          <span
-            className={`flex items-center ${STATIC_CLUSTER}`}
-            role="img"
-            aria-label={batteryLow ? 'Battery low' : 'Battery'}
-          >
-            <Battery
-              className={`h-[14px] w-[14px] shrink-0 transition-colors duration-300 ${
-                batteryLow
-                  ? 'text-red-600/80 dark:text-red-400/75'
-                  : isDark
-                    ? 'text-[#F9F9F7]'
-                    : 'text-[#23262D]'
-              }`}
-              strokeWidth={2}
-              aria-hidden
-            />
-          </span>
-        ) : null}
 
         <ThemeToggle theme={theme} onToggleTheme={onToggleTheme} />
 

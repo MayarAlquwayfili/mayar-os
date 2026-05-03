@@ -1539,9 +1539,6 @@ function formatNotifBody(body) {
   return <span>{body}</span>
 }
 
-/** Survives Strict Mode remount so low-battery toast fires only once per session. */
-let batteryLowToastShown = false
-
 export default function App() {
   const [uiTheme, setUiTheme] = useState('light')
   const [selectedDesktopItemId, setSelectedDesktopItemId] = useState(null)
@@ -1559,8 +1556,6 @@ export default function App() {
   /** idle → triggering_notifications → waiting_accept → loading → accepted */
   const [adminFlow, setAdminFlow] = useState('idle')
   const [adminNotifs, setAdminNotifs] = useState([])
-  /** System toasts (e.g. battery) — kept separate so admin flow clears do not remove them. */
-  const [systemNotifs, setSystemNotifs] = useState([])
   const timeoutsRef = useRef([])
 
   const clearAdminTimers = useCallback(() => {
@@ -1659,48 +1654,6 @@ export default function App() {
     }
   }, [])
 
-  const [batterySupported, setBatterySupported] = useState(false)
-  const [batteryLow, setBatteryLow] = useState(false)
-
-  useEffect(() => {
-    if (typeof navigator === 'undefined' || !navigator.getBattery) return undefined
-
-    let battery
-    const sync = () => {
-      if (!battery) return
-      const low = !battery.charging && battery.level < 0.2
-      setBatteryLow(low)
-      if (low && !batteryLowToastShown) {
-        batteryLowToastShown = true
-        setSystemNotifs((prev) => [
-          ...prev,
-          {
-            id: 'battery-low',
-            header: 'Mayar OS',
-            body: 'Low Battery: Mayar OS is running in Power Reserve mode.',
-          },
-        ])
-      }
-    }
-
-    navigator
-      .getBattery()
-      .then((b) => {
-        battery = b
-        setBatterySupported(true)
-        sync()
-        b.addEventListener('levelchange', sync)
-        b.addEventListener('chargingchange', sync)
-      })
-      .catch(() => {})
-
-    return () => {
-      if (!battery) return
-      battery.removeEventListener('levelchange', sync)
-      battery.removeEventListener('chargingchange', sync)
-    }
-  }, [])
-
   const handleFolderPositionChange = useCallback((id, pos) => {
     setFolderPositions((p) => ({ ...p, [id]: pos }))
   }, [])
@@ -1734,13 +1687,6 @@ export default function App() {
     return (
       <>
         <OfflineOverlay visible={isOffline} uiTheme={uiTheme} />
-        <AdminNotifications
-          uiTheme={uiTheme}
-          items={systemNotifs}
-          adminFlow="accepted"
-          formatBody={formatNotifBody}
-          onAccept={() => {}}
-        />
         <MobileEmptyState uiTheme={uiTheme} />
       </>
     )
@@ -1753,13 +1699,7 @@ export default function App() {
       }`}
     >
       <OfflineOverlay visible={isOffline} uiTheme={uiTheme} />
-      <TopStatusBar
-        theme={uiTheme}
-        onToggleTheme={toggleUiTheme}
-        isOffline={isOffline}
-        batterySupported={batterySupported}
-        batteryLow={batteryLow}
-      />
+      <TopStatusBar theme={uiTheme} onToggleTheme={toggleUiTheme} isOffline={isOffline} />
 
       <main
         className="absolute inset-x-0 bottom-0 top-7 z-0 min-h-0 min-w-0 overflow-hidden"
@@ -1940,7 +1880,7 @@ export default function App() {
 
       <AdminNotifications
         uiTheme={uiTheme}
-        items={[...adminNotifs, ...systemNotifs]}
+        items={adminNotifs}
         adminFlow={adminFlow}
         formatBody={formatNotifBody}
         onAccept={() => {
