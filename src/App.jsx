@@ -25,6 +25,7 @@ import AdminFolderCursorTip from './components/AdminFolderCursorTip'
 import AdminNotifications from './components/AdminNotifications'
 import IdentityNameSticker from './components/IdentityNameSticker'
 import MobileEmptyState from './components/MobileEmptyState'
+import OfflineOverlay from './components/OfflineOverlay'
 import NotionFolderIcon from './assets/Admin/Notion_Folder.svg'
 import V60FolderIcon from './assets/Admin/V60_Folder.svg'
 import FigmaFolderIcon from './assets/Admin/Figma_Folder.svg'
@@ -1638,6 +1639,21 @@ export default function App() {
     return () => mq.removeEventListener('change', apply)
   }, [])
 
+  const [isOffline, setIsOffline] = useState(() =>
+    typeof navigator !== 'undefined' ? !navigator.onLine : false,
+  )
+
+  useEffect(() => {
+    const sync = () => setIsOffline(!navigator.onLine)
+    window.addEventListener('online', sync)
+    window.addEventListener('offline', sync)
+    sync()
+    return () => {
+      window.removeEventListener('online', sync)
+      window.removeEventListener('offline', sync)
+    }
+  }, [])
+
   const handleFolderPositionChange = useCallback((id, pos) => {
     setFolderPositions((p) => ({ ...p, [id]: pos }))
   }, [])
@@ -1668,7 +1684,12 @@ export default function App() {
   )
 
   if (isMobile) {
-    return <MobileEmptyState uiTheme={uiTheme} />
+    return (
+      <>
+        <OfflineOverlay visible={isOffline} uiTheme={uiTheme} fullBleed />
+        <MobileEmptyState uiTheme={uiTheme} />
+      </>
+    )
   }
 
   return (
@@ -1677,7 +1698,8 @@ export default function App() {
         uiTheme === 'dark' ? 'bg-[#23262D] text-[#F9F9F7]' : 'bg-[#F9F9F7] text-[#23262D]'
       }`}
     >
-      <TopStatusBar theme={uiTheme} onToggleTheme={toggleUiTheme} />
+      <OfflineOverlay visible={isOffline} uiTheme={uiTheme} />
+      <TopStatusBar theme={uiTheme} onToggleTheme={toggleUiTheme} isOffline={isOffline} />
 
       <main
         className="absolute inset-x-0 bottom-0 top-7 z-0 min-h-0 min-w-0 overflow-hidden"

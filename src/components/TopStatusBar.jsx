@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Moon, Sun } from 'lucide-react'
+import { Moon, Sun, WifiOff } from 'lucide-react'
 import { accentTokens } from '../utils/windowContentTheme'
 import IcWifi from '../assets/Ic_wifi.svg'
 import IcGithub from '../assets/Ic_Github.svg'
@@ -92,7 +92,7 @@ function ThemeToggle({ theme, onToggleTheme }) {
   )
 }
 
-export default function TopStatusBar({ theme = 'light', onToggleTheme }) {
+export default function TopStatusBar({ theme = 'light', onToggleTheme, isOffline = false }) {
   const [now, setNow] = useState(() => new Date())
   const isDark = theme === 'dark'
 
@@ -169,16 +169,27 @@ export default function TopStatusBar({ theme = 'light', onToggleTheme }) {
           aria-hidden
         />
 
-        <span className="sr-only">Wi-Fi</span>
-        <span className={`flex items-center ${STATIC_CLUSTER}`}>
-          <img
-            src={IcWifi}
-            alt=""
-            aria-hidden
-            className={`h-[14px] w-[14px] block ${iconInvert}`}
-            draggable={false}
-          />
-        </span>
+        <span className="sr-only">{isOffline ? 'No network connection' : 'Wi-Fi'}</span>
+        {isOffline ? (
+          <span
+            className={`flex items-center gap-1 ${STATIC_CLUSTER} text-[#8e8e93] dark:text-[#A3A6AD]`}
+            role="status"
+            aria-live="polite"
+          >
+            <WifiOff className="h-[14px] w-[14px] shrink-0" strokeWidth={2} aria-hidden />
+            <span className="hidden font-medium leading-none sm:inline">Disconnected</span>
+          </span>
+        ) : (
+          <span className={`flex items-center ${STATIC_CLUSTER}`}>
+            <img
+              src={IcWifi}
+              alt=""
+              aria-hidden
+              className={`h-[14px] w-[14px] block ${iconInvert}`}
+              draggable={false}
+            />
+          </span>
+        )}
 
         <ThemeToggle theme={theme} onToggleTheme={onToggleTheme} />
 
