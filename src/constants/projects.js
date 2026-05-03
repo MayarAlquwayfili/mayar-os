@@ -114,12 +114,13 @@ export function getDesktopFolderPositions(vw, vh) {
   const gap = G.GAP_Y
 
   const maxY = vh - G.DOCK_SAFE_PX - G.FOLDER_STACK_H - 16
-  let brewchaY = Math.min(TOP + 4 * gap, maxY)
-  brewchaY = Math.min(Math.max(brewchaY, TOP + 2 * gap), maxY)
+  /** Rows y=50/180/310 are admin Notion/Figma/V60 — Side B starts below that stack. */
+  let brewchaY = Math.min(TOP + 5 * gap, maxY)
+  brewchaY = Math.min(Math.max(brewchaY, TOP + 4 * gap), maxY)
 
   return {
-    'side-b': { x: lx, y: TOP + 2 * gap },
-    'cash-obsolete-research': { x: lx, y: TOP + 3 * gap },
+    'side-b': { x: lx, y: TOP + 3 * gap },
+    'cash-obsolete-research': { x: lx, y: TOP + 4 * gap },
     brewcha: { x: lx, y: brewchaY },
     cv: { x: rx, y: TOP + gap },
   }
@@ -135,7 +136,7 @@ export const DESKTOP_FOLDERS = [
     icon: SideBFolderIcon,
     cursorTipLabel: 'behind the screen',
     x: 50,
-    y: 310,
+    y: 440,
   },
   {
     id: 'brewcha',
@@ -144,7 +145,7 @@ export const DESKTOP_FOLDERS = [
     icon: BrwchaFolderIcon,
     cursorTipLabel: 'Matcha & V60 Workshop',
     x: 50,
-    y: 570,
+    y: 700,
   },
   {
     id: 'cash-obsolete-research',
@@ -153,7 +154,7 @@ export const DESKTOP_FOLDERS = [
     icon: PayFolderIcon,
     cursorTipLabel: 'Economics Research',
     x: 50,
-    y: 440,
+    y: 570,
   },
   {
     id: 'cv',
