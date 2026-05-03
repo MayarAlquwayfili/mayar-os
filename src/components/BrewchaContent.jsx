@@ -77,7 +77,7 @@ export default function BrewchaContent({ uiTheme = 'light' }) {
                 const src = CALLOUT_STICKERS[i]
                 const style = {
                   width: p.size,
-                  height: 'auto',
+                  height: p.size,
                   transform: `rotate(${p.rotate}deg)`,
                   opacity: p.opacity,
                 }
@@ -91,7 +91,11 @@ export default function BrewchaContent({ uiTheme = 'light' }) {
                     src={src}
                     alt=""
                     draggable={false}
-                    className="absolute -z-[1] select-none"
+                    className="absolute -z-[1] select-none object-contain"
+                    width={p.size}
+                    height={p.size}
+                    loading="lazy"
+                    decoding="async"
                     style={style}
                   />
                 )
@@ -130,6 +134,10 @@ export default function BrewchaContent({ uiTheme = 'light' }) {
                   alt=""
                   className="h-full w-full object-cover object-center"
                   draggable={false}
+                  width={1200}
+                  height={1600}
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
             </div>
@@ -139,6 +147,10 @@ export default function BrewchaContent({ uiTheme = 'light' }) {
                 alt=""
                 className="h-full w-full object-cover"
                 draggable={false}
+                width={1200}
+                height={1600}
+                loading="lazy"
+                decoding="async"
               />
             </div>
             <div className="col-start-2 row-start-2 min-h-0 overflow-hidden rounded-2xl border border-gray-100 shadow-md">
@@ -147,6 +159,10 @@ export default function BrewchaContent({ uiTheme = 'light' }) {
                 alt=""
                 className="h-full w-full object-cover"
                 draggable={false}
+                width={1200}
+                height={1600}
+                loading="lazy"
+                decoding="async"
               />
             </div>
           </div>

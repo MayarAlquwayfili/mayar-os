@@ -63,6 +63,10 @@ export default function SideBAlbumContent({
                     alt=""
                     draggable={false}
                     className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-[1.02]"
+                    width={800}
+                    height={800}
+                    loading="lazy"
+                    decoding="async"
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center px-2 text-center text-[10px] font-medium leading-snug text-gray-600">

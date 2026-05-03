@@ -106,7 +106,10 @@ export default function SideBFolderContent({ uiTheme = 'light' }) {
                   alt=""
                   draggable={false}
                   className="h-auto w-full"
+                  width={900}
+                  height={1200}
                   loading="lazy"
+                  decoding="async"
                 />
               </div>
             </div>

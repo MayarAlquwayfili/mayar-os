@@ -32,6 +32,10 @@ export default function MobileEmptyState({ uiTheme = 'light' }) {
           alt=""
           className="relative z-0 h-auto w-full drop-shadow-lg"
           draggable={false}
+          width={560}
+          height={360}
+          loading="lazy"
+          decoding="async"
         />
       </div>
 

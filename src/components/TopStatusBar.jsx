@@ -158,6 +158,10 @@ export default function TopStatusBar({ theme = 'light', onToggleTheme, isOffline
               alt={label}
               className={`block ${label === 'Behance' ? 'h-5 w-5' : 'h-4 w-4'} ${iconInvert}`}
               draggable={false}
+              width={label === 'Behance' ? 20 : 16}
+              height={label === 'Behance' ? 20 : 16}
+              loading="lazy"
+              decoding="async"
             />
           </a>
         ))}
@@ -193,6 +197,10 @@ export default function TopStatusBar({ theme = 'light', onToggleTheme, isOffline
               aria-hidden
               className={`h-[14px] w-[14px] block ${iconInvert}`}
               draggable={false}
+              width={14}
+              height={14}
+              loading="lazy"
+              decoding="async"
             />
           </span>
         )}

@@ -149,6 +149,10 @@ function MoheetikSplitContent({ uiTheme = 'light' }) {
             src={AppIconMoheetik}
             alt="Moheetik app icon"
             className="h-16 w-16 rounded-[14px] shadow-sm"
+            width={64}
+            height={64}
+            loading="lazy"
+            decoding="async"
           />
           <div>
             <div className="flex items-center gap-2">
@@ -217,6 +221,10 @@ function MoheetikSplitContent({ uiTheme = 'light' }) {
               src={MockupMoheetik01}
               alt="App loading state and object list"
               className="w-full h-auto object-contain drop-shadow-none"
+              width={960}
+              height={560}
+              loading="lazy"
+              decoding="async"
             />
           </div>
         </section>
@@ -228,6 +236,10 @@ function MoheetikSplitContent({ uiTheme = 'light' }) {
               src={MockupMoheetik02}
               alt="Real-time detection grid"
               className="w-full h-auto object-contain drop-shadow-none"
+              width={960}
+              height={560}
+              loading="lazy"
+              decoding="async"
             />
           </div>
           <div className="min-w-0">
@@ -277,6 +289,10 @@ function MoheetikSplitContent({ uiTheme = 'light' }) {
               src={MockupMoheetik03}
               alt="Target reached and voice confirmation"
               className="w-full h-auto object-contain drop-shadow-none"
+              width={960}
+              height={560}
+              loading="lazy"
+              decoding="async"
             />
           </div>
         </section>
@@ -358,7 +374,15 @@ function RECLABContent({ uiTheme = 'light' }) {
       {/* ── Header + Overview ─────────────────────────────────────────── */}
       <div className="w-full max-w-[1200px] mx-auto px-6 sm:px-8 md:px-10 pt-8 pb-6">
         <header className="flex items-center gap-5 pb-6 mb-8 border-b border-gray-100">
-          <img src={AppIconRECLAB} alt="RECLAB app icon" className="h-16 w-16 rounded-[14px] shadow-sm" />
+          <img
+            src={AppIconRECLAB}
+            alt="RECLAB app icon"
+            className="h-16 w-16 rounded-[14px] shadow-sm"
+            width={64}
+            height={64}
+            loading="lazy"
+            decoding="async"
+          />
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-[20px] font-bold tracking-tight text-gray-900">RECLAB</h1>
@@ -462,6 +486,10 @@ function RECLABContent({ uiTheme = 'light' }) {
                 src={MockupRECLABLab}
                 alt="RECLAB Lab screen"
                 className="w-full h-auto object-contain"
+                width={400}
+                height={866}
+                loading="lazy"
+                decoding="async"
                 style={{ opacity: labOpacity }}
               />
               {/* MockupWinCollection — fades in across S04 */}
@@ -469,6 +497,10 @@ function RECLABContent({ uiTheme = 'light' }) {
                 src={MockupRECLABWinCollection}
                 alt="RECLAB Win Collection"
                 className="absolute inset-0 w-full h-full object-contain"
+                width={400}
+                height={866}
+                loading="lazy"
+                decoding="async"
                 style={{ opacity: wcOpacity }}
               />
 
@@ -476,6 +508,10 @@ function RECLABContent({ uiTheme = 'light' }) {
               <img
                 src={RECLABButton}
                 alt="RECLAB record button"
+                width={560}
+                height={200}
+                loading="lazy"
+                decoding="async"
                 style={{
                   position: 'absolute',
                   right: 'calc(100% + 36px)',
@@ -493,6 +529,10 @@ function RECLABContent({ uiTheme = 'light' }) {
               <img
                 src={RECLABPopup}
                 alt="RECLAB randomizer popup"
+                width={600}
+                height={400}
+                loading="lazy"
+                decoding="async"
                 style={{
                   position: 'absolute',
                   left: 'calc(100% + 36px)',
@@ -1518,6 +1558,10 @@ function DraggableFolder({
             className="h-16 w-16 shrink-0"
             alt=""
             draggable={false}
+            width={64}
+            height={64}
+            loading="lazy"
+            decoding="async"
           />
         </div>
 
@@ -1795,6 +1839,10 @@ export default function App() {
                       alt=""
                       draggable={false}
                       className="h-16 w-16 shrink-0 object-contain"
+                      width={64}
+                      height={64}
+                      loading="lazy"
+                      decoding="async"
                     />
                   </div>
                   <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
@@ -1829,6 +1877,10 @@ export default function App() {
                       alt=""
                       draggable={false}
                       className="h-16 w-16 shrink-0 object-contain"
+                      width={64}
+                      height={64}
+                      loading="lazy"
+                      decoding="async"
                     />
                   </div>
                   <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">
@@ -1863,6 +1915,10 @@ export default function App() {
                       alt=""
                       draggable={false}
                       className="h-16 w-16 shrink-0 object-contain"
+                      width={64}
+                      height={64}
+                      loading="lazy"
+                      decoding="async"
                     />
                   </div>
                   <div className="flex min-h-[36px] w-full flex-col items-center justify-center px-0.5 text-center">

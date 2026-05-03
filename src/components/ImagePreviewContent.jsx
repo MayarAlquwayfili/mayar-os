@@ -23,6 +23,10 @@ export default function ImagePreviewContent({
             alt={alt ?? caption ?? ''}
             draggable={false}
             className="max-h-full max-w-full object-contain shadow-sm"
+            width={1600}
+            height={1200}
+            loading="lazy"
+            decoding="async"
           />
         ) : (
           <div

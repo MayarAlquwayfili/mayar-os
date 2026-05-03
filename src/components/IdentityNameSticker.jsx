@@ -28,6 +28,10 @@ export default function IdentityNameSticker({ uiTheme = 'light' }) {
           alt=""
           draggable={false}
           className="block h-auto w-full"
+          width={560}
+          height={360}
+          loading="lazy"
+          decoding="async"
         />
       </motion.div>
     </AdminFolderCursorTip>

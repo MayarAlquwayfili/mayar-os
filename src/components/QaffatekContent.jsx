@@ -208,7 +208,15 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
       {/* ── Identity header + overview grid ───────────────────────────────── */}
       <div className="w-full max-w-[1200px] mx-auto px-6 sm:px-8 md:px-10 pt-8">
         <header className="flex items-center gap-5 pb-8 border-b border-gray-100">
-          <img src={AppIconQaffatek} alt="Qaffatek app icon" className="h-16 w-16 rounded-[14px] shadow-sm" />
+          <img
+            src={AppIconQaffatek}
+            alt="Qaffatek app icon"
+            className="h-16 w-16 rounded-[14px] shadow-sm"
+            width={64}
+            height={64}
+            loading="lazy"
+            decoding="async"
+          />
           <div>
             <div className="flex items-center gap-3 flex-wrap">
               <h1 className="text-[20px] font-bold tracking-tight text-gray-900">Qaffatek | قفطتك </h1>
@@ -313,6 +321,10 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
                   'pointer-events-auto absolute inset-0 h-full w-full object-contain ' +
                   mockupOpacityClass
                 }
+                width={390}
+                height={844}
+                loading="lazy"
+                decoding="async"
                 style={{ zIndex: 1, opacity: secretOpacity }}
               />
 
@@ -323,6 +335,10 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
                   'pointer-events-auto absolute inset-0 h-full w-full object-contain ' +
                   mockupOpacityClass
                 }
+                width={390}
+                height={844}
+                loading="lazy"
+                decoding="async"
                 style={{ zIndex: 10, opacity: weldOpacity }}
               />
 
@@ -333,6 +349,10 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
                   'pointer-events-auto absolute inset-0 h-full w-full object-contain ' +
                   mockupOpacityClass
                 }
+                width={390}
+                height={844}
+                loading="lazy"
+                decoding="async"
                 style={{ zIndex: 20, opacity: bintOpacity }}
               />
 
@@ -343,6 +363,10 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
                   'pointer-events-auto absolute inset-0 h-full w-full object-contain ' +
                   mockupOpacityClass
                 }
+                width={390}
+                height={844}
+                loading="lazy"
+                decoding="async"
                 style={{ zIndex: 30, opacity: ajouzOpacity }}
               />
 
@@ -353,6 +377,10 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
                   'pointer-events-auto absolute inset-0 h-full w-full object-contain ' +
                   mockupOpacityClass
                 }
+                width={390}
+                height={844}
+                loading="lazy"
+                decoding="async"
                 style={{ zIndex: 40, opacity: timeOpacity }}
               />
             </div>
@@ -386,6 +414,10 @@ export default function QaffatekContent({ uiTheme = 'light' }) {
                 src={QaffatekLogo}
                 alt="Qaffatek brand mark"
                 className="pointer-events-auto h-auto w-[150%] max-w-[500px] select-none"
+                width={1200}
+                height={400}
+                loading="lazy"
+                decoding="async"
                 style={{
                   opacity: brandOpacity,
                   transform: `translateY(${brandTY}px)`,

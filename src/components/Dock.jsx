@@ -74,6 +74,10 @@ function DockTile({
           alt={label}
           draggable={false}
           className={`h-full w-full rounded-[12px] ${iconFit === 'contain' ? 'object-contain' : 'object-cover'}`}
+          width={54}
+          height={54}
+          loading="lazy"
+          decoding="async"
         />
       </button>
 

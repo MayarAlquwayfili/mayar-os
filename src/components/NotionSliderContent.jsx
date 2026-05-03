@@ -78,6 +78,10 @@ export default function NotionSliderContent() {
             alt=""
             className="max-h-[min(52vh,420px)] w-full max-w-full object-contain"
             draggable={false}
+            width={960}
+            height={540}
+            loading="lazy"
+            decoding="async"
           />
         </div>
 

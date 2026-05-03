@@ -127,6 +127,10 @@ export default function CashResearchContent({ uiTheme = 'light' }) {
                 src={Figure1}
                 alt="Figure 1: Trend Digital Payment Adoption Rate (2015-2024)"
                 className={FIGURE_CLS}
+                width={800}
+                height={500}
+                loading="lazy"
+                decoding="async"
               />
               <p className={CAPTION}>
                 Figure 1: Trend Digital Payment Adoption Rate (2015-2024)
@@ -148,6 +152,10 @@ export default function CashResearchContent({ uiTheme = 'light' }) {
                 src={Table1}
                 alt="Table 1: Multiple Linear Regression Results on SME Resilience"
                 className={FIGURE_CLS}
+                width={800}
+                height={500}
+                loading="lazy"
+                decoding="async"
               />
               <p className={CAPTION}>
                 Table 1: Multiple Linear Regression Results on SME Resilience
@@ -169,6 +177,10 @@ export default function CashResearchContent({ uiTheme = 'light' }) {
                 src={Figure3}
                 alt="Figure 3 SME Loan Delinquency Rate Trend (2015-2024)"
                 className={FIGURE_CLS}
+                width={800}
+                height={500}
+                loading="lazy"
+                decoding="async"
               />
               <p className={CAPTION}>
                 Figure 3 SME Loan Delinquency Rate Trend (2015-2024)

@@ -60,6 +60,10 @@ export default function CreativeLabFolderContent({ onOpenProject, uiTheme = 'lig
                 alt=""
                 draggable={false}
                 className="h-[90px] w-[90px] object-contain drop-shadow-sm transition-transform duration-200 group-hover:scale-[1.02]"
+                width={90}
+                height={90}
+                loading="lazy"
+                decoding="async"
               />
               <span className="w-full text-[11px] font-medium leading-tight text-gray-800">
                 {item.title}
