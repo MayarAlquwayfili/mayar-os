@@ -42,6 +42,8 @@ import { playDesktopDropSfx, preloadDesktopMountSfx } from './utils/desktopDropS
 import { getNotificationSfx } from './utils/notificationSfx'
 
 const MENU_BAR_PX = 28
+/** Viewports at or below this width show MobileEmptyState (phones + iPad / tablets). */
+const COMPACT_LAYOUT_MAX_WIDTH_PX = 1180
 /** Desktop folder unlock stagger (CSS animation-delay only; single mount SFX on Accept) — Dock is unaffected */
 const FOLDER_REVEAL_STAGGER_S = 0.085
 const FOLDER_REVEAL_DURATION_S = 0.38
@@ -1698,11 +1700,12 @@ export default function App() {
   }, [])
 
   const [isMobile, setIsMobile] = useState(() =>
-    typeof window !== 'undefined' ? window.innerWidth < 768 : false,
+    typeof window !== 'undefined' ? window.innerWidth <= COMPACT_LAYOUT_MAX_WIDTH_PX : false,
   )
 
   useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)')
+    const query = `(max-width: ${COMPACT_LAYOUT_MAX_WIDTH_PX}px)`
+    const mq = window.matchMedia(query)
     const apply = () => setIsMobile(mq.matches)
     apply()
     mq.addEventListener('change', apply)
@@ -1714,13 +1717,15 @@ export default function App() {
   )
 
   useEffect(() => {
-    const sync = () => setIsOffline(!navigator.onLine)
-    window.addEventListener('online', sync)
-    window.addEventListener('offline', sync)
-    sync()
+    const syncOffline = () => {
+      setIsOffline(typeof navigator !== 'undefined' ? !navigator.onLine : false)
+    }
+    window.addEventListener('online', syncOffline)
+    window.addEventListener('offline', syncOffline)
+    syncOffline()
     return () => {
-      window.removeEventListener('online', sync)
-      window.removeEventListener('offline', sync)
+      window.removeEventListener('online', syncOffline)
+      window.removeEventListener('offline', syncOffline)
     }
   }, [])
 
