@@ -32,17 +32,6 @@ import { useWindowManager } from './hooks/useWindowManager'
 import { MOHEETIK_TOOLS, RECLAB_TOOLS, DESKTOP_FOLDERS } from './constants/projects'
 import { INITIAL_MANUAL_TASKS } from './constants/manualTasks'
 import { windowChrome, contentTokens } from './utils/windowContentTheme'
-import {
-  clearMayarOsPersistedState,
-  isOnboardingAcceptedInStorage,
-  loadPersistedAdminFlowSegment,
-  loadPersistedManualTasks,
-  persistAdminFlow,
-  persistManualTasks,
-} from './utils/mayarOsStorage'
-
-/** True once at module load: Manual dock tile should skip spring intro if user already completed onboarding. */
-const BOOT_MANUAL_DOCK_SKIP_INTRO = isOnboardingAcceptedInStorage()
 
 const MENU_BAR_PX = 28
 // Dock: bottom-4 (16px) + py-2 (16px) + icon (54px) + dot gap + dot = ~96px clearance
@@ -1525,36 +1514,6 @@ function DraggableFolder({
   )
 }
 
-/** Random spawn for first-time visitors; folder ~132×128px, respects menu + dock. */
-function randomFolderPosInBounds() {
-  const vw = typeof window !== 'undefined' ? window.innerWidth : 1200
-  const vh = typeof window !== 'undefined' ? window.innerHeight : 800
-  const FOLDER_W = 132
-  const FOLDER_H = 128
-  const MARGIN = 16
-  const minX = MARGIN
-  const maxX = Math.max(minX, vw - FOLDER_W - MARGIN)
-  const minY = MENU_BAR_PX + MARGIN
-  const maxY = Math.max(minY, vh - DOCK_SAFE_PX - FOLDER_H - MARGIN)
-  const x = minX + Math.floor(Math.random() * (maxX - minX + 1))
-  const y = minY + Math.floor(Math.random() * (maxY - minY + 1))
-  return { x, y }
-}
-
-const LS_KEY = 'mayaros-folder-positions'
-const LS_UI_THEME = 'mayaros-ui-theme'
-
-function loadLayout() {
-  try {
-    const raw = localStorage.getItem(LS_KEY)
-    if (raw == null) return null
-    const parsed = JSON.parse(raw)
-    return typeof parsed === 'object' && parsed !== null ? parsed : null
-  } catch {
-    return null
-  }
-}
-
 function defaultAdminNotionPos() {
   const w = typeof window !== 'undefined' ? window.innerWidth : 1200
   return { x: Math.max(16, w - 140), y: 96 }
@@ -1574,46 +1533,21 @@ function defaultIdentityStickerPos() {
   return { x: 24, y: MENU_BAR_PX + 16 }
 }
 
+/** Desktop folder spawn — constants only (no persistence). */
 function getInitialFolderPositions() {
-  const saved = loadLayout()
   const result = {}
-  const hasFolderData =
-    saved &&
-    DESKTOP_FOLDERS.some(
-      (f) =>
-        saved[f.id] &&
-        typeof saved[f.id].x === 'number' &&
-        typeof saved[f.id].y === 'number',
-    )
-
-  if (!hasFolderData) {
-    DESKTOP_FOLDERS.forEach((f) => {
-      result[f.id] = saved?.[f.id] ?? randomFolderPosInBounds()
-    })
-    try {
-      const cur = saved && typeof saved === 'object' ? { ...saved } : {}
-      DESKTOP_FOLDERS.forEach((f) => {
-        cur[f.id] = result[f.id]
-      })
-      localStorage.setItem(LS_KEY, JSON.stringify(cur))
-    } catch {
-      /* skip persist if storage unavailable */
-    }
-    return result
-  }
   DESKTOP_FOLDERS.forEach((f) => {
-    result[f.id] = saved[f.id] ?? { x: f.x, y: f.y }
+    result[f.id] = { x: f.x, y: f.y }
   })
   return result
 }
 
 function getInitialAdminLayout() {
-  const saved = loadLayout()
   return {
-    notion: saved?.['admin-notion'] ?? defaultAdminNotionPos(),
-    v60: saved?.['admin-v60'] ?? defaultAdminV60Pos(),
-    figma: saved?.['admin-figma'] ?? defaultAdminFigmaPos(),
-    identitySticker: saved?.['identity-sticker'] ?? defaultIdentityStickerPos(),
+    notion: defaultAdminNotionPos(),
+    v60: defaultAdminV60Pos(),
+    figma: defaultAdminFigmaPos(),
+    identitySticker: defaultIdentityStickerPos(),
   }
 }
 
@@ -1621,38 +1555,22 @@ function formatNotifBody(body) {
   return <span>{body}</span>
 }
 
-function loadPersistedUiTheme() {
-  try {
-    const t = localStorage.getItem(LS_UI_THEME)
-    if (t === 'dark' || t === 'light') return t
-  } catch {
-    /* ignore */
-  }
-  return 'light'
-}
-
 export default function App() {
-  const [uiTheme, setUiTheme] = useState(() =>
-    typeof window !== 'undefined' ? loadPersistedUiTheme() : 'light',
-  )
+  const [uiTheme, setUiTheme] = useState('light')
   const [selectedDesktopItemId, setSelectedDesktopItemId] = useState(null)
   const { openWindows, openOrFocusWindow, bringToFront, minimizeWindow, closeWindow } =
     useWindowManager()
   const [folderPositions, setFolderPositions] = useState(() => getInitialFolderPositions())
   const [adminLayout, setAdminLayout] = useState(() => getInitialAdminLayout())
 
-  /**
-   * Manual checklist — persisted under mayar-os-manual-tasks.
-   * Initializer reads localStorage synchronously so the first paint matches saved progress.
-   */
-  const [manualTasks, setManualTasks] = useState(() => {
-    const merged = loadPersistedManualTasks(INITIAL_MANUAL_TASKS)
-    return merged ?? INITIAL_MANUAL_TASKS.map((t) => ({ ...t }))
-  })
+  /** Manual checklist — fresh defaults every load (no persistence). */
+  const [manualTasks, setManualTasks] = useState(() =>
+    INITIAL_MANUAL_TASKS.map((t) => ({ ...t })),
+  )
 
   // ─── Admin login flow ─────────────────────────────────────────────────────
-  /** idle → triggering_notifications → waiting_accept → loading → accepted (accepted restored from mayar-os-onboarding). */
-  const [adminFlow, setAdminFlow] = useState(() => loadPersistedAdminFlowSegment())
+  /** idle → triggering_notifications → waiting_accept → loading → accepted */
+  const [adminFlow, setAdminFlow] = useState('idle')
   const [adminNotifs, setAdminNotifs] = useState([])
   const timeoutsRef = useRef([])
 
@@ -1664,25 +1582,6 @@ export default function App() {
   useEffect(() => {
     return () => clearAdminTimers()
   }, [clearAdminTimers])
-
-  useEffect(() => {
-    persistAdminFlow(adminFlow)
-  }, [adminFlow])
-
-  useEffect(() => {
-    persistManualTasks(manualTasks)
-  }, [manualTasks])
-
-  useEffect(() => {
-    if (!import.meta.env.DEV) return
-    window.__MAYAR_OS_DEV_RESET__ = () => {
-      clearMayarOsPersistedState()
-      window.location.reload()
-    }
-    return () => {
-      delete window.__MAYAR_OS_DEV_RESET__
-    }
-  }, [])
 
   useEffect(() => {
     if (adminFlow !== 'triggering_notifications') return
@@ -1740,37 +1639,6 @@ export default function App() {
     return () => clearTimeout(t)
   }, [adminFlow])
 
-  // TODO: UNCOMMENT FOR PRODUCTION
-  // useEffect(() => {
-  //   try {
-  //     if (adminFlow === 'accepted') {
-  //       // TODO: UNCOMMENT FOR PRODUCTION
-  //       // localStorage.setItem(LS_ADMIN_STATUS, 'accepted')
-  //     }
-  //   } catch {
-  //     /* ignore */
-  //   }
-  // }, [adminFlow])
-
-  const persistLayoutPatch = useCallback((patch) => {
-    try {
-      const raw = localStorage.getItem(LS_KEY)
-      const cur = raw ? JSON.parse(raw) : {}
-      Object.assign(cur, patch)
-      localStorage.setItem(LS_KEY, JSON.stringify(cur))
-    } catch {
-      /* ignore */
-    }
-  }, [])
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(LS_UI_THEME, uiTheme)
-    } catch {
-      /* ignore */
-    }
-  }, [uiTheme])
-
   const toggleUiTheme = useCallback(() => {
     setUiTheme((t) => (t === 'light' ? 'dark' : 'light'))
   }, [])
@@ -1787,45 +1655,25 @@ export default function App() {
     return () => mq.removeEventListener('change', apply)
   }, [])
 
-  const handleFolderPositionChange = useCallback(
-    (id, pos) => {
-      setFolderPositions((p) => ({ ...p, [id]: pos }))
-      persistLayoutPatch({ [id]: pos })
-    },
-    [persistLayoutPatch],
-  )
+  const handleFolderPositionChange = useCallback((id, pos) => {
+    setFolderPositions((p) => ({ ...p, [id]: pos }))
+  }, [])
 
-  const handleAdminNotionPos = useCallback(
-    (pos) => {
-      setAdminLayout((a) => ({ ...a, notion: pos }))
-      persistLayoutPatch({ 'admin-notion': pos })
-    },
-    [persistLayoutPatch],
-  )
+  const handleAdminNotionPos = useCallback((pos) => {
+    setAdminLayout((a) => ({ ...a, notion: pos }))
+  }, [])
 
-  const handleAdminV60Pos = useCallback(
-    (pos) => {
-      setAdminLayout((a) => ({ ...a, v60: pos }))
-      persistLayoutPatch({ 'admin-v60': pos })
-    },
-    [persistLayoutPatch],
-  )
+  const handleAdminV60Pos = useCallback((pos) => {
+    setAdminLayout((a) => ({ ...a, v60: pos }))
+  }, [])
 
-  const handleAdminFigmaPos = useCallback(
-    (pos) => {
-      setAdminLayout((a) => ({ ...a, figma: pos }))
-      persistLayoutPatch({ 'admin-figma': pos })
-    },
-    [persistLayoutPatch],
-  )
+  const handleAdminFigmaPos = useCallback((pos) => {
+    setAdminLayout((a) => ({ ...a, figma: pos }))
+  }, [])
 
-  const handleIdentityStickerPos = useCallback(
-    (pos) => {
-      setAdminLayout((a) => ({ ...a, identitySticker: pos }))
-      persistLayoutPatch({ 'identity-sticker': pos })
-    },
-    [persistLayoutPatch],
-  )
+  const handleIdentityStickerPos = useCallback((pos) => {
+    setAdminLayout((a) => ({ ...a, identitySticker: pos }))
+  }, [])
 
   /** Dock cannot open Manual until the Accept onboarding flow has finished (programmatic open still uses openOrFocusWindow). */
   const handleDockOpen = useCallback(
@@ -2050,7 +1898,6 @@ export default function App() {
         openWindows={openWindows}
         onOpen={handleDockOpen}
         manualUnlocked={adminFlow === 'accepted'}
-        manualSkipIntro={BOOT_MANUAL_DOCK_SKIP_INTRO}
       />
     </div>
   )
