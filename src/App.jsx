@@ -44,7 +44,6 @@ import { playDesktopDropSfx } from './utils/desktopDropSfx'
 
 const MENU_BAR_PX = 28
 /** Desktop folder reveal after onboarding Accept — matches stagger SFX + motion.delay */
-const FOLDER_GHOST_OPACITY = 0.3
 const FOLDER_REVEAL_STAGGER_S = 0.085
 const FOLDER_REVEAL_DURATION_S = 0.38
 const FOLDER_REVEAL_STAGGER_MS = Math.round(FOLDER_REVEAL_STAGGER_S * 1000)
@@ -1493,14 +1492,15 @@ function DraggableFolder({
 
   return (
     <motion.div
-      initial={{ opacity: FOLDER_GHOST_OPACITY }}
-      animate={{ opacity: folderRevealActive ? 1 : FOLDER_GHOST_OPACITY }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: folderRevealActive ? 1 : 0 }}
       transition={{
         duration: folderRevealActive ? folderRevealDuration : 0,
         delay: folderRevealActive ? folderRevealDelay : 0,
         ease: [0.22, 1, 0.36, 1],
       }}
       style={{ position: 'absolute', left: position.x, top: position.y }}
+      className={folderRevealActive ? '' : 'pointer-events-none'}
     >
       <AdminFolderCursorTip
         ref={rootRef}
