@@ -31,6 +31,13 @@ import Random_B_04 from '../assets/SideB/Random_B_04.jpg'
 import Random_B_05 from '../assets/SideB/Random_B_05.jpg'
 import Random_B_07 from '../assets/SideB/Random_B_07.webp'
 
+import Challenge_B_01 from '../assets/SideB/Challenge_B_01.webp'
+import Challenge_B_02 from '../assets/SideB/Challenge_B_02.webp'
+import Challenge_B_03 from '../assets/SideB/Challenge_B_03.webp'
+import Challenge_B_04 from '../assets/SideB/Challenge_B_04.webp'
+import Challenge_B_05 from '../assets/SideB/Challenge_B_05.webp'
+import Challenge_B_06 from '../assets/SideB/Challenge_B_06.webp'
+
 import { contentTokens } from '../utils/windowContentTheme'
 
 const SECTIONS = [
@@ -84,6 +91,17 @@ const SECTIONS = [
       { id: 'random-4', src: Random_B_04 },
       { id: 'random-5', src: Random_B_05 },
       { id: 'random-7', src: Random_B_07 },
+    ],
+  },
+  {
+    id: 'challenge',
+    images: [
+      { id: 'challenge-1', src: Challenge_B_01 },
+      { id: 'challenge-2', src: Challenge_B_02 },
+      { id: 'challenge-3', src: Challenge_B_03 },
+      { id: 'challenge-4', src: Challenge_B_04 },
+      { id: 'challenge-5', src: Challenge_B_05 },
+      { id: 'challenge-6', src: Challenge_B_06 },
     ],
   },
 ]

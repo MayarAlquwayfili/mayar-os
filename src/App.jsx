@@ -42,8 +42,8 @@ import { playDesktopDropSfx, preloadDesktopMountSfx } from './utils/desktopDropS
 import { getNotificationSfx } from './utils/notificationSfx'
 
 const MENU_BAR_PX = 28
-/** Viewports at or below this width show MobileEmptyState (phones + iPad / tablets). */
-const COMPACT_LAYOUT_MAX_WIDTH_PX = 1180
+/** Viewports with `window.innerWidth <=` this value render only MobileEmptyState (no desktop shell / RECLAB grid). Includes iPad Pro 12.9" landscape (~1366px). */
+const COMPACT_LAYOUT_MAX_WIDTH_PX = 1367
 /** Desktop folder unlock stagger (CSS animation-delay only; single mount SFX on Accept) — Dock is unaffected */
 const FOLDER_REVEAL_STAGGER_S = 0.085
 const FOLDER_REVEAL_DURATION_S = 0.38
@@ -370,11 +370,11 @@ function RECLABContent({ uiTheme = 'light' }) {
     <div
       ref={scrollRef}
       onScroll={handleScroll}
-      className={`pointer-events-auto h-full overflow-y-auto text-left font-sans ${T.surface} ${T.text} ${T.scrollRoot} ${T.contentProse}`}
+      className={`pointer-events-auto h-full overflow-x-hidden overflow-y-auto text-left font-sans ${T.surface} ${T.text} ${T.scrollRoot} ${T.contentProse}`}
     >
 
       {/* ── Header + Overview ─────────────────────────────────────────── */}
-      <div className="w-full max-w-[1200px] mx-auto px-6 sm:px-8 md:px-10 pt-8 pb-6">
+      <div className="w-full max-w-[min(90vw,1200px)] mx-auto px-[min(5vw,2rem)] pt-8 pb-6">
         <header className="flex items-center gap-5 pb-6 mb-8 border-b border-gray-100">
           <img
             src={AppIconRECLAB}
@@ -427,7 +427,7 @@ function RECLABContent({ uiTheme = 'light' }) {
       </div>
 
       {/* ── 01. The Challenge — full-width dramatic prologue ─────────── */}
-      <div className="w-full max-w-[820px] mx-auto px-6 sm:px-8 py-24 text-left">
+      <div className="w-full max-w-[min(90vw,820px)] mx-auto px-[min(5vw,2rem)] py-24 text-left">
         <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-400 mb-6">
           01 — The Challenge
         </p>
@@ -443,7 +443,7 @@ function RECLABContent({ uiTheme = 'light' }) {
           system to capture the journey, these experiments quickly vanish into a graveyard of
           abandoned hobbies.
         </p>
-        <div className="space-y-3 my-10 max-w-[560px] border-l-2 border-gray-200 pl-6 text-left">
+        <div className="space-y-3 my-10 max-w-[min(90vw,560px)] border-l-2 border-gray-200 pl-6 text-left">
           <p className="text-[15px] leading-[1.9] tracking-[0.01em] text-gray-500 italic">
             &ldquo;I joke that I only have one hobby, which is that I am a hobby collector.&rdquo;
           </p>
@@ -465,29 +465,31 @@ function RECLABContent({ uiTheme = 'light' }) {
         </p>
       </div>
 
-      {/* ── Main Stage — sticky phone + 3 alternating text sections ─────
-           Desktop grid: [1fr] [400px phone] [1fr]
-           Phone: col 2, rows 1-3, md:sticky top-0 h-screen.
+      {/* ── Main Stage — sticky phone + 3 text sections ─────────────────
+           Tablet 768–1179: [1fr phone | 1.5fr text stack] — phone left, no squeezed 3-col
+           Desktop ≥1180: [1fr | min(45vw,400px) phone | 1.2fr] — alternating text L/R
 
-           S02  col 3 (RIGHT)  MockupLab (static)   BUTTON 280px LEFT gutter
-           S03  col 1 (LEFT)   MockupLab (static)   POPUP 300px RIGHT gutter
-           S04  col 3 (RIGHT)  Lab → WC (done by 50% scroll)  —              ── */}
-      <div className="w-full max-w-[1200px] mx-auto px-6 sm:px-8 md:px-10 pb-24">
-        <div className="grid grid-cols-1 md:grid-cols-[1fr_400px_1fr] gap-x-10 items-start">
+           S02 / S04  wide desktop: col 3  ·  S03: col 1
+           Tablet: all three sections col 2 beside the phone                    ── */}
+      <div className="w-full max-w-[min(90vw,1200px)] mx-auto px-[min(5vw,2rem)] pb-24 min-w-0">
+        <div
+          className="grid min-w-0 grid-cols-1 items-start md:max-[1179px]:grid-cols-[1fr_1.5fr] md:max-[1179px]:gap-x-[min(0.75rem,2vw)]
+                     min-[1180px]:grid-cols-[1fr_min(45vw,400px)_1.2fr] min-[1180px]:gap-x-8 xl:gap-x-10"
+        >
 
-          {/* ══ STICKY PHONE — col 2, rows 1-3 ══════════════════════════ */}
+          {/* ══ STICKY PHONE — tablet col 1 · desktop col 2 · rows 1–3 ═══ */}
           <div
-            className="md:col-start-2 md:row-start-1 md:row-end-4 md:sticky top-0
-                       flex items-center justify-center h-screen"
+            className="min-w-0 max-w-full md:max-[1179px]:col-start-1 md:max-[1179px]:row-start-1 md:max-[1179px]:row-end-4
+                       min-[1180px]:col-start-2 min-[1180px]:row-start-1 min-[1180px]:row-end-4 md:sticky top-0
+                       flex items-center justify-center h-screen min-h-0 py-8 md:py-0"
             style={{ zIndex: 10 }}
           >
-            <div className="relative w-full max-w-[400px]">
-
+            <div className="relative mx-auto aspect-[400/866] w-full max-w-[min(90vw,400px)] shrink-0 md:max-[1179px]:max-w-full">
               {/* MockupLab — static through S02 + S03, fades as S04 scrolls */}
               <img
                 src={MockupRECLABLab}
                 alt="RECLAB Lab screen"
-                className="w-full h-auto object-contain"
+                className="absolute inset-0 h-full w-full object-contain"
                 width={400}
                 height={866}
                 loading="lazy"
@@ -498,7 +500,7 @@ function RECLABContent({ uiTheme = 'light' }) {
               <img
                 src={MockupRECLABWinCollection}
                 alt="RECLAB Win Collection"
-                className="absolute inset-0 w-full h-full object-contain"
+                className="absolute inset-0 h-full w-full object-contain"
                 width={400}
                 height={866}
                 loading="lazy"
@@ -506,7 +508,7 @@ function RECLABContent({ uiTheme = 'light' }) {
                 style={{ opacity: wcOpacity }}
               />
 
-              {/* RECLAB_BUTTON — 280px, LEFT gutter, tied strictly to S02 */}
+              {/* RECLAB_BUTTON — LEFT gutter, tied strictly to S02 */}
               <img
                 src={RECLABButton}
                 alt="RECLAB record button"
@@ -516,9 +518,9 @@ function RECLABContent({ uiTheme = 'light' }) {
                 decoding="async"
                 style={{
                   position: 'absolute',
-                  right: 'calc(100% + 36px)',
+                  right: 'calc(100% + min(36px, 4vw))',
                   top: '50%',
-                  width: '280px',
+                  width: 'min(90vw, 280px)',
                   objectFit: 'contain',
                   filter: 'drop-shadow(0 8px 20px rgba(0,0,0,0.12))',
                   opacity: btnOpacity,
@@ -527,7 +529,7 @@ function RECLABContent({ uiTheme = 'light' }) {
                 }}
               />
 
-              {/* RECLAB_POPUP — 300px, RIGHT gutter, tied strictly to S03 */}
+              {/* RECLAB_POPUP — RIGHT gutter, tied strictly to S03 */}
               <img
                 src={RECLABPopup}
                 alt="RECLAB randomizer popup"
@@ -537,9 +539,9 @@ function RECLABContent({ uiTheme = 'light' }) {
                 decoding="async"
                 style={{
                   position: 'absolute',
-                  left: 'calc(100% + 36px)',
+                  left: 'calc(100% + min(36px, 4vw))',
                   top: '50%',
-                  width: '300px',
+                  width: 'min(90vw, 300px)',
                   objectFit: 'contain',
                   filter: 'drop-shadow(0 8px 20px rgba(0,0,0,0.12))',
                   opacity: popOpacity,
@@ -550,13 +552,12 @@ function RECLABContent({ uiTheme = 'light' }) {
             </div>
           </div>
 
-          {/* ══ S02 — col 3 (RIGHT), row 1 ═══════════════════════════════
-               Phone: MockupLab (static). RECLAB_BUTTON LEFT gutter.      */}
+          {/* ══ S02 — tablet col 2 row 1 · desktop col 3 ═════════════════ */}
           <section
             ref={sec2Ref}
-            className="md:col-start-3 md:row-start-1 flex items-center py-16 min-h-[85vh]"
+            className="min-w-0 max-w-full overflow-x-hidden md:max-[1179px]:col-start-2 md:max-[1179px]:row-start-1 min-[1180px]:col-start-3 min-[1180px]:row-start-1 flex items-center py-16 min-h-[85vh]"
           >
-            <div className="min-w-0">
+            <div className="min-w-0 w-full max-w-full break-words min-[1180px]:max-w-[min(100%,32rem)]">
               <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-400 mb-5">
                 02 — The Solution
               </p>
@@ -573,13 +574,12 @@ function RECLABContent({ uiTheme = 'light' }) {
             </div>
           </section>
 
-          {/* ══ S03 — col 1 (LEFT), row 2 ════════════════════════════════
-               Phone: MockupLab (static). Single POPUP RIGHT gutter.       */}
+          {/* ══ S03 — tablet col 2 row 2 · desktop col 1 ═════════════════ */}
           <section
             ref={sec3Ref}
-            className="md:col-start-1 md:row-start-2 flex items-center py-16 min-h-[85vh]"
+            className="min-w-0 max-w-full overflow-x-hidden md:max-[1179px]:col-start-2 md:max-[1179px]:row-start-2 min-[1180px]:col-start-1 min-[1180px]:row-start-2 flex items-center py-16 min-h-[85vh]"
           >
-            <div className="min-w-0">
+            <div className="min-w-0 w-full max-w-full break-words">
               <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-400 mb-5">
                 03 — The Randomizer
               </p>
@@ -596,13 +596,12 @@ function RECLABContent({ uiTheme = 'light' }) {
             </div>
           </section>
 
-          {/* ══ S04 — col 3 (RIGHT), row 3 ════════════════════════════════
-               Phone: Lab → WinCollection blends as this section scrolls.  */}
+          {/* ══ S04 — tablet col 2 row 3 · desktop col 3 ═════════════════ */}
           <section
             ref={sec4Ref}
-            className="md:col-start-3 md:row-start-3 flex items-center py-16 min-h-[85vh]"
+            className="min-w-0 max-w-full overflow-x-hidden md:max-[1179px]:col-start-2 md:max-[1179px]:row-start-3 min-[1180px]:col-start-3 min-[1180px]:row-start-3 flex items-center py-16 min-h-[85vh]"
           >
-            <div className="min-w-0">
+            <div className="min-w-0 w-full max-w-full break-words">
               <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-400 mb-5">
                 04 — The Impact
               </p>
@@ -659,9 +658,7 @@ function CVContent({ uiTheme = 'light' }) {
         {/* ── Profile ── */}
         <Section title="Profile">
           <p className="text-[13.5px] leading-7 text-gray-700">
-            Economics senior &amp; Apple Developer Academy student. Bridging the gap between
-            business strategy, UI/UX design, and iOS development to build highly impactful
-            digital products.
+          Economics senior and Apple Developer Academy alumna focused on building user-centered digital products. I combine business strategy, product thinking, UI/UX design, and technical implementation to turn ideas into impactful products from concept to launch.
           </p>
         </Section>
 
@@ -687,10 +684,22 @@ function CVContent({ uiTheme = 'light' }) {
 
         {/* ── Projects ── */}
         <Section title="Projects">
+        <CVEntry
+            bulletBeforeAccent={bulletDot}
+            title="Suhail — Apple Developer Academy"
+            titleHref="https://apps.apple.com/app/suhail/id6775820204"
+            meta="Product Designer"
+            date="Mar 2026 – Present"
+            bullets={[
+              'Designed an iOS safety app to preserve critical trip details and alert emergency contacts, bridging the information gap to accelerate desert rescue missions.',
+              'Built a scalable design system utilizing advanced Figma components to ensure a consistent UI.',
+              'Showcased the project on stage at the Apple Developer Academy graduation.',
+            ]}
+          />
           <CVEntry
             bulletBeforeAccent={bulletDot}
             title="RECLAB App — Personal Project"
-            meta="iOS Developer & Product Designer"
+            meta="Product Designer & iOS Developer"
             date="Jan 2026 – Present"
             bullets={[
               'Developed an iOS personal-logging app for multipotentialites to document and track diverse experiments.',
@@ -701,7 +710,7 @@ function CVContent({ uiTheme = 'light' }) {
             bulletBeforeAccent={bulletDot}
             title="Qaffatek — Apple Developer Academy"
             titleHref="https://apps.apple.com/sa/app/%D9%82%D9%81%D8%B7%D8%AA%D9%83/id6757811186"
-            meta="iOS Developer & Product Designer"
+            meta="Product Designer & iOS Developer"
             date="Sep 2025 – Mar 2026"
             bullets={[
               'Launched an iOS game to the App Store, transforming a traditional paper game into a digital experience.',
@@ -777,9 +786,9 @@ function CVContent({ uiTheme = 'light' }) {
         <Section title="Skills">
           <div className="space-y-2.5 text-[13px] leading-relaxed text-gray-700">
             {[
-              ['Technical', 'Swift, SwiftUI, Core ML, MVVM Architecture, API, Git/GitHub, iOS Accessibility (VoiceOver, Dynamic Type), Cursor (AI-Assisted Development), TestFlight, App Store Connect.'],
-              ['Design',    'Figma (Auto Layout, Components), Design Systems, Apple Human Interface Guidelines (HIG), User Flows, User Research (Interviews & Usability Testing), Developer Handoff, Inclusive Design.'],
-              ['Product',   'Agile (Scrum), Design Thinking, Product Development (End-to-End), Business Analysis (BMC, MVP Strategy), Market & Competitive Analysis, Data Analysis & Visualization.'],
+             ['Product', 'Product Strategy, Design Thinking, Business Strategy (BMC, Value Proposition), User Research (Interviews & Usability Testing), Market & Competitive Analysis, Agile (Scrum), MVP Definition, Feature Prioritization, Product Roadmapping, Product Documentation .'],
+             ['Design', 'Figma (Auto Layout, Components), Design Systems, User Flows, Apple HIG, Developer Handoff.'],
+             ['Technical', 'Swift, SwiftUI, MVVM Architecture, Git/GitHub, Core ML, TestFlight, App Store Connect.'],
             ].map(([cat, items]) => (
               <p key={cat}>
                 <span className="font-semibold text-gray-900">{cat}:&nbsp;</span>{items}
@@ -791,8 +800,8 @@ function CVContent({ uiTheme = 'light' }) {
         {/* ── Download button ── */}
         <div className="mt-10 flex justify-start border-t border-gray-100 pt-7">
           <a
-            href={`${import.meta.env.BASE_URL}MayarAlquwayfiliCv.pdf`}
-            download="MayarAlquwayfiliCv.pdf"
+            href={`${import.meta.env.BASE_URL}Mayar_Alquwayfili_CV.pdf`}
+            download="Mayar_Alquwayfili_CV.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-6 py-2.5 text-[13px] font-medium text-white transition-colors hover:bg-gray-700"
@@ -1303,7 +1312,7 @@ function MacWindow({
           <SideBFolderContent uiTheme={uiTheme} />
         ) : title === 'Brewcha' ? (
           <BrewchaContent uiTheme={uiTheme} />
-        ) : title === 'Preview — Mayar_CV.pdf' ? (
+        ) : title === 'Preview — Mayar_Alquwayfili_CV.pdf' ? (
           <CVContent uiTheme={uiTheme} />
         ) : variant === 'notion-slider' ? null : title === 'How to Work with Me' ? (
           <HowToWorkContent
@@ -1699,17 +1708,15 @@ export default function App() {
     setUiTheme((t) => (t === 'light' ? 'dark' : 'light'))
   }, [])
 
-  const [isMobile, setIsMobile] = useState(() =>
+  const [isCompactLayout, setIsCompactLayout] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth <= COMPACT_LAYOUT_MAX_WIDTH_PX : false,
   )
 
   useEffect(() => {
-    const query = `(max-width: ${COMPACT_LAYOUT_MAX_WIDTH_PX}px)`
-    const mq = window.matchMedia(query)
-    const apply = () => setIsMobile(mq.matches)
+    const apply = () => setIsCompactLayout(window.innerWidth <= COMPACT_LAYOUT_MAX_WIDTH_PX)
     apply()
-    mq.addEventListener('change', apply)
-    return () => mq.removeEventListener('change', apply)
+    window.addEventListener('resize', apply)
+    return () => window.removeEventListener('resize', apply)
   }, [])
 
   const [isOffline, setIsOffline] = useState(() =>
@@ -1775,7 +1782,7 @@ export default function App() {
     timeoutsRef.current.push(t)
   }, [adminFlow, clearAdminTimers, openOrFocusWindow])
 
-  if (isMobile) {
+  if (isCompactLayout) {
     return (
       <>
         <OfflineOverlay visible={isOffline} uiTheme={uiTheme} />

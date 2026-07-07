@@ -153,8 +153,8 @@ export const DESKTOP_FOLDERS = [
   },
   {
     id: 'cv',
-    title: 'Mayar_CV.pdf',
-    windowTitle: 'Preview — Mayar_CV.pdf',
+    title: 'Mayar_Alquwayfili_CV.pdf',
+    windowTitle: 'Preview — Mayar_Alquwayfili_CV.pdf',
     icon: PdfFloderIcon,
     cursorTipLabel: 'PNU x ADA',
     x: 331,

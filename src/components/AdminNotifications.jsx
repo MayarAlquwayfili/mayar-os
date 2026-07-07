@@ -9,17 +9,13 @@ export default function AdminNotifications({ uiTheme = 'light', items, adminFlow
   const accent = accentTokens(uiTheme)
 
   const cardClassName = [
-    'pointer-events-auto w-80 rounded-2xl border-[1.5px] bg-transparent px-5 py-5',
+    'pointer-events-auto w-80 rounded-2xl border px-5 py-5 backdrop-blur-md',
     isDark
-      ? 'border-white/35 drop-shadow-[0_14px_40px_rgba(0,0,0,0.42)]'
-      : 'border-[#23262D]/30 drop-shadow-[0_14px_36px_rgba(0,0,0,0.11)]',
+      ? 'bg-[#1D1D1F] border-white/20 shadow-2xl'
+      : 'bg-[#F9F9F7] border-gray-100 shadow-xl',
   ].join(' ')
 
-  const textLegibility = isDark
-    ? '[text-shadow:0_1px_14px_rgba(0,0,0,0.92),0_0_1px_rgba(0,0,0,0.9)]'
-    : '[text-shadow:0_1px_14px_rgba(255,255,255,0.95),0_0_1px_rgba(255,255,255,0.9)]'
-
-  const headerMuted = isDark ? 'text-[#F9F9F7]/70' : 'text-[#23262D]/75'
+  const headerMuted = isDark ? 'text-gray-300' : 'text-[#23262D]/75'
   const bodyText = isDark ? 'text-[#F9F9F7]' : 'text-[#23262D]'
 
   /** Light: light label on #82ADB5 (reads with frosted glass). Dark: charcoal on #ACDEE7 per accentTokens. */
@@ -78,12 +74,12 @@ export default function AdminNotifications({ uiTheme = 'light', items, adminFlow
             className={cardClassName}
           >
             <p
-              className={`text-[12px] font-normal uppercase tracking-[0.12em] ${headerMuted} ${textLegibility}`}
+              className={`text-[12px] font-normal uppercase tracking-[0.12em] ${headerMuted}`}
             >
               {n.header}
             </p>
             <p
-              className={`mt-2 text-[14px] font-normal leading-relaxed ${bodyText} ${textLegibility}`}
+              className={`mt-2 text-[14px] font-normal leading-relaxed ${bodyText}`}
             >
               {formatBody(n.body)}
             </p>
