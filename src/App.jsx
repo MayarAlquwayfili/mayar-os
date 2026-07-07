@@ -668,7 +668,7 @@ function CVContent({ uiTheme = 'light' }) {
             bulletBeforeAccent={bulletDot}
             title="Apple Developer Academy at TUWAIQ"
             meta="Education Scholarship"
-            date="2025 – Present"
+            date="Aug 2025 – Jun 2026"
           />
         </Section>
 
